@@ -1,0 +1,52 @@
+{
+  "name": "jam-comments",
+  "version": "1.0.0",
+  "description": "A commenting platform for self-hosted static websites.",
+  "main": "index.js",
+  "scripts": {
+    "cli": "ts-node src/cli.ts",
+    "test": "jest",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist build",
+    "ts-node": "ts-node"
+  },
+  "repository": "git+https://github.com/teekay/JamComments.git",
+  "keywords": [],
+  "author": "teekay <tomas.kohl@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/teekay/JamComments/issues"
+  },
+  "homepage": "https://github.com/teekay/JamComments#readme",
+  "dependencies": {
+    "@nestjs/common": "7.6.15",
+    "@nestjs/core": "7.6.15",
+    "@nestjs/platform-express": "7.6.15",
+    "@pgtyped/cli": "^0.10.4",
+    "@pgtyped/query": "^0.10.4",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "pg": "^8.6.0",
+    "reflect-metadata": "0.1.13",
+    "rimraf": "3.0.2",
+    "rxjs": "6.6.7",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "7.6.0",
+    "@nestjs/schematics": "7.3.1",
+    "@nestjs/testing": "7.6.15",
+    "@types/express": "4.17.11",
+    "@types/jest": "26.0.23",
+    "@types/node": "^15.6.1",
+    "@types/pg": "^8.6.0",
+    "@types/uuid": "^8.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
+    "prettier": "2.3.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  }
+}

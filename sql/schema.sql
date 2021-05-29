@@ -1,0 +1,1 @@
+CREATE TABLE comments(id character(36) not null primary key, comment text not null, reader_name varchar(512) not null, reader_email varchar(512), created_at timestamp not null);
