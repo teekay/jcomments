@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
+import { LoginMiddleware } from '../accounts/login.middleware';
 import { PersistenceModule } from '../persistence/persistence.module'
 import { CommentService } from './comment.service'
 import { CommentsController } from './comments.controller'
@@ -8,4 +9,10 @@ import { CommentsController } from './comments.controller'
   controllers: [CommentsController],
   providers: [CommentService],
 })
-export class CommentsModule {}
+export class CommentsModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer
+      .apply(LoginMiddleware)
+      .forRoutes('comments');
+  }
+}

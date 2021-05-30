@@ -2,8 +2,6 @@
 
 A commenting platform for self-hosted static websites.
 
-**This is a prototype, no code available yet.**
-
 ## The problem
 
 Websites running on the JAM stack don't have a backend, and so it's not obvious how to integrate comments into them.
