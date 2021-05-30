@@ -1,5 +1,5 @@
 
-import * as _ from 'lodash'
+import _ from 'lodash';
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { Client } from 'pg';
@@ -19,12 +19,12 @@ export class LoginMiddleware implements NestMiddleware {
     const account = await loginFromToken.run({
       token: token
     }, this.client)
-    if (!account) {
+    if (!account || account.length === 0) {
       res.status(403).end();
       return;
     }
 
-    _.set(req, 'account', account)
+    _.set(req, 'account', account[0])
     next();
   }
 }
