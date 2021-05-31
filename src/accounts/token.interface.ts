@@ -9,5 +9,5 @@ export interface Token {
   account: Account
   token: string
   createdAt: Date
-  revokedAt?: Date
+  revokedAt?: Date | null
 }
