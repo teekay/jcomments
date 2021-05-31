@@ -28,8 +28,10 @@
     "@pgtyped/query": "^0.10.4",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "commander": "^7.2.0",
     "dotenv": "^10.0.0",
     "lodash": "^4.17.21",
+    "nestjs-console": "^5.0.1",
     "nestjs-pino": "^1.4.0",
     "pg": "^8.6.0",
     "pino": "^6.11.3",
@@ -38,7 +40,8 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "6.6.7",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yargs": "^17.0.1"
   },
   "devDependencies": {
     "@nestjs/cli": "7.6.0",
@@ -50,6 +53,7 @@
     "@types/node": "^15.6.1",
     "@types/pg": "^8.6.0",
     "@types/uuid": "^8.3.0",
+    "@types/yargs": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "eslint": "^7.27.0",

@@ -20,7 +20,7 @@ export interface IPostCommentForUrlQuery {
   result: IPostCommentForUrlResult;
 }
 
-const postCommentForUrlIR: any = {"name":"PostCommentForUrl","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":134,"b":135,"line":2,"col":103}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":139,"b":147,"line":2,"col":108}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":151,"b":153,"line":2,"col":120}]}},{"name":"text","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":157,"b":160,"line":2,"col":126}]}},{"name":"name","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":164,"b":167,"line":2,"col":133}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":171,"b":175,"line":2,"col":140}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"text":true,"name":true,"email":true},"statement":{"body":"INSERT INTO comments(id, account_id, page_url, comment, reader_name, reader_email, created_at) VALUES(:id, :accountId, :url, :text, :name, :email, 'now'::timestamp)","loc":{"a":31,"b":194,"line":2,"col":0}}};
+const postCommentForUrlIR: any = {"name":"PostCommentForUrl","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":133,"b":134,"line":2,"col":103}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":138,"b":146,"line":2,"col":108}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":150,"b":152,"line":2,"col":120}]}},{"name":"text","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":156,"b":159,"line":2,"col":126}]}},{"name":"name","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":163,"b":166,"line":2,"col":133}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":170,"b":174,"line":2,"col":140}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"text":true,"name":true,"email":true},"statement":{"body":"INSERT INTO comments(id, account_id, page_url, comment, reader_name, reader_email, created_at) VALUES(:id, :accountId, :url, :text, :name, :email, 'now'::timestamp)","loc":{"a":30,"b":193,"line":2,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -52,7 +52,7 @@ export interface ICommentsForUrlQuery {
   result: ICommentsForUrlResult;
 }
 
-const commentsForUrlIR: any = {"name":"CommentsForUrl","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":324,"b":332,"line":5,"col":96}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":348,"b":350,"line":5,"col":120}]}}],"usedParamSet":{"accountId":true,"url":true},"statement":{"body":"SELECT page_url, comment, reader_name, reader_email, created_at FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at","loc":{"a":228,"b":370,"line":5,"col":0}}};
+const commentsForUrlIR: any = {"name":"CommentsForUrl","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":320,"b":328,"line":5,"col":96}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":344,"b":346,"line":5,"col":120}]}}],"usedParamSet":{"accountId":true,"url":true},"statement":{"body":"SELECT page_url, comment, reader_name, reader_email, created_at FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at","loc":{"a":224,"b":366,"line":5,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -85,7 +85,7 @@ export interface ICommentsForUrlSinceDateQuery {
   result: ICommentsForUrlSinceDateResult;
 }
 
-const commentsForUrlSinceDateIR: any = {"name":"CommentsForUrlSinceDate","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":509,"b":517,"line":8,"col":96}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":533,"b":535,"line":8,"col":120}]}},{"name":"date","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":555,"b":558,"line":8,"col":142}]}}],"usedParamSet":{"accountId":true,"url":true,"date":true},"statement":{"body":"SELECT page_url, comment, reader_name, reader_email, created_at FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at","loc":{"a":413,"b":578,"line":8,"col":0}}};
+const commentsForUrlSinceDateIR: any = {"name":"CommentsForUrlSinceDate","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":502,"b":510,"line":8,"col":96}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":526,"b":528,"line":8,"col":120}]}},{"name":"date","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":548,"b":551,"line":8,"col":142}]}}],"usedParamSet":{"accountId":true,"url":true,"date":true},"statement":{"body":"SELECT page_url, comment, reader_name, reader_email, created_at FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at","loc":{"a":406,"b":571,"line":8,"col":0}}};
 
 /**
  * Query generated from SQL:
