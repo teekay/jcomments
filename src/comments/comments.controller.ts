@@ -1,9 +1,10 @@
 import _ from 'lodash'
 import { Account } from '../accounts/account.interface'
 import { Body, Controller, Get, HttpStatus, Param, Post, Req, Res } from '@nestjs/common'
-import { Comment, CommentBase } from './comment.interface'
+import { CommentBase, CommentDto } from './comment.interface'
 import { CommentService } from './comment.service'
 import { Request, Response } from 'express'
+//import { Logger } from 'nestjs-pino'
 
 @Controller('comments')
 export class CommentsController {
@@ -16,12 +17,13 @@ export class CommentsController {
   }
 
   @Post()
-  async postCommentForUrl(@Req() req: Request, @Body() comment: Comment, @Res() res: Response): Promise<void> {
-    if (!comment || !comment.text || !comment.author?.name) {
-      res.status(400).end();
-      return;
-    }
-    await this.commentsService.create(_.get(req, 'account') as Account, comment)
+  async postCommentForUrl(@Req() req: Request, @Body() comment: CommentDto, @Res() res: Response): Promise<void> {
+    const account = _.get(req, 'account') as Account
+    await this.commentsService.create(account, {
+      ... comment,
+      account,
+      postedAt: new Date()
+    })
     res.status(HttpStatus.CREATED).send() 
   }
 }

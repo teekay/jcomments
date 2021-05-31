@@ -1,5 +1,6 @@
+import { IsNotEmpty } from "class-validator";
 import { Account } from "../accounts/account.interface";
-import { Author } from "./author.interface";
+import { Author, AuthorDto } from "./author.interface";
 
 export interface CommentBase {
   postUrl: string
@@ -15,3 +16,14 @@ export interface CommentBase {
 export interface Comment extends CommentBase {
   account: Account
 }
+
+export class CommentDto {
+  @IsNotEmpty()
+  postUrl!: string;
+  
+  @IsNotEmpty()
+  text!: string;
+  
+  @IsNotEmpty()
+  author!: AuthorDto
+  }

@@ -7,7 +7,7 @@ import { PersistenceModule } from './persistence/persistence.module'
 @Module({
   imports: [CommentsModule, PersistenceModule,
     LoggerModule.forRoot({
-    pinoHttp: { prettyPrint: true },
+    pinoHttp: { prettyPrint: true, prettifier: require('pino-colada') },
 }),],
 })
 export class AppModule implements OnApplicationShutdown {

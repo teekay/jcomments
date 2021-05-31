@@ -4,13 +4,16 @@ import { Inject, Injectable } from '@nestjs/common'
 import { Comment, CommentBase } from './comment.interface'
 import { commentsForUrl, commentsForUrlSinceDate, postCommentForUrl } from './comments.queries'
 import { v4 as uuidv4 } from 'uuid'
+import { Logger } from "nestjs-pino";
 
 @Injectable()
 export class CommentService {
 
-  constructor(@Inject('PG_CLIENT') private client: Client) {}
+  constructor(@Inject('PG_CLIENT') private client: Client,
+    private readonly logger: Logger) {}
 
   async create(account: Account, comment: Comment): Promise<void> {
+    this.logger.log(`Creating a comment ${JSON.stringify(comment)}`)
     await postCommentForUrl.run({
       id: uuidv4(),
       accountId: account.id,
