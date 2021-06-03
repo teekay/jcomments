@@ -18,3 +18,6 @@ UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token;
 
 /* @name findToken */
 SELECT * FROM tokens WHERE token=:token;
+
+/* @name findCurrentToken */
+SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL;

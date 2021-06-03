@@ -205,3 +205,34 @@ const findTokenIR: any = {"name":"findToken","params":[{"name":"token","transfor
 export const findToken = new PreparedQuery<IFindTokenParams,IFindTokenResult>(findTokenIR);
 
 
+/** 'FindCurrentToken' parameters type */
+export interface IFindCurrentTokenParams {
+  accountId: string | null | void;
+}
+
+/** 'FindCurrentToken' return type */
+export interface IFindCurrentTokenResult {
+  id: string;
+  account_id: string;
+  token: string;
+  created_at: Date;
+  revoked_at: Date | null;
+}
+
+/** 'FindCurrentToken' query type */
+export interface IFindCurrentTokenQuery {
+  params: IFindCurrentTokenParams;
+  result: IFindCurrentTokenResult;
+}
+
+const findCurrentTokenIR: any = {"name":"findCurrentToken","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":814,"b":822,"line":23,"col":39}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL","loc":{"a":775,"b":845,"line":23,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL
+ * ```
+ */
+export const findCurrentToken = new PreparedQuery<IFindCurrentTokenParams,IFindCurrentTokenResult>(findCurrentTokenIR);
+
+

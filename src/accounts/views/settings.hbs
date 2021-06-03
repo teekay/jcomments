@@ -1,0 +1,36 @@
+<div class="container">
+  <ul class="nav nav-pills mb-5">
+    <li class="nav-item">
+      <a class="nav-link" href="/dashboard/">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="/account/settings/">Settings</a>
+    </li>
+  </ul>
+
+<h3>Account settings</h3>
+
+  <h4>Api key</h4>
+  <section class="row">
+    <div class="col">
+      {{ token.token }}
+    </div>
+    <div class="col">
+      <form method="POST" action="/account/settings/token/refresh">
+        <button type="submit" class="btn btn-primary">Reissue</button>
+      </form>
+    </div>
+  </section>
+
+  <h4>Comments settings</h4>
+  <section class="row">
+    <div class="col">
+      Use anti-SPAM protection
+    </div>
+    <div class="col">
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+      </div>
+    </div>
+  </section>
+</div>

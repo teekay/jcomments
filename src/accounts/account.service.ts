@@ -2,7 +2,8 @@ import { Account } from './account.interface'
 import { Client } from 'pg'
 import { Inject, Injectable } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
-import { findById, login, signup } from './accounts.queries'
+import { findById, findCurrentToken, login, signup } from './accounts.queries'
+import { Token } from './token.interface'
 
 @Injectable()
 export class AccountService {
@@ -36,6 +37,20 @@ export class AccountService {
       password: a.password.toString(),
       createdAt: a.created_at
     }
+  }
+
+  async token(account: Account): Promise<Token | undefined> {
+    const t = await findCurrentToken.run({ accountId: account.id }, this.client)
+    if (t.length > 0) {
+      const { created_at, ...base } = t[0]
+      const token = {
+        account,
+        createdAt: created_at,
+        ... base
+      }
+      return token
+    }
+    return
   }
 
 }
