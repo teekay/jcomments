@@ -1,0 +1,50 @@
+<div class="container">
+  <ul class="nav nav-pills mb-5">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="/dashboard/">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/account/settings/">Settings</a>
+    </li>
+  </ul>
+
+  <h3>Latest comments ({{ count }})</h3>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Page</th>
+        <th scope="col">From</th>
+        <th scope="col">Comment</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each comments}}
+      <tr>
+        <td>{{ postedAt }}</td>
+        <td><a href="{{ postUrl }}">{{ postUrl }}</a></td>
+        <td>{{ author.name }} {{ author.email }}</td>
+        <td>{{ text }}</td>
+        <td>TODO</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <nav aria-label="Comment paging">
+    <ul class="pagination">      
+      <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
+        <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
+      </li>     
+      {{#each pages}}
+      <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
+      {{/each}}
+      <li class="page-item{{#if onLastPage }} disabled{{/if}}">
+        <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
+      </li>
+    </ul>
+  </nav>
+
+</div>

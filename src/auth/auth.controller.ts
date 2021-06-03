@@ -1,5 +1,4 @@
-import { AuthenticatedGuard } from './authenticated.guard'
-import { Controller, Get, Post, Render, Request, Res, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common'
 import { LocalAuthGuard } from './auth.local.guard'
 import { Response } from 'express'
 
@@ -7,25 +6,19 @@ import { Response } from 'express'
 export class AuthController {
 
   @Get('login')
-  @Render('./auth/views/login')
-  loginForm() {
+  loginForm(@Res() res: Response) {
+    return res.render('./auth/views/login', { layout: 'dashboard' })
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Res() res: Response) {
-    res.redirect('/auth/check')
-  }
-
-  @UseGuards(AuthenticatedGuard)
-  @Get('check')
-  async check() {
-    return 'You are in!'
+    res.redirect('/dashboard/')
   }
 
   @Get('logout')
   logout(@Request() req, @Res() res: Response) {
-    req.logout();
-    res.redirect('/auth/login');
+    req.logout()
+    res.redirect('/auth/login')
   }
 }

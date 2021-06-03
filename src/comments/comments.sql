@@ -1,6 +1,15 @@
 /* @name PostCommentForUrl */
 INSERT INTO comments(id, account_id, page_url, comment, reader_name, reader_email, created_at) VALUES(:id, :accountId, :url, :text, :name, :email, 'now'::timestamp);
 
+/* @name CommentCountForAccount */
+SELECT COUNT(*) as "Total" FROM comments WHERE account_id=:accountId;
+
+/* @name CommentsForAccount */
+SELECT page_url, comment, reader_name, reader_email, created_at FROM comments WHERE account_id=:accountId ORDER BY created_at DESC;
+
+/* @name CommentsForAccountPaged */
+SELECT page_url, comment, reader_name, reader_email, created_at FROM comments WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset;
+
 /* @name CommentsForUrl */
 SELECT page_url, comment, reader_name, reader_email, created_at FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at;
 

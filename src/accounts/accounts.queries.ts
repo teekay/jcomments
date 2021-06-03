@@ -18,7 +18,7 @@ export interface ISignupQuery {
   result: ISignupResult;
 }
 
-const signupIR: any = {"name":"Signup","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":86,"b":87,"line":2,"col":66}]}},{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":91,"b":98,"line":2,"col":71}]}},{"name":"password","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":109,"b":116,"line":2,"col":89}]}},{"name":"createdAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":137,"b":145,"line":2,"col":117}]}}],"usedParamSet":{"id":true,"username":true,"password":true,"createdAt":true},"statement":{"body":"INSERT INTO accounts (id, username, password, created_at) VALUES(:id, :username, digest(:password::text, 'sha256'), :createdAt)","loc":{"a":20,"b":146,"line":2,"col":0}}};
+const signupIR: any = {"name":"Signup","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":85,"b":86,"line":2,"col":66}]}},{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":90,"b":97,"line":2,"col":71}]}},{"name":"password","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":108,"b":115,"line":2,"col":89}]}},{"name":"createdAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":136,"b":144,"line":2,"col":117}]}}],"usedParamSet":{"id":true,"username":true,"password":true,"createdAt":true},"statement":{"body":"INSERT INTO accounts (id, username, password, created_at) VALUES(:id, :username, digest(:password::text, 'sha256'), :createdAt)","loc":{"a":19,"b":145,"line":2,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -49,7 +49,7 @@ export interface ILoginQuery {
   result: ILoginResult;
 }
 
-const loginIR: any = {"name":"Login","params":[{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":210,"b":217,"line":5,"col":39}]}},{"name":"password","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":240,"b":247,"line":5,"col":69}]}}],"usedParamSet":{"username":true,"password":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')","loc":{"a":171,"b":264,"line":5,"col":0}}};
+const loginIR: any = {"name":"Login","params":[{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":206,"b":213,"line":5,"col":39}]}},{"name":"password","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":236,"b":243,"line":5,"col":69}]}}],"usedParamSet":{"username":true,"password":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')","loc":{"a":167,"b":260,"line":5,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -79,7 +79,7 @@ export interface IFindByIdQuery {
   result: IFindByIdResult;
 }
 
-const findByIdIR: any = {"name":"findById","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":325,"b":326,"line":8,"col":33}]}}],"usedParamSet":{"id":true},"statement":{"body":"SELECT * FROM accounts WHERE id=:id","loc":{"a":292,"b":326,"line":8,"col":0}}};
+const findByIdIR: any = {"name":"findById","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":318,"b":319,"line":8,"col":33}]}}],"usedParamSet":{"id":true},"statement":{"body":"SELECT * FROM accounts WHERE id=:id","loc":{"a":285,"b":319,"line":8,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -109,7 +109,7 @@ export interface ILoginFromTokenQuery {
   result: ILoginFromTokenResult;
 }
 
-const loginFromTokenIR: any = {"name":"LoginFromToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":448,"b":452,"line":11,"col":88}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL","loc":{"a":360,"b":477,"line":11,"col":0}}};
+const loginFromTokenIR: any = {"name":"LoginFromToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":438,"b":442,"line":11,"col":88}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL","loc":{"a":350,"b":467,"line":11,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -137,7 +137,7 @@ export interface ICreateTokenQuery {
   result: ICreateTokenResult;
 }
 
-const createTokenIR: any = {"name":"CreateToken","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":572,"b":573,"line":14,"col":64}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":577,"b":585,"line":14,"col":69}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":589,"b":593,"line":14,"col":81}]}},{"name":"createdAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":597,"b":605,"line":14,"col":89}]}}],"usedParamSet":{"id":true,"accountId":true,"token":true,"createdAt":true},"statement":{"body":"INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)","loc":{"a":508,"b":606,"line":14,"col":0}}};
+const createTokenIR: any = {"name":"CreateToken","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":559,"b":560,"line":14,"col":64}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":564,"b":572,"line":14,"col":69}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":576,"b":580,"line":14,"col":81}]}},{"name":"createdAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":584,"b":592,"line":14,"col":89}]}}],"usedParamSet":{"id":true,"accountId":true,"token":true,"createdAt":true},"statement":{"body":"INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)","loc":{"a":495,"b":593,"line":14,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -163,7 +163,7 @@ export interface IRevokeTokenQuery {
   result: IRevokeTokenResult;
 }
 
-const revokeTokenIR: any = {"name":"RevokeToken","params":[{"name":"revokedAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":667,"b":675,"line":17,"col":30}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":690,"b":694,"line":17,"col":53}]}}],"usedParamSet":{"revokedAt":true,"token":true},"statement":{"body":"UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token","loc":{"a":637,"b":694,"line":17,"col":0}}};
+const revokeTokenIR: any = {"name":"RevokeToken","params":[{"name":"revokedAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":651,"b":659,"line":17,"col":30}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":674,"b":678,"line":17,"col":53}]}}],"usedParamSet":{"revokedAt":true,"token":true},"statement":{"body":"UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token","loc":{"a":621,"b":678,"line":17,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -194,7 +194,7 @@ export interface IFindTokenQuery {
   result: IFindTokenResult;
 }
 
-const findTokenIR: any = {"name":"findToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":757,"b":761,"line":20,"col":34}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT * FROM tokens WHERE token=:token","loc":{"a":723,"b":761,"line":20,"col":0}}};
+const findTokenIR: any = {"name":"findToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":738,"b":742,"line":20,"col":34}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT * FROM tokens WHERE token=:token","loc":{"a":704,"b":742,"line":20,"col":0}}};
 
 /**
  * Query generated from SQL:

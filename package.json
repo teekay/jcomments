@@ -9,7 +9,7 @@
     "test": "jest",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist build",
+    "clean": "rm -rf build",
     "ts-node": "ts-node"
   },
   "repository": "git+https://github.com/teekay/JamComments.git",
@@ -33,7 +33,9 @@
     "connect-flash": "^0.1.1",
     "connect-pg-simple": "^6.2.1",
     "dotenv": "^10.0.0",
+    "express-handlebars": "^5.3.2",
     "express-session": "^1.17.2",
+    "handlebars-helpers": "^0.10.0",
     "hbs": "^4.1.2",
     "lodash": "^4.17.21",
     "nestjs-console": "^5.0.1",

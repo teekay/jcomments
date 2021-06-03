@@ -8,6 +8,7 @@ import { CommentsController } from './comments.controller'
   imports: [PersistenceModule],
   controllers: [CommentsController],
   providers: [CommentService],
+  exports: [CommentService]
 })
 export class CommentsModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
