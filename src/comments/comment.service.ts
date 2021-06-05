@@ -1,26 +1,32 @@
+import _ from 'lodash'
 import { Account } from '../accounts/account.interface'
+import { AccountService } from '../accounts/account.service'
+import { AkismetService } from './akismet.service'
 import { Client } from 'pg'
+import { Comment, CommentBase, CommentWithId } from './comment.interface'
+import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount } from './comments.queries'
 import { Inject, Injectable } from '@nestjs/common'
-import { Comment, CommentBase } from './comment.interface'
-import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged } from './comments.queries'
-import { v4 as uuidv4 } from 'uuid'
 import { Logger } from "nestjs-pino";
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class CommentService {
   constructor(@Inject('PG_CLIENT') private client: Client,
+    private readonly accountService: AccountService,
+    private readonly akismetService: AkismetService,
     private readonly logger: Logger) {}
 
-  async create(account: Account, comment: Comment): Promise<void> {
-    this.logger.log(`Creating a comment ${JSON.stringify(comment)}`)
-    await postCommentForUrl.run({
-      id: uuidv4(),
-      accountId: account.id,
-      url: comment.postUrl,
-      text: comment.text,
-      name: comment.author.name,
-      email: comment.author.email
-    }, this.client)
+  async create(account: Account, comment: CommentBase, ip: string): Promise<void> {
+    const settings = await this.accountService.settingsFor(account)
+    if (settings?.akismetKey && settings.useAkismet) {
+      const isSpam = await this.akismetService.isCommentSpam(settings, comment, ip)
+      if (isSpam) {
+        this.logger.warn(`SPAM detected: ${JSON.stringify(comment)}`)
+        await flagCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
+        return
+      }
+    }
+    await postCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
   }
 
   async commentsForUrl(account: Account, url: string, fromDate?: Date): Promise<CommentBase[]> {
@@ -36,6 +42,11 @@ export class CommentService {
     return +(c[0].Total ?? 0)
   }
 
+  async reviewCountForAccount(account: Account): Promise<number> {
+    const c = await reviewCountForAccount.run({ accountId: account.id }, this.client)
+    return +(c[0].Total ?? 0)
+  }
+
   async commentsForAccount(account: Account) {
       const allComments = await commentsForAccount.run({ accountId: account.id }, this.client)
       return allComments.map(this.recordToClass)
@@ -48,8 +59,60 @@ export class CommentService {
     return pagedComments.map(this.recordToClass)
   }
 
-  private recordToClass(r: ICommentsForAccountResult): CommentBase {
+  async reviewsForAccountPaged(account: Account, batchSize?: number, page?: number) {
+    const limit = batchSize ?? 10
+    const offset = ((page ?? 1) - 1) * limit
+    const pagedComments = await reviewsForAccountPaged.run({ accountId: account.id, limit: `${limit}`, offset: `${offset}` }, this.client)
+    return pagedComments.map(this.recordToClass)
+  }
+
+  async findById(account: Account, id: string): Promise<Comment | undefined> {
+    const c = await findByIdForAccount.run({accountId: account.id, id}, this.client)
+    if (c.length !== 1) return
+    return _.merge({
+      id: c[0].id, account
+    }, this.recordToClass(c[0] as ICommentsForAccountResult))
+  }
+
+  async findSpamById(account: Account, id: string): Promise<Comment | undefined> {
+    const c = await findSpamByIdForAccount.run({accountId: account.id, id}, this.client)
+    if (c.length !== 1) return
+    return _.merge({
+      id: c[0].id, account
+    }, this.recordToClass(c[0] as ICommentsForAccountResult))
+  }
+
+  async deleteSingle(comment: Comment): Promise<void> {
+    await deleteSingleComment.run({id: comment.id}, this.client)
+  }
+
+  async deleteSingleSpam(comment: Comment): Promise<void> {
+    await deleteSingleSpam.run({id: comment.id}, this.client)
+  }
+
+  async markCommentNotSpam(comment: Comment): Promise<void> {
+    const account = await this.accountService.findById(comment.account.id)
+    await deleteSingleSpam.run({id: comment.id}, this.client)
+    await postCommentForUrlWithTimestamp.run(_.merge(
+      {createdAt: comment.postedAt},
+      this.commentToDbParam(account!, comment)), this.client)
+  }
+
+  private commentToDbParam(account: Account, comment: CommentBase) {
     return {
+      id: uuidv4(),
+      accountId: account.id,
+      url: comment.postUrl,
+      text: comment.text,
+      name: comment.author.name,
+      email: comment.author.email,
+      website: comment.author.website
+    }
+  }
+
+  private recordToClass(r: ICommentsForAccountResult): CommentWithId {
+    return {
+      id: r.id,
       postUrl: r.page_url,
       postedAt: r.created_at,
       text: r.comment,

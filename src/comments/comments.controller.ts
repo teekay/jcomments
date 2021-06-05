@@ -17,13 +17,13 @@ export class CommentsController {
   }
 
   @Post()
-  async postCommentForUrl(@Req() req: Request, @Body() comment: CommentDto, @Res() res: Response): Promise<void> {
+  async postCommentForUrl(@Req() req: Request, @Body() comment: CommentDto,
+    @Res() res: Response): Promise<void> {
     const account = _.get(req, 'account') as Account
     await this.commentsService.create(account, {
       ... comment,
-      account,
       postedAt: new Date()
-    })
+    }, req.ip)
     res.status(HttpStatus.CREATED).send() 
   }
 }

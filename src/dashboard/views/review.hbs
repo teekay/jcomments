@@ -1,10 +1,10 @@
 <div class="container">
   <ul class="nav nav-pills mb-5">
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
+      <a class="nav-link active" aria-current="page" href="/dashboard/">Dashboard</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/account/settings">Settings</a>
+      <a class="nav-link" href="/account/settings/">Settings</a>
     </li>
     <li class="nav-item pull-right">
       <a class="nav-link" href="/auth/logout">Sign out</a>
@@ -13,10 +13,10 @@
 
   <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <a href="/dashboard" class="nav-link active" id="home-tab" role="tab" aria-controls="comments" aria-selected="true">Comments</a>
+      <a href="/dashboard" class="nav-link" role="tab" aria-controls="comments" aria-selected="false">Comments</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a href="/dashboard/review" class="nav-link" id="profile-tab" role="tab" aria-controls="reviews" aria-selected="false">For review</a>
+      <a href="/dashboard/review" class="nav-link active" role="tab" aria-controls="reviews" aria-selected="true">For review</a>
     </li>
   </ul>
 
@@ -39,8 +39,10 @@
           <td>{{ author.name }} {{ author.email }}</td>
           <td>{{ text }}</td>
           <td>
-              <button class="btn delete-comment" data-id="{{ id }}"
-                title="Delete"><i class="cil-x-circle"></i></button>
+            <button class="btn delete-spam" data-id="{{ id }}"
+              title="Delete"><i class="cil-x-circle"></i></button>
+            <button class="btn not-spam-comment" data-id="{{ id }}"
+              title="Not spam"><i class="cil-thumb-up"></i></button>
           </td>
         </tr>
         {{/each}}
@@ -64,14 +66,14 @@
 
 </div>
 <script>
-  document.querySelectorAll('.delete-comment').forEach(el => {
+  document.querySelectorAll('.delete-spam').forEach(el => {
     el.addEventListener('click', function(ev) {
       ev.preventDefault();
       let element = ev.target.parentNode;
       let id = element.getAttribute('data-id');
       if (!id) return;
 
-      fetch('/dashboard/comment/delete', {
+      fetch('/dashboard/spam/delete', {
         method: 'POST',
         body: JSON.stringify({ id }),
         headers: {

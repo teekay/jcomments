@@ -91,22 +91,23 @@
       switch(response.status) {
         case 200:
           console.log('Key is OK');
-          resultMsg = 'OK';
+          resultMsg = '<i class="cil-thumb-up"></i>';
           break;
         case 400:
           console.log('Failed precondition')
-          resultMsg = 'ERR';
+          resultMsg = '<i class="cil-exclamation-circle"></i>';
           break;
         case 403:
           console.log('Key is no good');
-          resultMsg = 'KO';
+          resultMsg = '<i class="cil-thumb-down"></i>';
           break;
         case 503:
           console.log('Could not reach Akismet')
-          resultMsg = 'ERR';
+          resultMsg = '<i class="cil-exclamation-circle"></i>';
           break;
         default:
           console.warn(`Programmer error? ${response.status}`);
+          resultMsg = '<i class="cis-warning"></i>';
       }
       infoBox.innerHTML = resultMsg;
     })

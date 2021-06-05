@@ -9,11 +9,15 @@ export interface CommentBase {
   postedAt: Date
 }
 
+export interface CommentWithId extends CommentBase {
+  id: string
+}
+
 /**
  * Describes a comment to a particular resource (URL)
  * owned by someone who signed up for the service
  */
-export interface Comment extends CommentBase {
+export interface Comment extends CommentWithId {
   account: Account
 }
 

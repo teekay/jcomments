@@ -1,8 +1,9 @@
-import { IsEmail, IsNotEmpty } from "class-validator"
+import { IsEmail, IsNotEmpty, IsUrl } from "class-validator"
 
 export interface Author {
-  name: string;
-  email?: string;
+  name: string
+  email?: string
+  website?: string
 }
 
 export class AuthorDto {
@@ -11,4 +12,7 @@ export class AuthorDto {
 
   @IsEmail()
   email?: string
+
+  @IsUrl()
+  website?: string
 }
