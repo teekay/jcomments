@@ -2,8 +2,10 @@ import _ from 'lodash'
 import { Account } from '../accounts/account.interface'
 import { AccountParam } from './account.param'
 import { AccountService } from './account.service'
+import { AkismetService } from '../comments/akismet.service'
 import { AuthenticatedGuard } from '../auth/authenticated.guard'
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
 import { SettingsParam } from './settings.param'
 import { TokenService } from './token.service'
@@ -12,7 +14,9 @@ import { TokenService } from './token.service'
 export class AccountController {
 
   constructor(private readonly accountService: AccountService,
-    private readonly tokenService: TokenService) {}
+    private readonly tokenService: TokenService,
+    private readonly akismetService: AkismetService,
+    private readonly logger: Logger) {}
 
   @Get('signup')
   signup(@Req() req: Request, @Res() res: Response) {
@@ -53,8 +57,10 @@ export class AccountController {
   async settings(@Req() req: Request, @Res() res: Response) {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
+    this.logger.log(settings)
     return res.render('./accounts/views/settings', { 
       layout: 'dashboard',
+      section: 'Settings',
       token: await this.accountService.token(account),
       ...settings
     })
@@ -80,5 +86,23 @@ export class AccountController {
     await this.tokenService.revoke(token)
     await this.tokenService.create(account)
     return res.redirect('/account/settings')
+  }
+
+  @Post('settings/akismet/verify')
+  @UseGuards(AuthenticatedGuard)
+  async checkAkismetKey(@Req() req: Request, @Res() res: Response) {
+    const account = _.get(req, 'user') as Account
+    const settings = await this.accountService.settingsFor(account)
+    if (!settings) {
+      res.status(400).end()
+      return
+    }
+    const isKeyAnyGood = await this.akismetService.verifyKey(settings)
+    const returnCode = _.isUndefined(isKeyAnyGood) ?
+      (503) :
+      isKeyAnyGood ?
+        (200) :
+        (403)
+    res.status(returnCode).end()
   }
 }

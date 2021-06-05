@@ -21,6 +21,7 @@ export class DashboardController {
     const comments = await this.commentService.commentsForAccountPaged(account, size, page)
     return res.render('./dashboard/views/index', { 
       layout: 'dashboard',
+      section: 'Dashboard',
       comments, count, page, pages,
       onFirstPage: page === 1,
       onLastPage: page >= (_.last(pages) ?? 0),

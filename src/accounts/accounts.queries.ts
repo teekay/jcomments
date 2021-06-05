@@ -301,6 +301,7 @@ export interface IAccountSettingsParams {
 export interface IAccountSettingsResult {
   id: string;
   account_id: string;
+  blog_url: string | null;
   akismet_key: string | null;
   use_akismet: boolean | null;
 }
@@ -324,6 +325,7 @@ export const accountSettings = new PreparedQuery<IAccountSettingsParams,IAccount
 
 /** 'UpdateSettings' parameters type */
 export interface IUpdateSettingsParams {
+  blogUrl: string | null | void;
   useAkismet: boolean | null | void;
   akismetKey: string | null | void;
   accountId: string | null | void;
@@ -338,12 +340,12 @@ export interface IUpdateSettingsQuery {
   result: IUpdateSettingsResult;
 }
 
-const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"useAkismet","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1189,"b":1198,"line":35,"col":41}]}},{"name":"akismetKey","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1214,"b":1223,"line":35,"col":66}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1243,"b":1251,"line":35,"col":95}]}}],"usedParamSet":{"useAkismet":true,"akismetKey":true,"accountId":true},"statement":{"body":"UPDATE account_settings SET use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId","loc":{"a":1148,"b":1251,"line":35,"col":0}}};
+const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"blogUrl","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1186,"b":1192,"line":35,"col":38}]}},{"name":"useAkismet","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1208,"b":1217,"line":35,"col":60}]}},{"name":"akismetKey","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1233,"b":1242,"line":35,"col":85}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1262,"b":1270,"line":35,"col":114}]}}],"usedParamSet":{"blogUrl":true,"useAkismet":true,"akismetKey":true,"accountId":true},"statement":{"body":"UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId","loc":{"a":1148,"b":1270,"line":35,"col":0}}};
 
 /**
  * Query generated from SQL:
  * ```
- * UPDATE account_settings SET use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId
+ * UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId
  * ```
  */
 export const updateSettings = new PreparedQuery<IUpdateSettingsParams,IUpdateSettingsResult>(updateSettingsIR);

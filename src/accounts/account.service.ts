@@ -60,12 +60,13 @@ export class AccountService {
     return token
   }
 
-  async settingsFor(account: Account) {
+  async settingsFor(account: Account): Promise<SettingsParam | undefined> {
     const s = await accountSettings.run({accountId: account.id}, this.client)
     if (s.length === 0) return
     return {
-      useAkismet: s[0].use_akismet,
-      akismetKey: s[0].akismet_key
+      useAkismet: s[0].use_akismet ?? false,
+      akismetKey: s[0].akismet_key ?? '',
+      blogUrl: s[0].blog_url ?? ''
     }
   }
 

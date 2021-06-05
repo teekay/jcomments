@@ -32,4 +32,4 @@ SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL;
 SELECT * FROM account_settings WHERE account_id=:accountId;
 
 /* @name updateSettings */
-UPDATE account_settings SET use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId;
+UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId;

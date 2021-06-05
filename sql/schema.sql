@@ -2,7 +2,7 @@ CREATE EXTENSION pgcrypto;
 
 CREATE TABLE accounts(id CHARACTER(36) NOT NULL PRIMARY KEY, username VARCHAR(1024) NOT NULL, password bytea NOT NULL, created_at TIMESTAMP NOT NULL, UNIQUE(username));
 
-CREATE TABLE account_settings(id CHARACTER(36) NOT NULL PRIMARY KEY, account_id CHARACTER(36) NOT NULL REFERENCES accounts(id), akismet_key VARCHAR(256), use_akismet BOOLEAN DEFAULT false);
+CREATE TABLE account_settings(id CHARACTER(36) NOT NULL PRIMARY KEY, account_id CHARACTER(36) NOT NULL REFERENCES accounts(id), blog_url VARCHAR(1024), akismet_key VARCHAR(256), use_akismet BOOLEAN DEFAULT false);
 
 CREATE TABLE tokens(id CHARACTER(36) NOT NULL PRIMARY KEY, account_id CHARACTER(36) NOT NULL REFERENCES accounts(id), token VARCHAR(512) NOT NULL, created_at TIMESTAMP NOT NULL, revoked_at TIMESTAMP DEFAULT NULL);
 

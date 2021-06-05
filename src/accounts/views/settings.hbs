@@ -6,12 +6,15 @@
     <li class="nav-item">
       <a class="nav-link active" aria-current="page" href="/account/settings/">Settings</a>
     </li>
+    <li class="nav-item pull-right">
+      <a class="nav-link" href="/auth/logout">Sign out</a>
+    </li>
   </ul>
 
-<h3>Account settings</h3>
+<h3 class="mb-5">Account settings</h3>
 
   <h4>Api key</h4>
-  <section class="row">
+  <section class="row mb-4">
     <div class="col">
       {{ token.token }}
     </div>
@@ -20,11 +23,12 @@
         <button type="submit" class="btn btn-primary">Reissue</button>
       </form>
     </div>
+    <div class="col"></div>
   </section>
 
   <h4>Comments settings</h4>
   <form method="POST" action="/account/settings">
-    <section class="row">
+    <section class="row mb-3">
       <div class="col">
         Use anti-SPAM protection (Akismet)
       </div>
@@ -37,19 +41,75 @@
             id="useAkismet"{{#if useAkismet}} checked{{/if}}>
         </div>
       </div>
+      <div class="col"></div>
     </section>
-    <section class="row">
+    <section class="row mb-3">
       <div class="col">
         Akismet API key
       </div>
-      <div class="col">
+      <div class="col input-group">
         <input class="form-control"
           type="text"
           name="akismetKey"
           id="akismetKey"
           value="{{ akismetKey }}"/>
+        {{#if blogUrl }}
+        <button id="checkAkismetKey" 
+          type="button"
+          class="btn btn-dark">Check</button>
+        {{/if}}
       </div>
+     <div class="col">
+       <span id="akismetKeyCheckResult"></span>
+     </div>
+    </section>
+    <section class="row mb-3">
+      <div class="col">
+        Blog URL (required by Akismet)
+      </div>
+      <div class="col">
+        <input class="form-control"
+          type="text"
+          name="blogUrl"
+          id="blogUrl"
+          value="{{ blogUrl }}"/>
+      </div>
+      <div class="col"></div>
     </section>
     <button type="submit" class="btn btn-primary">Update</button>
   </form>
 </div>
+{{#if blogUrl }}
+<script>
+  document.querySelector('#checkAkismetKey').addEventListener('click', function() {
+    let key = document.querySelector('#akismetKey').value;
+    let infoBox = document.querySelector('#akismetKeyCheckResult');
+    let resultMsg = ''
+    fetch('/account/settings/akismet/verify', {
+      method: 'POST'
+    }).then(response => {
+      switch(response.status) {
+        case 200:
+          console.log('Key is OK');
+          resultMsg = 'OK';
+          break;
+        case 400:
+          console.log('Failed precondition')
+          resultMsg = 'ERR';
+          break;
+        case 403:
+          console.log('Key is no good');
+          resultMsg = 'KO';
+          break;
+        case 503:
+          console.log('Could not reach Akismet')
+          resultMsg = 'ERR';
+          break;
+        default:
+          console.warn(`Programmer error? ${response.status}`);
+      }
+      infoBox.innerHTML = resultMsg;
+    })
+  })
+</script>
+{{/if}}

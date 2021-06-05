@@ -27,6 +27,7 @@
     "@nestjs/platform-express": "7.6.15",
     "@pgtyped/cli": "^0.10.4",
     "@pgtyped/query": "^0.10.4",
+    "akismet-api": "^5.1.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "commander": "^7.2.0",
