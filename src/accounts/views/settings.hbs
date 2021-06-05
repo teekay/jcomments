@@ -23,14 +23,33 @@
   </section>
 
   <h4>Comments settings</h4>
-  <section class="row">
-    <div class="col">
-      Use anti-SPAM protection
-    </div>
-    <div class="col">
-      <div class="form-check form-switch">
-        <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+  <form method="POST" action="/account/settings">
+    <section class="row">
+      <div class="col">
+        Use anti-SPAM protection (Akismet)
       </div>
-    </div>
-  </section>
+      <div class="col">
+        <div class="form-check form-switch">
+          <input class="form-check-input" 
+            value="1"
+            type="checkbox" 
+            name="useAkismet" 
+            id="useAkismet"{{#if useAkismet}} checked{{/if}}>
+        </div>
+      </div>
+    </section>
+    <section class="row">
+      <div class="col">
+        Akismet API key
+      </div>
+      <div class="col">
+        <input class="form-control"
+          type="text"
+          name="akismetKey"
+          id="akismetKey"
+          value="{{ akismetKey }}"/>
+      </div>
+    </section>
+    <button type="submit" class="btn btn-primary">Update</button>
+  </form>
 </div>
