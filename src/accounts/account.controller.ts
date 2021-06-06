@@ -19,12 +19,13 @@ export class AccountController {
     private readonly logger: Logger) {}
 
   @Get('signup')
-  signup(@Req() req: Request, @Res() res: Response) {
+  signup(@Req() req, @Res() res: Response) {
     if (req.isAuthenticated()) {
       return res.redirect('/dashboard/');
     }
     return res.render('./accounts/views/signup', { 
       layout: 'dashboard',
+      csrfToken: req.csrfToken() 
     })
   }
 
@@ -54,13 +55,14 @@ export class AccountController {
 
   @Get('settings')
   @UseGuards(AuthenticatedGuard)
-  async settings(@Req() req: Request, @Res() res: Response) {
+  async settings(@Req() req, @Res() res: Response) {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
     this.logger.log(settings)
     return res.render('./accounts/views/settings', { 
       layout: 'dashboard',
       section: 'Settings',
+      csrfToken: req.csrfToken(),
       token: await this.accountService.token(account),
       ...settings
     })

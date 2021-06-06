@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "api": "ts-node src/api.ts",
+    "web": "ts-node src/web.ts",
     "cli": "ts-node src/cli.ts",
     "test": "jest",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
@@ -39,6 +40,7 @@
     "dotenv": "^10.0.0",
     "express-handlebars": "^5.3.2",
     "express-session": "^1.17.2",
+    "handlebars-dateformat": "^1.1.1",
     "handlebars-helpers": "^0.10.0",
     "hbs": "^4.1.2",
     "lodash": "^4.17.21",

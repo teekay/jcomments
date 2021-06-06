@@ -34,9 +34,9 @@
       <tbody>
         {{#each comments}}
         <tr>
-          <td>{{ postedAt }}</td>
+          <td style="white-space:nowrap;">{{ dateFormat postedAt 'llll' }}</td>
           <td><a href="{{ postUrl }}">{{ postUrl }}</a></td>
-          <td>{{ author.name }} {{ author.email }}</td>
+          <td>{{ author.name }} {{ author.email }} {{ author.website }}</td>
           <td>{{ text }}</td>
           <td>
               <button class="btn delete-comment" data-id="{{ id }}"
@@ -67,6 +67,7 @@
   document.querySelectorAll('.delete-comment').forEach(el => {
     el.addEventListener('click', function(ev) {
       ev.preventDefault();
+      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
       let element = ev.target.parentNode;
       let id = element.getAttribute('data-id');
       if (!id) return;
@@ -75,6 +76,7 @@
         method: 'POST',
         body: JSON.stringify({ id }),
         headers: {
+          'CSRF-Token': token,
           'content-type': 'application/json'
         }
       }).then(response => {

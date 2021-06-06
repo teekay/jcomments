@@ -1,7 +1,8 @@
 <div class="container">
   <h1>JamComments</h1>
   <p>Hello there! Wanna login?</p>
-  <form method="POST" action="/auth/login">
+  {{ loginError }}
+  <form method="POST" action="/auth/login" class="mb-2">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <div class="mb-3">
       <label for="username" class="form-label">User name</label>

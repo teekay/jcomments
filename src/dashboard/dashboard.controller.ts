@@ -15,15 +15,16 @@ export class DashboardController {
 
   @Get()
   @UseGuards(AuthenticatedGuard)
-  async dashboard(@Req() req: Request, @Res() res: Response) {
+  async dashboard(@Req() req, @Res() res: Response) {
     const account = _.get(req, 'user') as Account
     const page = +(req.query['page'] ?? 1)
-    const size = +(req.query['size'] ?? 2)
+    const size = +(req.query['size'] ?? 10)
     const count = await this.commentService.commentCountForAccount(account)
     const pages = _.range(1, Math.ceil(count / size) + 1)
     const comments = await this.commentService.commentsForAccountPaged(account, size, page)
     return res.render('./dashboard/views/index', { 
       layout: 'dashboard',
+      csrfToken: req.csrfToken(),
       section: 'Dashboard',
       comments, count, page, pages,
       onFirstPage: page === 1,
@@ -35,15 +36,16 @@ export class DashboardController {
 
   @Get('review')
   @UseGuards(AuthenticatedGuard)
-  async review(@Req() req: Request, @Res() res: Response) {
+  async review(@Req() req, @Res() res: Response) {
     const account = _.get(req, 'user') as Account
     const page = +(req.query['page'] ?? 1)
-    const size = +(req.query['size'] ?? 2)
+    const size = +(req.query['size'] ?? 10)
     const count = await this.commentService.reviewCountForAccount(account)
     const pages = _.range(1, Math.ceil(count / size) + 1)
     const comments = await this.commentService.reviewsForAccountPaged(account, size, page)
     return res.render('./dashboard/views/review', { 
       layout: 'dashboard',
+      csrfToken: req.csrfToken(),
       section: 'Dashboard',
       comments, count, page, pages,
       onFirstPage: page === 1,

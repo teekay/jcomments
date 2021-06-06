@@ -69,6 +69,7 @@
   document.querySelectorAll('.delete-spam').forEach(el => {
     el.addEventListener('click', function(ev) {
       ev.preventDefault();
+      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
       let element = ev.target.parentNode;
       let id = element.getAttribute('data-id');
       if (!id) return;
@@ -77,6 +78,7 @@
         method: 'POST',
         body: JSON.stringify({ id }),
         headers: {
+          'CSRF-Token': token,
           'content-type': 'application/json'
         }
       }).then(response => {

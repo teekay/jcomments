@@ -20,6 +20,7 @@
     </div>
     <div class="col">
       <form method="POST" action="/account/settings/token/refresh">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <button type="submit" class="btn btn-primary">Reissue</button>
       </form>
     </div>
@@ -28,6 +29,7 @@
 
   <h4>Comments settings</h4>
   <form method="POST" action="/account/settings">
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <section class="row mb-3">
       <div class="col">
         Use anti-SPAM protection (Akismet)
@@ -82,11 +84,15 @@
 {{#if blogUrl }}
 <script>
   document.querySelector('#checkAkismetKey').addEventListener('click', function() {
+    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     let key = document.querySelector('#akismetKey').value;
     let infoBox = document.querySelector('#akismetKeyCheckResult');
     let resultMsg = ''
     fetch('/account/settings/akismet/verify', {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        'CSRF-Token': token
+      }
     }).then(response => {
       switch(response.status) {
         case 200:

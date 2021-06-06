@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Req, Request, Res, UseGuards } from '@nestjs/common'
+import { AuthExceptionFilter } from './auth.exception'
+import { Controller, Get, Post, Req, Request, Res, UseFilters, UseGuards } from '@nestjs/common'
 import { LocalAuthGuard } from './auth.local.guard'
 import { Response } from 'express'
 
@@ -10,10 +11,13 @@ export class AuthController {
     return res.render('./auth/views/login', { 
       layout: 'dashboard',
       section: 'Sign in',
-      csrfToken: req.csrfToken() })
+      loginError: req.flash('login-error'),
+      csrfToken: req.csrfToken() 
+    })
   }
 
   @UseGuards(LocalAuthGuard)
+  @UseFilters(new AuthExceptionFilter())
   @Post('login')
   async login(@Res() res: Response) {
     res.redirect('/dashboard/')
