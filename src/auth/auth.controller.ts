@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Request, Res, UseGuards } from '@nestjs/common'
+import { Controller, Get, Post, Req, Request, Res, UseGuards } from '@nestjs/common'
 import { LocalAuthGuard } from './auth.local.guard'
 import { Response } from 'express'
 
@@ -6,8 +6,11 @@ import { Response } from 'express'
 export class AuthController {
 
   @Get('login')
-  loginForm(@Res() res: Response) {
-    return res.render('./auth/views/login', { layout: 'dashboard' })
+  loginForm(@Req() req, @Res() res: Response) {
+    return res.render('./auth/views/login', { 
+      layout: 'dashboard',
+      section: 'Sign in',
+      csrfToken: req.csrfToken() })
   }
 
   @UseGuards(LocalAuthGuard)
