@@ -1,0 +1,93 @@
+<div class="container">
+  <ul class="nav nav-pills mb-5">
+    <li class="nav-item">
+      <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/account/settings">Settings</a>
+    </li>
+    <li class="nav-item pull-right">
+      <a class="nav-link" href="/auth/logout">Sign out</a>
+    </li>
+  </ul>
+
+  <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <a href="/dashboard" class="nav-link active" id="home-tab" role="tab" aria-controls="comments" aria-selected="true">Comments</a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="/dashboard/review" class="nav-link" id="profile-tab" role="tab" aria-controls="reviews" aria-selected="false">For review</a>
+    </li>
+  </ul>
+
+  <div class="tab-content" id="myTabContent">
+    <table class="table mt-3 ms-2">
+      <thead>
+        <tr>
+          <th scope="col">Date</th>
+          <th scope="col">Page</th>
+          <th scope="col">From</th>
+          <th scope="col">Comment</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each comments}}
+        <tr>
+          <td style="white-space:nowrap;">{{ dateFormat postedAt 'llll' }}</td>
+          <td><a href="{{ postUrl }}">{{ postUrl }}</a></td>
+          <td>{{ author.name }} {{ author.email }} {{ author.website }}</td>
+          <td>{{ text }}</td>
+          <td>
+              <button class="btn delete-comment" data-id="{{ id }}"
+                title="Delete"><i class="cil-x-circle"></i></button>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+
+    <nav aria-label="Comment paging">
+      <ul class="pagination">      
+        <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
+          <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
+        </li>     
+        {{#each pages}}
+        <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
+        {{/each}}
+        <li class="page-item{{#if onLastPage }} disabled{{/if}}">
+          <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</div>
+<script>
+  document.querySelectorAll('.delete-comment').forEach(el => {
+    el.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      let element = ev.target.parentNode;
+      let id = element.getAttribute('data-id');
+      if (!id) return;
+
+      fetch('/dashboard/comment/delete', {
+        method: 'POST',
+        body: JSON.stringify({ id }),
+        headers: {
+          'CSRF-Token': token,
+          'content-type': 'application/json'
+        }
+      }).then(response => {
+        // document.location = document.location;
+        // TODO handle errors
+        if (response.status === 201) {
+          document.location = document.location;
+          return;
+        }
+        console.error(response.status)
+      })
+    })
+  })
+</script>
