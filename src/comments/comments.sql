@@ -32,10 +32,10 @@ SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC;
 SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset;
 
 /* @name CommentsForUrl */
-SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at;
+SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at DESC;
 
 /* @name CommentsForUrlSinceDate */
-SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at;
+SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at DESC;
 
 /* @name DeleteSingleComment */
 DELETE FROM comments WHERE id=:id;

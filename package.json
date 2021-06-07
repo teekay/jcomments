@@ -44,6 +44,7 @@
     "handlebars-helpers": "^0.10.0",
     "hbs": "^4.1.2",
     "lodash": "^4.17.21",
+    "moment": "^2.29.1",
     "nestjs-console": "^5.0.1",
     "nestjs-pino": "^1.4.0",
     "passport": "^0.4.1",

@@ -29,12 +29,21 @@ export class CommentService {
     await postCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
   }
 
-  async commentsForUrl(account: Account, url: string, fromDate?: Date): Promise<CommentBase[]> {
-    return (
-      fromDate 
-        ? await commentsForUrlSinceDate.run({ url, accountId: account.id, date: fromDate }, this.client)
-        : await commentsForUrl.run({ url, accountId: account.id }, this.client)
-      ).map(r => this.recordToClass(r))
+  async commentsForUrl(account: Account, url: string, query?: CommentsQuery): Promise<CommentBase[]> {
+    let records: any[]
+    if (query?.fromDate) {
+      records = await commentsForUrlSinceDate.run({ url, accountId: account.id, date: query.fromDate }, this.client)
+    } else {
+      records = await commentsForUrl.run({ url, accountId: account.id }, this.client)
+      if (query?.afterId) {
+        // records are sorted with the most recent coming up first
+        // hopefully no two records have the exact same timestamp
+        const lastKnownComment = records.find(r => r.id === query.afterId)
+        const indexOfLastComment = records.indexOf(lastKnownComment)
+        records = indexOfLastComment === -1 ? records : records.slice(0, indexOfLastComment)
+      }
+    }
+    return records.map(r => this.recordToClass(r))
   }
 
   async commentCountForAccount(account: Account): Promise<number> {
@@ -122,4 +131,9 @@ export class CommentService {
       }
     }
   }
+}
+
+export class CommentsQuery {
+  fromDate?: Date;
+  afterId?: string;
 }

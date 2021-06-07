@@ -3,6 +3,7 @@ import { Account } from '../accounts/account.interface'
 import { Body, Controller, Get, HttpStatus, Param, Post, Req, Res } from '@nestjs/common'
 import { CommentBase, CommentDto } from './comment.interface'
 import { CommentService } from './comment.service'
+import moment from 'moment'
 import { Request, Response } from 'express'
 //import { Logger } from 'nestjs-pino'
 
@@ -13,7 +14,12 @@ export class CommentsController {
 
   @Get(':url')
   async commentsForUrl(@Req() req: Request, @Param() params : { url: string }): Promise<CommentBase[]> {
-    return await this.commentsService.commentsForUrl(_.get(req, 'account') as Account, params.url)
+    const since  = req.query['since'] as string
+    const fromDate = req.query['fromDate'] as string
+    const maybeDate = moment(fromDate)
+    return await this.commentsService.commentsForUrl(_.get(req, 'account') as Account, params.url, {
+      afterId: since, fromDate: fromDate && maybeDate?.isValid() ? maybeDate.toDate() : undefined
+    })
   }
 
   @Post()
