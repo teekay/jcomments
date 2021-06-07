@@ -26,3 +26,7 @@ The implementing party can fetch the JSON with the comments and bake the comment
 ## Tech stack
 
 The prototype is built with Typescript using the NestJS framework and PostgreSQL for data storage. Spam detection is delegated to Akismet (optional).
+
+## Integrations
+
+The prototype now features a sample integration with [Eleventy](https://www.11ty.dev/). More integrations to follow.
