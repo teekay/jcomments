@@ -29,7 +29,7 @@ export class CommentService {
     await postCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
   }
 
-  async commentsForUrl(account: Account, url: string, query?: CommentsQuery): Promise<CommentBase[]> {
+  async commentsForUrl(account: Account, url: string, query?: CommentsQuery): Promise<CommentWithId[]> {
     let records: any[]
     if (query?.fromDate) {
       records = await commentsForUrlSinceDate.run({ url, accountId: account.id, date: query.fromDate }, this.client)
@@ -40,7 +40,8 @@ export class CommentService {
         // hopefully no two records have the exact same timestamp
         const lastKnownComment = records.find(r => r.id === query.afterId)
         const indexOfLastComment = records.indexOf(lastKnownComment)
-        records = indexOfLastComment === -1 ? records : records.slice(0, indexOfLastComment)
+        this.logger.debug(`After ID: ${query.afterId}, pos ${indexOfLastComment}`)
+        records = indexOfLastComment === -1 ? records : records.slice(indexOfLastComment + 1)
       }
     }
     return records.map(r => this.recordToClass(r))
@@ -56,19 +57,19 @@ export class CommentService {
     return +(c[0].Total ?? 0)
   }
 
-  async commentsForAccount(account: Account) {
+  async commentsForAccount(account: Account): Promise<CommentWithId[]> {
       const allComments = await commentsForAccount.run({ accountId: account.id }, this.client)
       return allComments.map(this.recordToClass)
   }
 
-  async commentsForAccountPaged(account: Account, batchSize?: number, page?: number) {
+  async commentsForAccountPaged(account: Account, batchSize?: number, page?: number): Promise<CommentWithId[]> {
     const limit = batchSize ?? 10
     const offset = ((page ?? 1) - 1) * limit
     const pagedComments = await commentsForAccountPaged.run({ accountId: account.id, limit: `${limit}`, offset: `${offset}` }, this.client)
     return pagedComments.map(this.recordToClass)
   }
 
-  async reviewsForAccountPaged(account: Account, batchSize?: number, page?: number) {
+  async reviewsForAccountPaged(account: Account, batchSize?: number, page?: number): Promise<CommentWithId[]> {
     const limit = batchSize ?? 10
     const offset = ((page ?? 1) - 1) * limit
     const pagedComments = await reviewsForAccountPaged.run({ accountId: account.id, limit: `${limit}`, offset: `${offset}` }, this.client)

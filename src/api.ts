@@ -8,6 +8,7 @@ require('dotenv').config()
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule)
+  app.enableCors()
   const logger = app.get(Logger)
   app.useLogger(logger)
   app.useGlobalPipes(new ValidationPipe())

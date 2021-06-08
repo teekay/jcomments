@@ -381,12 +381,12 @@ export interface ICommentsForUrlQuery {
   result: ICommentsForUrlResult;
 }
 
-const commentsForUrlIR: any = {"name":"CommentsForUrl","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1636,"b":1644,"line":35,"col":41}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1660,"b":1662,"line":35,"col":65}]}}],"usedParamSet":{"accountId":true,"url":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at DESC","loc":{"a":1595,"b":1687,"line":35,"col":0}}};
+const commentsForUrlIR: any = {"name":"CommentsForUrl","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1636,"b":1644,"line":35,"col":41}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1660,"b":1662,"line":35,"col":65}]}}],"usedParamSet":{"accountId":true,"url":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at ASC","loc":{"a":1595,"b":1686,"line":35,"col":0}}};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at DESC
+ * SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at ASC
  * ```
  */
 export const commentsForUrl = new PreparedQuery<ICommentsForUrlParams,ICommentsForUrlResult>(commentsForUrlIR);
@@ -417,12 +417,12 @@ export interface ICommentsForUrlSinceDateQuery {
   result: ICommentsForUrlSinceDateResult;
 }
 
-const commentsForUrlSinceDateIR: any = {"name":"CommentsForUrlSinceDate","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1768,"b":1776,"line":38,"col":41}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1792,"b":1794,"line":38,"col":65}]}},{"name":"date","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1814,"b":1817,"line":38,"col":87}]}}],"usedParamSet":{"accountId":true,"url":true,"date":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at DESC","loc":{"a":1727,"b":1842,"line":38,"col":0}}};
+const commentsForUrlSinceDateIR: any = {"name":"CommentsForUrlSinceDate","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1767,"b":1775,"line":38,"col":41}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1791,"b":1793,"line":38,"col":65}]}},{"name":"date","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1813,"b":1816,"line":38,"col":87}]}}],"usedParamSet":{"accountId":true,"url":true,"date":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at ASC","loc":{"a":1726,"b":1840,"line":38,"col":0}}};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at DESC
+ * SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at ASC
  * ```
  */
 export const commentsForUrlSinceDate = new PreparedQuery<ICommentsForUrlSinceDateParams,ICommentsForUrlSinceDateResult>(commentsForUrlSinceDateIR);
@@ -442,7 +442,7 @@ export interface IDeleteSingleCommentQuery {
   result: IDeleteSingleCommentResult;
 }
 
-const deleteSingleCommentIR: any = {"name":"DeleteSingleComment","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1909,"b":1910,"line":41,"col":31}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM comments WHERE id=:id","loc":{"a":1878,"b":1910,"line":41,"col":0}}};
+const deleteSingleCommentIR: any = {"name":"DeleteSingleComment","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1907,"b":1908,"line":41,"col":31}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM comments WHERE id=:id","loc":{"a":1876,"b":1908,"line":41,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -467,7 +467,7 @@ export interface IDeleteSingleSpamQuery {
   result: IDeleteSingleSpamResult;
 }
 
-const deleteSingleSpamIR: any = {"name":"DeleteSingleSpam","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1973,"b":1974,"line":44,"col":30}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM reviews WHERE id=:id","loc":{"a":1943,"b":1974,"line":44,"col":0}}};
+const deleteSingleSpamIR: any = {"name":"DeleteSingleSpam","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1971,"b":1972,"line":44,"col":30}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM reviews WHERE id=:id","loc":{"a":1941,"b":1972,"line":44,"col":0}}};
 
 /**
  * Query generated from SQL:
