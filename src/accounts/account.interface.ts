@@ -7,6 +7,7 @@ export interface User {
  */
 export interface Account extends User {
   username: string
+  email: string
   password: string
   createdAt: Date
 }

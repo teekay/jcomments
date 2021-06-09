@@ -2,13 +2,17 @@
 import { accountFromToken, changePassword, createPasswordResetToken, expirePendingTokens, isTokenUsable } from './auth.queries'
 import { AccountService } from '../accounts/account.service'
 import { Client } from 'pg'
+import { EmailService } from '../emails/email.service'
 import { Inject, Injectable } from '@nestjs/common'
 import moment from 'moment'
+import { SendMailService } from '../emails/sendmail.service'
 import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class AuthService {
   constructor(@Inject('PG_CLIENT') private client: Client,
+    private readonly emailService: EmailService,
+    private readonly sendMailService: SendMailService,
     private usersService: AccountService) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
@@ -38,7 +42,9 @@ export class AuthService {
       expiresAt: moment().add(1, 'day').toDate()
     }, this.client)
     // email it to the account holder
-    // TODO
+    // TODO externalize config
+    const email = this.emailService.passwordResetEmail(`http://${(process.env['HOST'] ?? '')}/auth/reset-password/${token}`)
+    this.sendMailService.send('tomas@colladeo.com', account.email, email.subject, email.html, email.text)
   }
 
   async completePasswordReset(token: string, password: string): Promise<void> {
