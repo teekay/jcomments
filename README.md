@@ -27,6 +27,18 @@ The implementing party can fetch the JSON with the comments and bake the comment
 
 The prototype is built with Typescript using the NestJS framework and PostgreSQL for data storage. Spam detection is delegated to Akismet (optional).
 
+### CLI
+
+The command-line module gives you an option to create user accounts and assign or revoke access tokens.
+
+### Web API
+
+The API module exposes a REST interface that accepts incoming comments and returns comments associated with an account or also with a specific post / page.
+
+### Admin interface
+
+This module exposes a web dashboard where each user account can manage settings, view and manage comments, and deal with the SPAM queue.
+
 ## Integrations
 
 The prototype now features a sample integration with [Eleventy](https://www.11ty.dev/). More integrations to follow.
