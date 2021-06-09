@@ -11,8 +11,13 @@
           <div id="usernameHelp" class="form-text">This is your nickname, not your email</div>
         </div>
         <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" required>
+          <div id="emailHelp" class="form-text">Used only for password reset etc.</div>
+        </div>
+        <div class="mb-3">
           <label for="password" class="form-label">Password (8 characters minimum)</label>
-          <input type="password" class="form-control" id="password" name="password" minlength="8">
+          <input type="password" class="form-control" id="password" name="password" minlength="8" required>
         </div>
         <button type="submit" class="btn btn-primary">Sign up</button>
       </form>

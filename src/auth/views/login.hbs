@@ -14,7 +14,8 @@
           <label for="password" class="form-label">Password</label>
           <input type="password" class="form-control" id="password" name="password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Sign in</button>
+        <button type="submit" class="btn btn-primary me-3">Sign in</button>
+        <a href="/auth/forgot-password">Forgot password?</a>
       </form>
       {{#if loginError}}
       <div class="alert alert-warning mt-2" role="alert">{{ loginError }}</div>

@@ -19,7 +19,7 @@ export class AccountController {
     private readonly logger: Logger) {}
 
   @Get('signup')
-  signup(@Req() req, @Res() res: Response) {
+  signup(@Req() req, @Res() res: Response): void {
     if (req.isAuthenticated()) {
       return res.redirect('/dashboard/');
     }
@@ -30,13 +30,13 @@ export class AccountController {
   }
 
   @Post('signup')
-  async doSignup(@Req() req: Request, @Res() res: Response, @Body() accountParam: AccountParam) {
+  async doSignup(@Req() req: Request, @Res() res: Response, @Body() accountParam: AccountParam): Promise<void> {
     if (req.isAuthenticated()) {
       return res.redirect('/dashboard/');
     }
     try {
-      const {username, password} = accountParam
-      await this.accountService.create(username, password)
+      const {username, email, password} = accountParam
+      await this.accountService.create(username, email, password)
       const account = await this.accountService.login(username, password)
       if (!account) throw new Error('Could not fetch the account')
       await this.tokenService.create(account)
@@ -48,14 +48,14 @@ export class AccountController {
         res.redirect('/dashboard/')
       })
     } catch (e) {
-      res.render('./accounts/views/signup-error')
-      //res.status(500).end() // TODO error page
+      this.logger.error(e)
+      res.status(500).render('./accounts/views/signup-error')
     }
   }
 
   @Get('settings')
   @UseGuards(AuthenticatedGuard)
-  async settings(@Req() req, @Res() res: Response) {
+  async settings(@Req() req, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
     return res.render('./accounts/views/settings', { 
@@ -69,7 +69,7 @@ export class AccountController {
 
   @Post('settings')
   @UseGuards(AuthenticatedGuard)
-  async updateSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: SettingsParam) {
+  async updateSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: SettingsParam): Promise<void> {
     const account = _.get(req, 'user') as Account
     await this.accountService.updateSettings(account, settingsParam)
     return res.redirect('/account/settings')
@@ -77,7 +77,7 @@ export class AccountController {
 
   @Post('settings/token/refresh')
   @UseGuards(AuthenticatedGuard)
-  async refreshToken(@Req() req: Request, @Res() res: Response) {
+  async refreshToken(@Req() req: Request, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'user') as Account
     const token = await this.accountService.token(account)
     if (!token) {
@@ -92,7 +92,7 @@ export class AccountController {
 
   @Post('settings/akismet/verify')
   @UseGuards(AuthenticatedGuard)
-  async checkAkismetKey(@Req() req: Request, @Res() res: Response) {
+  async checkAkismetKey(@Req() req: Request, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
     if (!settings) {
