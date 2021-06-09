@@ -1,17 +1,23 @@
 <div class="container">
   <h1>JamComments</h1>
-  <p>Hello there! Wanna signup?</p>
-  <form method="POST" action="/account/signup">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <div class="mb-3">
-      <label for="username" class="form-label">User name</label>
-      <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp">
-      <div id="usernameHelp" class="form-text">This is your nickname, not your email</div>
+  <p class="lead mb-3">Hello there! Wanna signup?</p>
+  <div class="row mb-5">
+    <div class="col">
+      <form method="POST" action="/account/signup">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <div class="mb-3">
+          <label for="username" class="form-label">User name</label>
+          <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" required>
+          <div id="usernameHelp" class="form-text">This is your nickname, not your email</div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password (8 characters minimum)</label>
+          <input type="password" class="form-control" id="password" name="password" minlength="8">
+        </div>
+        <button type="submit" class="btn btn-primary">Sign up</button>
+      </form>
     </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" name="password">
-    </div>
-    <button type="submit" class="btn btn-primary">Sign up</button>
-  </form>
+    <div class="col"></div>
+  </div>
+  <p>Have an account already? <a href="/auth/login">Sign in instead</a></p>
 </div>

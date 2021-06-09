@@ -4,10 +4,10 @@ import { Request, Response } from 'express';
 
 @Catch(UnauthorizedException)
 export class AuthExceptionFilter implements ExceptionFilter {
-  catch(_: UnauthorizedException, host: ArgumentsHost) {
+  catch(_: UnauthorizedException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
-    request.flash('login-error', 'Wrong username or password')
+    request.flash('login-error', 'Oops, those credentials did not work')
     const response = ctx.getResponse<Response>();
     response.redirect('/auth/login');
   }

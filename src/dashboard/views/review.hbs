@@ -34,7 +34,7 @@
       <tbody>
         {{#each comments}}
         <tr>
-          <td>{{ postedAt }}</td>
+          <td>{{ dateFormat postedAt 'llll' }}</td>
           <td><a href="{{ postUrl }}">{{ postUrl }}</a></td>
           <td>{{ author.name }} {{ author.email }}</td>
           <td>{{ text }}</td>
@@ -46,9 +46,14 @@
           </td>
         </tr>
         {{/each}}
+        {{#unless comments}}
+          <tr>
+            <td colspan="5">There's nothing for you to review at the moment</td>
+          </tr>
+        {{/unless}}
       </tbody>
     </table>
-
+    {{#if comments}}
     <nav aria-label="Comment paging">
       <ul class="pagination">      
         <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
@@ -63,8 +68,33 @@
       </ul>
     </nav>
   </div>
-
+  {{/if}}
+  <div class="alert alert-warning d-none" id="infoProblemDeletingComment" role="alert">
+    There was a problem deleting this comment, sorry about that!
+  </div>
+  <div class="alert alert-warning d-none" id="infoProblemPromotingComment" role="alert">
+    There was a problem marking this comment not spam, sorry about that!
+  </div>
 </div>
+<div class="modal" tabindex="-1" id="deleteCommentModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Really delete?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete this comment?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelDelete">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btnDeleteComment">Yup, delete this!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
   document.querySelectorAll('.delete-spam').forEach(el => {
     el.addEventListener('click', function(ev) {
@@ -74,7 +104,47 @@
       let id = element.getAttribute('data-id');
       if (!id) return;
 
-      fetch('/dashboard/spam/delete', {
+      let confirmModal = new bootstrap.Modal(document.getElementById('deleteCommentModal'));
+      let btnConfirm = document.querySelector('#btnDeleteComment')
+      let btnCancel = document.querySelector('#btnCancelDelete')
+      let confirm = () => {
+        fetch('/dashboard/spam/delete', {
+          method: 'POST',
+          body: JSON.stringify({ id }),
+          headers: {
+            'CSRF-Token': token,
+            'content-type': 'application/json'
+          }
+        }).then(response => {
+          if (response.status === 201) {
+            document.location = document.location;
+            return;
+          }
+          console.error(response.status);
+          document.querySelector('#infoProblemDeletingComment').classList.remove('d-none');
+          confirmModal.hide();
+        });
+      };
+      let cancel = () => {
+        btnConfirm.removeEventListener('click', confirm);
+        btnCancel.removeEventListener('click', cancel);
+      }
+
+      btnConfirm.addEventListener('click', confirm);
+      btnCancel.addEventListener('click', cancel);
+
+      confirmModal.show();
+    })
+  });
+
+  document.querySelectorAll('.not-spam-comment').forEach(el => {
+    el.addEventListener('click', function(ev) {
+      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      let element = ev.target.parentNode;
+      let id = element.getAttribute('data-id');
+      if (!id) return;
+
+      fetch('/dashboard/spam/unmark', {
         method: 'POST',
         body: JSON.stringify({ id }),
         headers: {
@@ -82,14 +152,13 @@
           'content-type': 'application/json'
         }
       }).then(response => {
-        // document.location = document.location;
-        // TODO handle errors
         if (response.status === 201) {
           document.location = document.location;
           return;
         }
-        console.error(response.status)
-      })
-    })
+        console.error(response.status);
+        document.querySelector('#infoProblemPromotingComment').classList.remove('d-none');
+      });
+    });
   })
 </script>

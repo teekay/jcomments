@@ -16,39 +16,34 @@
   <h4>Api key</h4>
   <section class="row mb-4">
     <div class="col">
-      {{ token.token }}
+      <p><mark>{{ token.token }}</mark></p>
+      <p>Use this API key in your integration code to fetch comments from JamComments.</p>
     </div>
     <div class="col">
       <form method="POST" action="/account/settings/token/refresh">
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <button type="submit" class="btn btn-primary">Reissue</button>
+        <button type="submit" class="btn btn-secondary">Reissue</button>
       </form>
     </div>
     <div class="col"></div>
   </section>
 
-  <h4>Comments settings</h4>
+  <h4 class="mb-3">Comments settings</h4>
   <form method="POST" action="/account/settings">
     <input type="hidden" name="_csrf" value="{{csrfToken}}">
     <section class="row mb-3">
-      <div class="col">
-        Use anti-SPAM protection (Akismet)
-      </div>
-      <div class="col">
-        <div class="form-check form-switch">
-          <input class="form-check-input" 
-            value="1"
-            type="checkbox" 
-            name="useAkismet" 
-            id="useAkismet"{{#if useAkismet}} checked{{/if}}>
-        </div>
+      <label for="useAkismet" class="col form-label">Use anti-SPAM protection (Akismet)</label>
+      <div class="col form-check form-switch">
+        <input class="form-check-input" 
+          value="1"
+          type="checkbox" 
+          name="useAkismet" 
+          id="useAkismet"{{#if useAkismet}} checked{{/if}}>
       </div>
       <div class="col"></div>
     </section>
     <section class="row mb-3">
-      <div class="col">
-        Akismet API key
-      </div>
+      <label for="akismetKey" class="form-label">Akismet API key</label>
       <div class="col input-group">
         <input class="form-control"
           type="text"
@@ -66,14 +61,13 @@
      </div>
     </section>
     <section class="row mb-3">
-      <div class="col">
-        Blog URL (required by Akismet)
-      </div>
+      <label for="blogUrl" class="form-label">Blog URL (required by Akismet)</label>
       <div class="col">
         <input class="form-control"
           type="text"
           name="blogUrl"
           id="blogUrl"
+          placeholder="https://example.com"
           value="{{ blogUrl }}"/>
       </div>
       <div class="col"></div>
@@ -81,6 +75,7 @@
     <button type="submit" class="btn btn-primary">Update</button>
   </form>
 </div>
+
 {{#if blogUrl }}
 <script>
   document.querySelector('#checkAkismetKey').addEventListener('click', function() {

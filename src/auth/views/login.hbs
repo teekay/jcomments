@@ -1,23 +1,26 @@
 <div class="container">
   <h1>JamComments</h1>
-  <p>Hello there! Wanna login?</p>
-  {{ loginError }}
-  <form method="POST" action="/auth/login" class="mb-2">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <div class="mb-3">
-      <label for="username" class="form-label">User name</label>
-      <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp">
-      <div id="usernameHelp" class="form-text">This is your nickname, not your email</div>
+  <p class="lead">Hello there! Wanna sign in?</p>
+  <div class="row mb-5">
+    <div class="col">
+      <form method="POST" action="/auth/login">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <div class="mb-3">
+          <label for="username" class="form-label">User name</label>
+          <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" required>
+          <div id="usernameHelp" class="form-text">This is your nickname, not your email</div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+      </form>
+      {{#if loginError}}
+      <div class="alert alert-warning mt-2" role="alert">{{ loginError }}</div>
+      {{/if}}
     </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="password" class="form-control" id="password" name="password">
-    </div>
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="rememberMe">
-      <label class="form-check-label" for="rememberMe">Remember me</label>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  <p>Don't have an account yet? <a href="/account/signup">Sign up</a></p>
+    <div class="col"></div>
+  </div>
+  <p>Don't have an account yet? <a href="/account/signup">Sign up instead</a></p>
 </div>
