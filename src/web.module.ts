@@ -2,6 +2,7 @@ import { AccountsModule } from './accounts/account.module'
 import { AuthModule } from './auth/auth.module'
 import { Client } from 'pg'
 import { CommentsModule } from './comments/comments.module'
+import { ConfigModule } from './config/config.module'
 import { EmailsModule } from './emails/emails.module'
 import { DashboardModule } from './dashboard/dashboard.module'
 import { HomeModule } from './home/home.module'
@@ -10,7 +11,7 @@ import { LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from './persistence/persistence.module'
 
 @Module({
-  imports: [AccountsModule, AuthModule, EmailsModule, HomeModule, CommentsModule, DashboardModule, PersistenceModule, 
+  imports: [AccountsModule, AuthModule, ConfigModule, EmailsModule, HomeModule, CommentsModule, DashboardModule, PersistenceModule, 
     LoggerModule.forRoot({
     pinoHttp: {
       level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
@@ -19,11 +20,11 @@ import { PersistenceModule } from './persistence/persistence.module'
     },
 }),],
 })
-export class AppModule implements OnApplicationShutdown {
+export class WebModule implements OnApplicationShutdown {
 
   constructor(@Inject('PG_CLIENT') private client: Client) {}
 
-  async onApplicationShutdown(signal?: string) {
+  async onApplicationShutdown(signal?: string): Promise<void> {
     // TODO haven't seen this invoked yet
     console.log(`Application exiting with code ${signal}`)
     await this.client.end()

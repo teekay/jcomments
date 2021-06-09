@@ -1,24 +1,16 @@
+import { ConfigService } from "../config/config.service"
 import { Injectable } from "@nestjs/common"
 import { Logger } from "nestjs-pino"
-import nodemailer from 'nodemailer'
 import mg from 'nodemailer-mailgun-transport'
+import nodemailer from 'nodemailer'
 
 @Injectable()
 export class SendMailService {
-  private apiKey: string
-  private domain: string
   private nodemailerMailgun
 
-  constructor(private readonly logger: Logger) {
-    // TODO externalize the config to something like 'ConfigService' or whatever
-    this.apiKey = process.env['MAILGUN_API_KEY'] ?? ''
-    this.domain = process.env['MAILGUN_DOMAIN'] ?? ''
-    this.nodemailerMailgun = nodemailer.createTransport(mg({
-      auth: {
-        api_key: this.apiKey,
-        domain: this.domain
-      }
-    }))
+  constructor(private readonly configService: ConfigService,
+    private readonly logger: Logger) {
+    this.nodemailerMailgun = nodemailer.createTransport(mg(this.configService.mailgunAuth()))
   }
 
   send(from: string, to: string | string[], subject: string, html?: string, text?: string): void {
@@ -27,8 +19,7 @@ export class SendMailService {
       to, // An array if you have multiple recipients.
       subject,
       html,
-      //You can use "text:" to send plain-text content. It's oldschool!
-      text
+      text  // plain-text version
     }, (err, info) => {
       if (err) {
         this.logger.warn(`Error: ${err}`)

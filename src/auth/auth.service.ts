@@ -2,6 +2,7 @@
 import { accountFromToken, changePassword, createPasswordResetToken, expirePendingTokens, isTokenUsable } from './auth.queries'
 import { AccountService } from '../accounts/account.service'
 import { Client } from 'pg'
+import { ConfigService } from '../config/config.service'
 import { EmailService } from '../emails/email.service'
 import { Inject, Injectable } from '@nestjs/common'
 import moment from 'moment'
@@ -11,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 @Injectable()
 export class AuthService {
   constructor(@Inject('PG_CLIENT') private client: Client,
+    private readonly configService: ConfigService,
     private readonly emailService: EmailService,
     private readonly sendMailService: SendMailService,
     private usersService: AccountService) {}
@@ -32,6 +34,7 @@ export class AuthService {
 
     // expire all pending reset tokens, if any
     await expirePendingTokens.run({ accountId: account.id, now: new Date() }, this.client)
+
     // create a new token
     const token = uuidv4()
     await createPasswordResetToken.run({ 
@@ -41,10 +44,12 @@ export class AuthService {
       createdAt: new Date(),
       expiresAt: moment().add(1, 'day').toDate()
     }, this.client)
+
     // email it to the account holder
-    // TODO externalize config
-    const email = this.emailService.passwordResetEmail(`http://${(process.env['HOST'] ?? '')}/auth/reset-password/${token}`)
-    this.sendMailService.send('tomas@colladeo.com', account.email, email.subject, email.html, email.text)
+    const email = this.emailService
+      .passwordResetEmail(
+        `${this.configService.scheme()}${this.configService.hostname()}${this.configService.portIfNot80()}/auth/reset-password/${token}`)
+    this.sendMailService.send(this.configService.mailgunSender(), account.email, email.subject, email.html, email.text)
   }
 
   async completePasswordReset(token: string, password: string): Promise<void> {
