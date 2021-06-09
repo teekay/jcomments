@@ -1,5 +1,5 @@
 /* @name Signup */
-INSERT INTO accounts (id, username, password, created_at) VALUES(:id, :username, digest(:password::text, 'sha256'), :createdAt);
+INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt);
 
 /* @name initialAccountSettings */
 INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId);
@@ -33,3 +33,6 @@ SELECT * FROM account_settings WHERE account_id=:accountId;
 
 /* @name updateSettings */
 UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId;
+
+/* @name findUserByEmailOrUsername */
+SELECT * FROM accounts WHERE username=:username OR email=:username;

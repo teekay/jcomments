@@ -20,6 +20,9 @@ export class CliService {
           flags: '-u --username <username>',
           required: true
         }, {
+          flags: '-e --email <email>',
+          required: true
+        }, {
           flags: '-p --password <password>',
           required: true
         }]
@@ -54,8 +57,8 @@ export class CliService {
 
   }
 
-  createAccount = async (args: {username: string, password: string}): Promise<void> => {
-    await this.accountService.create(args.username, args.password)
+  createAccount = async (args: {username: string, email: string, password: string}): Promise<void> => {
+    await this.accountService.create(args.username, args.email, args.password)
   }
 
   createToken = async (args: {account: string}): Promise<void> => {

@@ -1,6 +1,6 @@
 import dateFormat from 'handlebars-dateformat'
-import { AppModule } from './app.module'
 import bodyParser from 'body-parser'
+import { ConfigService } from './config/config.service'
 import connectPgSimple from 'connect-pg-simple'
 import cookieParser from 'cookie-parser'
 import { config as dotenv } from 'dotenv'
@@ -16,11 +16,13 @@ import { NestFactory } from '@nestjs/core'
 import passport from 'passport'
 import session from 'express-session'
 import { ValidationPipe } from '@nestjs/common'
+import { WebModule } from './web.module'
 
 dotenv()
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule)
+  new ConfigService().validateOrThrow()
+  const app = await NestFactory.create<NestExpressApplication>(WebModule)
   const logger = app.get(Logger)
   app.useLogger(logger)
   app.useGlobalPipes(new ValidationPipe())
@@ -67,7 +69,7 @@ async function bootstrap() {
     res.render('./home/views/csrf-error')
   })
 
-  await app.listen(3000)
+  await app.listen(process.env['WEB_PORT'] ?? 3030)
   logger.log(`JamComments web is running on: ${await app.getUrl()}`)
 }
 

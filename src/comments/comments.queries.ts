@@ -161,8 +161,8 @@ export interface IFindByIdForAccountResult {
   comment: string;
   reader_name: string;
   reader_email: string | null;
-  created_at: Date;
   reader_website: string | null;
+  created_at: Date;
 }
 
 /** 'FindByIdForAccount' query type */
@@ -195,8 +195,8 @@ export interface ICommentsForAccountResult {
   comment: string;
   reader_name: string;
   reader_email: string | null;
-  created_at: Date;
   reader_website: string | null;
+  created_at: Date;
 }
 
 /** 'CommentsForAccount' query type */
@@ -231,8 +231,8 @@ export interface ICommentsForAccountPagedResult {
   comment: string;
   reader_name: string;
   reader_email: string | null;
-  created_at: Date;
   reader_website: string | null;
+  created_at: Date;
 }
 
 /** 'CommentsForAccountPaged' query type */
@@ -371,8 +371,8 @@ export interface ICommentsForUrlResult {
   comment: string;
   reader_name: string;
   reader_email: string | null;
-  created_at: Date;
   reader_website: string | null;
+  created_at: Date;
 }
 
 /** 'CommentsForUrl' query type */
@@ -407,8 +407,8 @@ export interface ICommentsForUrlSinceDateResult {
   comment: string;
   reader_name: string;
   reader_email: string | null;
-  created_at: Date;
   reader_website: string | null;
+  created_at: Date;
 }
 
 /** 'CommentsForUrlSinceDate' query type */
