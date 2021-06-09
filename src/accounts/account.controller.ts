@@ -58,7 +58,6 @@ export class AccountController {
   async settings(@Req() req, @Res() res: Response) {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
-    this.logger.log(settings)
     return res.render('./accounts/views/settings', { 
       layout: 'dashboard',
       section: 'Settings',
@@ -82,6 +81,7 @@ export class AccountController {
     const account = _.get(req, 'user') as Account
     const token = await this.accountService.token(account)
     if (!token) {
+      this.logger.error('No token created')
       res.status(400).end()
       return
     }

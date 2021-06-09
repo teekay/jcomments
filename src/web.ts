@@ -1,4 +1,4 @@
-import * as dateFormat from 'handlebars-dateformat'
+import dateFormat from 'handlebars-dateformat'
 import { AppModule } from './app.module'
 import bodyParser from 'body-parser'
 import connectPgSimple from 'connect-pg-simple'
