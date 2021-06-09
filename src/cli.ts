@@ -1,7 +1,8 @@
-import { BootstrapConsole } from 'nestjs-console';
-import { CliModule } from './console/console.module';
+import { BootstrapConsole } from 'nestjs-console'
+import { config as dotenv } from 'dotenv'
+import { CliModule } from './console/console.module'
 
-require('dotenv').config()
+dotenv()
 
 const bootstrap = new BootstrapConsole({
     module: CliModule,
@@ -9,13 +10,13 @@ const bootstrap = new BootstrapConsole({
 });
 bootstrap.init().then(async (app) => {
     try {
-        await app.init();
-        await bootstrap.boot();
-        await app.close();
+        await app.init()
+        await bootstrap.boot()
+        await app.close()
         process.exit(0)
     } catch (e) {
-        console.error(e);
-        await app.close();
-        process.exit(1);
+        console.error(e)
+        await app.close()
+        process.exit(1)
     }
 });

@@ -1,10 +1,10 @@
-import _ from 'lodash'
 import { ApiModule } from './api.module'
+import { config as dotenv } from 'dotenv'
 import { Logger } from 'nestjs-pino'
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
 
-require('dotenv').config()
+dotenv()
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule)

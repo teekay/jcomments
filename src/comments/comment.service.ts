@@ -4,7 +4,7 @@ import { AccountService } from '../accounts/account.service'
 import { AkismetService } from './akismet.service'
 import { Client } from 'pg'
 import { Comment, CommentBase, CommentWithId } from './comment.interface'
-import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount } from './comments.queries'
+import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount, ICommentsForUrlSinceDateResult, ICommentsForUrlResult } from './comments.queries'
 import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from "nestjs-pino";
 import { v4 as uuidv4 } from 'uuid'
@@ -30,7 +30,7 @@ export class CommentService {
   }
 
   async commentsForUrl(account: Account, url: string, query?: CommentsQuery): Promise<CommentWithId[]> {
-    let records: any[]
+    let records: ICommentsForUrlSinceDateResult[] | ICommentsForUrlResult[]
     if (query?.fromDate) {
       records = await commentsForUrlSinceDate.run({ url, accountId: account.id, date: query.fromDate }, this.client)
     } else {
@@ -39,8 +39,7 @@ export class CommentService {
         // records are sorted with the most recent coming up first
         // hopefully no two records have the exact same timestamp
         const lastKnownComment = records.find(r => r.id === query.afterId)
-        const indexOfLastComment = records.indexOf(lastKnownComment)
-        this.logger.debug(`After ID: ${query.afterId}, pos ${indexOfLastComment}`)
+        const indexOfLastComment = lastKnownComment ? records.indexOf(lastKnownComment) : -1
         records = indexOfLastComment === -1 ? records : records.slice(indexOfLastComment + 1)
       }
     }
@@ -102,10 +101,11 @@ export class CommentService {
 
   async markCommentNotSpam(comment: Comment): Promise<void> {
     const account = await this.accountService.findById(comment.account.id)
+    if (!account) throw new Error("Data integrity error")
     await deleteSingleSpam.run({id: comment.id}, this.client)
     await postCommentForUrlWithTimestamp.run(_.merge(
       {createdAt: comment.postedAt},
-      this.commentToDbParam(account!, comment)), this.client)
+      this.commentToDbParam(account, comment)), this.client)
   }
 
   private commentToDbParam(account: Account, comment: CommentBase) {

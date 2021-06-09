@@ -9,7 +9,6 @@ export class CliService {
   constructor(private readonly consoleService: ConsoleService,
     private readonly accountService: AccountService,
     private readonly tokenService: TokenService) {
-    // get the root cli
     const cli = this.consoleService.getCli();
     if (!cli) throw new Error('Could not get the console')
 
@@ -38,7 +37,7 @@ export class CliService {
         }]
       },
       this.createToken,
-      cli // attach the command to the cli
+      cli
     );
 
     this.consoleService.createCommand({
@@ -50,7 +49,7 @@ export class CliService {
         }]
       },
       this.revokeToken,
-      cli // attach the command to the cli
+      cli
     );
 
   }

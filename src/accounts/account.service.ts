@@ -1,10 +1,10 @@
 import { Account } from './account.interface'
+import { accountSettings, findById, findByUsername, findCurrentToken, IFindByIdResult, initialAccountSettings, login, signup, updateSettings } from './accounts.queries'
 import { Client } from 'pg'
 import { Inject, Injectable } from '@nestjs/common'
-import { v4 as uuidv4 } from 'uuid'
-import { accountSettings, findById, findByUsername, findCurrentToken, IFindByIdResult, initialAccountSettings, login, signup, updateSettings } from './accounts.queries'
-import { Token } from './token.interface'
 import { SettingsParam } from './settings.param'
+import { Token } from './token.interface'
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class AccountService {
@@ -15,9 +15,9 @@ export class AccountService {
     if (existing) {
       throw new Error(`${username} already exists`)
     }
-    await signup.run({ id: uuidv4(), username, password, createdAt: new Date() }, this.client)
-    const account = await this.findByUsername(username)
-    await initialAccountSettings.run({id: uuidv4(), accountId: account!.id}, this.client)
+    const accountId = uuidv4()
+    await signup.run({ id: accountId, username, password, createdAt: new Date() }, this.client)
+    await initialAccountSettings.run({id: uuidv4(), accountId}, this.client)
   }
 
   async login(username: string, password: string): Promise<Account | undefined> {

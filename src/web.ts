@@ -1,6 +1,9 @@
+import * as dateFormat from 'handlebars-dateformat'
 import { AppModule } from './app.module'
 import bodyParser from 'body-parser'
+import connectPgSimple from 'connect-pg-simple'
 import cookieParser from 'cookie-parser'
+import { config as dotenv } from 'dotenv'
 import csurf from 'csurf'
 import exphbs from 'express-handlebars'
 import flash = require('connect-flash')
@@ -13,9 +16,8 @@ import { NestFactory } from '@nestjs/core'
 import passport from 'passport'
 import session from 'express-session'
 import { ValidationPipe } from '@nestjs/common'
-import _ from 'lodash'
 
-require('dotenv').config()
+dotenv()
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)
@@ -27,12 +29,12 @@ async function bootstrap() {
   app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'public' }))
   app.setViewEngine('hbs')
   helpers({handlebars})
-  handlebars.registerHelper('dateFormat', require('handlebars-dateformat'))
+  handlebars.registerHelper('dateFormat', dateFormat)
   
   app.use(
     session({
       name: 'JamComments',
-      store: new (require('connect-pg-simple')(session))({tableName: 'sessions'}),
+      store: new (connectPgSimple(session))({tableName: 'sessions'}),
       cookie: {
         maxAge: +(process.env['SESSION_LIFETIME'] ?? 1000 * 60 * 60 * 24 * 30), // 30 days default
         sameSite: true,
