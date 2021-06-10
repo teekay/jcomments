@@ -8,6 +8,7 @@ import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsFor
 import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from "nestjs-pino";
 import { v4 as uuidv4 } from 'uuid'
+import moment from 'moment'
 
 @Injectable()
 export class CommentService {
@@ -108,6 +109,23 @@ export class CommentService {
       this.commentToDbParam(account, comment)), this.client)
   }
 
+  async import(account: Account, dump: JsonDump[]): Promise<void> {
+    await this.client.query("BEGIN;")
+    for (const comment of dump) {
+      await postCommentForUrlWithTimestamp.run({
+        id: uuidv4(),
+        accountId: account.id,
+        createdAt: moment(comment.posted_at).toDate(),
+        url: comment.page_url,
+        text: comment.text,
+        name: comment.author,
+        email: comment.email,
+        website: comment.website
+      }, this.client)
+    }
+    await this.client.query("COMMIT;")
+  }
+
   private commentToDbParam(account: Account, comment: CommentBase) {
     return {
       id: uuidv4(),
@@ -137,4 +155,13 @@ export class CommentService {
 export class CommentsQuery {
   fromDate?: Date;
   afterId?: string;
+}
+
+export interface JsonDump {
+  posted_at: string
+  page_url: string
+  author: string
+  text: string
+  email?: string
+  website?: string
 }

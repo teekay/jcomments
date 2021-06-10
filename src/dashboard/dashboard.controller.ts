@@ -27,6 +27,7 @@ export class DashboardController {
       csrfToken: req.csrfToken(),
       section: 'Dashboard',
       comments, count, page, pages,
+      importError: req.flash('import-error'),
       onFirstPage: page === 1,
       onLastPage: page >= (_.last(pages) ?? 0),
       prevPage: page - 1,

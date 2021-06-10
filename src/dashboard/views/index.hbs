@@ -46,7 +46,42 @@
         {{/each}}
         {{#unless comments}}
         <tr>
-          <td colspan="5">There are no comments yet, check back later!</td>
+          <td colspan="5">
+            <p>There are no comments yet, check back later!</p>
+            <p>On a second thought, maybe you want to import comments from your existing app?</p>
+            <p>It needs to be a JSON in the following format:</p>
+            <blockquote>
+              <pre>
+[
+  {
+  "posted_at": "2021-02-12 14:17:17",
+  "page_url": "https://example.com/blog/2020-12-you-are-looking-awesome-today/",
+  "author": "Lucy L.",
+  "text": "Wonderful post, thank you so much for inspiration!",
+  "email": "lucy.poster@mailinator.com",
+  "website": "https://lucy.blogspot.com"
+  }
+]
+              </pre>
+            </blockquote>
+            <form action="/account/import?_csrf={{csrfToken}}"
+                  method="POST"
+                  enctype="multipart/form-data"
+                  class="row gy-2 gx-3 align-items-center">
+              <div class="col-auto">
+                <label class="visually-hidden" for="importjson">File</label>
+                <input type="file" id="importjson" name="importjson" required/>
+              </div>
+              <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Import</button>
+              </div>
+            </form>
+            {{#if importError}}
+            <div class="alert alert-warning mt-2" role="alert">
+              There was an error processing your JSON. Please have a look at it and make sure the format corresponds to what you see above.
+            </div>
+            {{/if}}
+          </td>
         </tr>
         {{/unless}}
       </tbody>

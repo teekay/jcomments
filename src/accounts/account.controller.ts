@@ -4,11 +4,13 @@ import { AccountParam } from './account.param'
 import { AccountService } from './account.service'
 import { AkismetService } from '../comments/akismet.service'
 import { AuthenticatedGuard } from '../auth/authenticated.guard'
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
+import { FileInterceptor } from '@nestjs/platform-express'
 import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
 import { SettingsParam } from './settings.param'
 import { TokenService } from './token.service'
+import { CommentService } from '../comments/comment.service'
 
 @Controller('account')
 export class AccountController {
@@ -16,6 +18,7 @@ export class AccountController {
   constructor(private readonly accountService: AccountService,
     private readonly tokenService: TokenService,
     private readonly akismetService: AkismetService,
+    private readonly commentService: CommentService,
     private readonly logger: Logger) {}
 
   @Get('signup')
@@ -106,5 +109,20 @@ export class AccountController {
         (200) :
         (403)
     res.status(returnCode).end()
+  }
+
+  @Post('import')
+  @UseGuards(AuthenticatedGuard)
+  @UseInterceptors(FileInterceptor('importjson'))
+  async import(@Req() req: Request, @Res() res: Response, @UploadedFile() file): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    try {
+      const json = JSON.parse(file.buffer.toString())
+      this.commentService.import(account, json)
+    } catch(parseError) {
+      this.logger.warn(parseError)
+      req.flash('import-error', 'There was an error parsing the JSON')
+    }
+    return res.redirect('/dashboard')
   }
 }
