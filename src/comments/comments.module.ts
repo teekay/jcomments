@@ -1,12 +1,12 @@
 import { AccountsModule } from '../accounts/account.module';
 import { CommentService } from './comment.service'
 import { CommentsController } from './comments.controller'
+import { forwardRef, MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { LoginMiddleware } from '../accounts/login.middleware';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { PersistenceModule } from '../persistence/persistence.module'
 
 @Module({
-  imports: [PersistenceModule, AccountsModule],
+  imports: [PersistenceModule, forwardRef(() => AccountsModule)],
   controllers: [CommentsController],
   providers: [CommentService],
   exports: [CommentService]
