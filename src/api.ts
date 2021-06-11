@@ -1,5 +1,6 @@
 import { ApiModule } from './api.module'
 import { config as dotenv } from 'dotenv'
+import flash = require('connect-flash')
 import { Logger } from 'nestjs-pino'
 import { NestFactory } from '@nestjs/core'
 import { ValidationPipe } from '@nestjs/common'
@@ -9,6 +10,7 @@ dotenv()
 async function bootstrap() {
   const app = await NestFactory.create(ApiModule)
   app.enableCors()
+  app.use(flash())
   const logger = app.get(Logger)
   app.useLogger(logger)
   app.useGlobalPipes(new ValidationPipe())

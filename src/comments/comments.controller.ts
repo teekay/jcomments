@@ -38,6 +38,12 @@ export class CommentsController {
       ... comment,
       postedAt: new Date()
     }, req.ip)
+
+    if (req.headers['content-type'] !== 'application/json') {
+      // assuming the request comes from the web page -> redirect back
+      return res.redirect(comment.postUrl)
+    }
+
     res.status(HttpStatus.CREATED).send() 
   }
 }
