@@ -57,9 +57,10 @@ export class CommentService {
     return +(c[0].Total ?? 0)
   }
 
-  async commentsForAccount(account: Account): Promise<CommentWithId[]> {
+  async commentsForAccount(account: Account, sort?: SortOrder): Promise<CommentWithId[]> {
       const allComments = await commentsForAccount.run({ accountId: account.id }, this.client)
-      return allComments.map(this.recordToClass)
+      const sorted = sort === SortOrder.Asc ? allComments.reverse() : allComments
+      return sorted.map(this.recordToClass)
   }
 
   async commentsForAccountPaged(account: Account, batchSize?: number, page?: number): Promise<CommentWithId[]> {
@@ -164,4 +165,8 @@ export interface JsonDump {
   text: string
   email?: string
   website?: string
+}
+
+export enum SortOrder {
+  Asc, Desc
 }
