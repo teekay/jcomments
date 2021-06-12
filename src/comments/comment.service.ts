@@ -147,7 +147,8 @@ export class CommentService {
       text: r.comment,
       author: {
         name: r.reader_name,
-        email: r.reader_email ?? ''
+        email: r.reader_email ?? '',
+        website: r.reader_website ?? ''
       }
     }
   }
