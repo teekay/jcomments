@@ -59,13 +59,22 @@ export class CliService {
 
   createAccount = async (args: {username: string, email: string, password: string}): Promise<void> => {
     await this.accountService.create(args.username, args.email, args.password)
+    const account = await this.accountService.findByUsername(args.username)
+    if (!account) {
+      throw new Error("Account not created")
+    }
+    console.log(`Account created. ID: ${account.id}`)
   }
 
   createToken = async (args: {account: string}): Promise<void> => {
     const account = await this.accountService.findById(args.account)
     if (!account) throw new Error(`No account found for id ${args.account}`)
-    console.log('Account found')
     await this.tokenService.create(account)
+    const token = await this.accountService.token(account)
+    if (!token) {
+      throw new Error('Token not created')
+    }
+    console.log(`Token created: ${token.token}`)
   }
 
   revokeToken = async (args: {token: string}): Promise<void> => {

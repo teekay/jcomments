@@ -114,7 +114,7 @@ export class AccountController {
   @Post('import')
   @UseGuards(AuthenticatedGuard)
   @UseInterceptors(FileInterceptor('importjson', { limits: { fileSize: +(process.env['UPLOAD_MAX_SIZE_BYTES'] ?? 1024 * 10) }}))
-  async import(@Req() req: Request, @Res() res: Response, @UploadedFile() file): Promise<void> {
+  async import(@Req() req, @Res() res: Response, @UploadedFile() file): Promise<void> {
     const account = _.get(req, 'user') as Account
     try {
       const json = JSON.parse(file.buffer.toString())
