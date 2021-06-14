@@ -22,7 +22,7 @@ export class AuthController {
   }
 
   @UseGuards(LocalAuthGuard)
-  @UseFilters(new AuthExceptionFilter())
+  @UseFilters(AuthExceptionFilter)
   @Post('login')
   async login(@Res() res: Response): Promise<void> {
     res.redirect('/dashboard/')

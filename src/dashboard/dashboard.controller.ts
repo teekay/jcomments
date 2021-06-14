@@ -1,13 +1,15 @@
 import _ from 'lodash'
 import { Account } from '../accounts/account.interface'
 import { AuthenticatedGuard } from '../auth/authenticated.guard'
-import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common'
 import { CommentService } from '../comments/comment.service'
 import { Identifiable } from './identifiable.param'
 import { Logger } from "nestjs-pino";
 import { Request, Response } from 'express'
+import { SessionExpiredFilter } from '../auth/auth.exception'
 
 @Controller('dashboard')
+@UseFilters(new SessionExpiredFilter())
 export class DashboardController {
 
   constructor(private readonly commentService: CommentService,

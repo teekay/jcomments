@@ -1,10 +1,11 @@
-import dateFormat from 'handlebars-dateformat'
+import _ from 'lodash'
 import bodyParser from 'body-parser'
 import { ConfigService } from './config/config.service'
 import connectPgSimple from 'connect-pg-simple'
 import cookieParser from 'cookie-parser'
 import { config as dotenv } from 'dotenv'
 import csurf from 'csurf'
+import dateFormat from 'handlebars-dateformat'
 import exphbs from 'express-handlebars'
 import flash = require('connect-flash')
 import handlebars from 'handlebars'
@@ -22,9 +23,14 @@ dotenv()
 
 async function bootstrap() {
   new ConfigService().validateOrThrow()
+  const isInProduction = process.env['NODE_ENVIRONMENT'] === 'production'
   const app = await NestFactory.create<NestExpressApplication>(WebModule)
   const logger = app.get(Logger)
   app.useLogger(logger)
+  if (isInProduction) {
+    app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal'])
+  }
+  app.disable('x-powered-by')
   app.useGlobalPipes(new ValidationPipe())
   app.useStaticAssets(join(__dirname, '..', 'public'))
   app.setBaseViewsDir(join(__dirname, '..', 'src'))
@@ -32,16 +38,20 @@ async function bootstrap() {
   app.setViewEngine('hbs')
   helpers({handlebars})
   handlebars.registerHelper('dateFormat', dateFormat)
+
+  const defaultSessionLifetime = 60 * 24 * 30 // 30 days
+  const cfgSessionLifetime = _.defaultTo(+(process.env['SESSION_LIFETIME'] ?? defaultSessionLifetime), defaultSessionLifetime)
+  const sessionLifetime = cfgSessionLifetime * 60 * 1000
   
   app.use(
     session({
       name: 'JamComments',
       store: new (connectPgSimple(session))({tableName: 'sessions'}),
       cookie: {
-        maxAge: +(process.env['SESSION_LIFETIME'] ?? 1000 * 60 * 60 * 24 * 30), // 30 days default
+        maxAge: sessionLifetime,
         sameSite: true,
         httpOnly: true,
-        secure: process.env['NODE_ENVIRONMENT'] === 'production'
+        secure: isInProduction
       },
       proxy: true,
       secret: process.env['SESSION_SECRET'] ?? 'lorem ipsum',

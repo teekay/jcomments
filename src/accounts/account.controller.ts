@@ -4,15 +4,17 @@ import { AccountParam } from './account.param'
 import { AccountService } from './account.service'
 import { AkismetService } from '../comments/akismet.service'
 import { AuthenticatedGuard } from '../auth/authenticated.guard'
-import { Body, Controller, Get, Post, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common'
+import { Body, Controller, Get, Post, Req, Res, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common'
+import { CommentService } from '../comments/comment.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
+import { SessionExpiredFilter } from '../auth/auth.exception'
 import { SettingsParam } from './settings.param'
 import { TokenService } from './token.service'
-import { CommentService } from '../comments/comment.service'
 
 @Controller('account')
+@UseFilters(new SessionExpiredFilter())
 export class AccountController {
 
   constructor(private readonly accountService: AccountService,
