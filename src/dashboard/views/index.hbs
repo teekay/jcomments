@@ -13,10 +13,10 @@
 
   <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <a href="/dashboard" class="nav-link active" id="home-tab" role="tab" aria-controls="comments" aria-selected="true">Comments</a>
+      <a href="/dashboard" class="nav-link active" id="home-tab" role="tab" aria-controls="comments" aria-selected="true">Comments ({{ commentCount }})</a>
     </li>
     <li class="nav-item" role="presentation">
-      <a href="/dashboard/review" class="nav-link" id="profile-tab" role="tab" aria-controls="reviews" aria-selected="false">For review</a>
+      <a href="/dashboard/review" class="nav-link" id="profile-tab" role="tab" aria-controls="reviews" aria-selected="false">For review ({{ reviewCount }})</a>
     </li>
   </ul>
 
@@ -24,9 +24,9 @@
     <table class="table mt-3 ms-2">
       <thead>
         <tr>
-          <th scope="col">Date</th>
-          <th scope="col">Page</th>
-          <th scope="col">From</th>
+          <th scope="col">Posted</th>
+          <th scope="col">Commented on</th>
+          <th scope="col">Commenter</th>
           <th scope="col">Comment</th>
           <th scope="col">Action</th>
         </tr>
@@ -34,10 +34,17 @@
       <tbody>
         {{#each comments}}
         <tr>
-          <td style="white-space:nowrap;">{{ dateFormat postedAt 'llll' }}</td>
+          <td style="white-space:nowrap;"><span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span></td>
           <td><a href="{{ postUrl }}">{{ postUrl }}</a></td>
-          <td>{{ author.name }} {{ author.email }} {{ author.website }}</td>
-          <td>{{ text }}</td>
+          <td>
+            {{ author.name }}
+            {{#if author.email}}
+            <br/>{{ author.email }}
+            {{/if}}
+            {{#if author.website}}
+            {{ author.website }}</td>
+            {{/if}}
+          <td>{{ truncate text 120 "..."}}</td>
           <td>
               <button class="btn delete-comment" data-id="{{ id }}"
                 title="Delete"><i class="cil-x-circle"></i></button>

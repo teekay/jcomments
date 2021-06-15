@@ -7,6 +7,7 @@
     "api": "ts-node src/api.ts",
     "web": "ts-node src/web.ts",
     "cli": "ts-node src/cli.ts",
+    "sql": "pgtyped -c config.json",
     "test": "jest",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "build": "tsc -p tsconfig.json",

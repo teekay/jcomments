@@ -1,8 +1,8 @@
 import { Account } from './account.interface'
-import { accountSettings, findById, findByUsername, findCurrentToken, findUserByEmailOrUsername, IFindByIdResult, initialAccountSettings, login, signup, updateSettings } from './accounts.queries'
+import { accountEmailSettings, accountSettings, findById, findByUsername, findCurrentToken, findUserByEmailOrUsername, IFindByIdResult, initialAccountEmailSettings, initialAccountSettings, login, signup, updateEmailSettings, updateSettings } from './accounts.queries'
 import { Client } from 'pg'
 import { Inject, Injectable } from '@nestjs/common'
-import { SettingsParam } from './settings.param'
+import { EmailSettingsParam, SettingsParam } from './settings.param'
 import { Token } from './token.interface'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -18,6 +18,7 @@ export class AccountService {
     const accountId = uuidv4()
     await signup.run({ id: accountId, username, email, password, createdAt: new Date() }, this.client)
     await initialAccountSettings.run({id: uuidv4(), accountId}, this.client)
+    await initialAccountEmailSettings.run({id: uuidv4(), accountId}, this.client)
   }
 
   async login(username: string, password: string): Promise<Account | undefined> {
@@ -77,8 +78,21 @@ export class AccountService {
     }
   }
 
+  async emailSettingsFor(account: Account): Promise<EmailSettingsParam | undefined> {
+    const s = await accountEmailSettings.run({accountId: account.id}, this.client)
+    if (s.length === 0) return
+    return {
+      notifyOnComments: s[0].notify_on_comments ?? false,
+      sendCommentsDigest: s[0].send_comments_digest ?? false,
+    }
+  }
+
   async updateSettings(account: Account, settings: SettingsParam): Promise<void> {
     await updateSettings.run({accountId: account.id, ...settings}, this.client)
+  }
+
+  async updateEmailSettings(account: Account, settings: EmailSettingsParam): Promise<void> {
+    await updateEmailSettings.run({accountId: account.id, ...settings}, this.client)
   }
 
   private recordToAccount(a: IFindByIdResult): Account {

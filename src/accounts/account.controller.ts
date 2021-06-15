@@ -10,7 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
 import { SessionExpiredFilter } from '../auth/auth.exception'
-import { SettingsParam } from './settings.param'
+import { EmailSettingsParam, SettingsParam } from './settings.param'
 import { TokenService } from './token.service'
 
 @Controller('account')
@@ -63,12 +63,15 @@ export class AccountController {
   async settings(@Req() req, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
+    const emailSettings = await this.accountService.emailSettingsFor(account)
     return res.render('./accounts/views/settings', { 
       layout: 'dashboard',
       section: 'Settings',
       csrfToken: req.csrfToken(),
       token: await this.accountService.token(account),
-      ...settings
+      account,
+      ...settings,
+      ...emailSettings
     })
   }
 
@@ -77,6 +80,14 @@ export class AccountController {
   async updateSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: SettingsParam): Promise<void> {
     const account = _.get(req, 'user') as Account
     await this.accountService.updateSettings(account, settingsParam)
+    return res.redirect('/account/settings')
+  }
+
+  @Post('email/settings')
+  @UseGuards(AuthenticatedGuard)
+  async updateEmailSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: EmailSettingsParam): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    await this.accountService.updateEmailSettings(account, settingsParam)
     return res.redirect('/account/settings')
   }
 
