@@ -1,0 +1,18 @@
+Hello there!
+
+A new comment came in for {{ comment.postUrl }}.
+
+Author: {{ comment.author.name }}
+
+{{#if comment.author.email }}
+Email: {{ comment.author.email }}
+{{/if}}
+{{#if comment.author.website }}
+Email: {{ comment.author.email }}
+{{/if}}
+
+---
+{{ comment.text }}
+---
+
+Looks fishy? You can always delete it using your dashboard - {{ link }}

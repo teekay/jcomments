@@ -1,0 +1,20 @@
+<h1>Hello there!</h1>
+
+<p>A new comment came in for <a href="{{ comment.postUrl }}">{{ comment.postUrl }}</a>.</p>
+
+<p>Author: {{ comment.author.name }}</p>
+
+{{#if comment.author.email }}
+<p>Email: {{ comment.author.email }}</p>
+{{/if}}
+{{#if comment.author.website }}
+<p>Email: {{ comment.author.email }}</p>
+{{/if}}
+
+<blockquote>
+{{ comment.text }}
+</blockquote>
+
+<hr/>
+
+<p>Looks fishy? You can always delete it using your <a href="{{ link }}">dashboard</a></p>

@@ -48,7 +48,7 @@ export class AuthService {
     // email it to the account holder
     const email = this.emailService
       .passwordResetEmail(
-        `${this.configService.scheme()}${this.configService.hostname()}${this.configService.portIfNot80()}/auth/reset-password/${token}`)
+        `${this.configService.adminUrl()}/auth/reset-password/${token}`)
     this.sendMailService.send(this.configService.mailgunSender(), account.email, email.subject, email.html, email.text)
   }
 
