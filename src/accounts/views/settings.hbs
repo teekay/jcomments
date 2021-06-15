@@ -52,7 +52,25 @@
           <p>(used to reset your password and for email notifications, never shared)</p>
         </div>
         <div class="col">
-          <mark>{{ account.email }}</mark>
+          <form id="formChangeEmail"
+                method="POST"
+                action="/account/email/change"
+                class="d-none">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <div class="input-group mb-3">
+              <input type="email" name="email"
+                     class="form-control" 
+                     placeholder="New e-mail address"
+                     aria-label="New e-mail address"/>
+              <button class="btn btn-secondary" type="submit">Change</button>
+              <button class="btn btn-outline-secondary" id="btnCancelEmailChange" type="button">Cancel</button>
+            </div>
+          </form>
+          <mark id="lblAccountEmail">{{ account.email }}</mark><br/>
+          <a href="#" id="btnChangeEmail">change</a>
+          {{#if changeEmailError}}
+          <div class="alert alert-warning mt-2" role="alert">{{ changeEmailError }}</div>
+          {{/if}}
         </div>
         <div class="col"></div>
       </section>
@@ -76,7 +94,7 @@
 
           <form method="POST" action="/account/settings/token/refresh" id="formReiussueApiKey">
             <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button type="button" class="btn btn-info me-2"
+            <button type="button" class="btn btn-secondary me-2"
                     id="btnRevealApiKey">Reveal</button>
             <button type="button" class="btn btn-danger"
                     data-bs-toggle="modal" data-bs-target="#reissueApiKeyModal">Reissue</button>
@@ -174,6 +192,18 @@
   
 </div>
 <script>
+  document.querySelector('#btnChangeEmail').addEventListener('click', function() {
+    document.querySelector('#btnChangeEmail').classList.add('d-none');
+    document.querySelector('#lblAccountEmail').classList.add('d-none');
+    document.querySelector('#formChangeEmail').classList.remove('d-none');
+  });
+
+  document.querySelector('#btnCancelEmailChange').addEventListener('click', function() {
+    document.querySelector('#btnChangeEmail').classList.remove('d-none');
+    document.querySelector('#lblAccountEmail').classList.remove('d-none');
+    document.querySelector('#formChangeEmail').classList.add('d-none');
+  });
+
   document.querySelector('#btnReissueApiKey').addEventListener('click', function() {
     document.querySelector('#formReiussueApiKey').submit();
   });

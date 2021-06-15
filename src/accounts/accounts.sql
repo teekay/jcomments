@@ -16,6 +16,9 @@ SELECT * FROM accounts WHERE id=:id;
 /* @name findByUsername */
 SELECT * FROM accounts WHERE username=:username;
 
+/* @name findByEmail */
+SELECT * FROM accounts WHERE email=:email;
+
 /* @name LoginFromToken */
 SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL;
 
@@ -44,4 +47,7 @@ UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_
 UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId;
 
 /* @name findUserByEmailOrUsername */
-SELECT * FROM accounts WHERE username=:username OR email=:username;
+SELECT * FROM accounts WHERE username=:username OR email=:email;
+
+/* @name changeAccountEmail */
+UPDATE accounts SET email=:email WHERE id=:accountId;

@@ -45,11 +45,7 @@ export class AccountController {
       const account = await this.accountService.login(username, password)
       if (!account) throw new Error('Could not fetch the account')
       await this.tokenService.create(account)
-      req.logIn(account as Express.User, function(err) {
-        if (err) {
-          res.redirect('/auth/login') // TODO error page
-          return
-        }
+      req.logIn(account as Express.User, function() {
         res.redirect('/dashboard/')
       })
     } catch (e) {
@@ -70,6 +66,7 @@ export class AccountController {
       csrfToken: req.csrfToken(),
       token: await this.accountService.token(account),
       account,
+      changeEmailError: req.flash('change-email-error'),
       ...settings,
       ...emailSettings
     })
@@ -80,6 +77,23 @@ export class AccountController {
   async updateSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: SettingsParam): Promise<void> {
     const account = _.get(req, 'user') as Account
     await this.accountService.updateSettings(account, settingsParam)
+    return res.redirect('/account/settings')
+  }
+
+  @Post('email/change')
+  @UseGuards(AuthenticatedGuard)
+  async changeEmail(@Req() req: Request, @Res() res: Response, @Body() form: { email: string }): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    try {
+      await this.accountService.changeEmail(account, form.email)
+      const accountWithNewEmail = await this.accountService.findById(account.id)
+      req.logIn(accountWithNewEmail as Express.User, function() {
+        res.redirect('/account/settings')
+      })
+      return
+    } catch (oops) {
+      req.flash('change-email-error', 'This email already belongs to someone else. Please choose another')
+    }
     return res.redirect('/account/settings')
   }
 

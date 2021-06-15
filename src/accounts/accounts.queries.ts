@@ -176,6 +176,37 @@ const findByUsernameIR: any = {"name":"findByUsername","params":[{"name":"userna
 export const findByUsername = new PreparedQuery<IFindByUsernameParams,IFindByUsernameResult>(findByUsernameIR);
 
 
+/** 'FindByEmail' parameters type */
+export interface IFindByEmailParams {
+  email: string | null | void;
+}
+
+/** 'FindByEmail' return type */
+export interface IFindByEmailResult {
+  id: string;
+  username: string;
+  email: string;
+  password: Buffer;
+  created_at: Date;
+}
+
+/** 'FindByEmail' query type */
+export interface IFindByEmailQuery {
+  params: IFindByEmailParams;
+  result: IFindByEmailResult;
+}
+
+const findByEmailIR: any = {"name":"findByEmail","params":[{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":698,"b":702,"line":20,"col":36}]}}],"usedParamSet":{"email":true},"statement":{"body":"SELECT * FROM accounts WHERE email=:email","loc":{"a":662,"b":702,"line":20,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * SELECT * FROM accounts WHERE email=:email
+ * ```
+ */
+export const findByEmail = new PreparedQuery<IFindByEmailParams,IFindByEmailResult>(findByEmailIR);
+
+
 /** 'LoginFromToken' parameters type */
 export interface ILoginFromTokenParams {
   token: string | null | void;
@@ -196,7 +227,7 @@ export interface ILoginFromTokenQuery {
   result: ILoginFromTokenResult;
 }
 
-const loginFromTokenIR: any = {"name":"LoginFromToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":753,"b":757,"line":20,"col":88}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL","loc":{"a":665,"b":782,"line":20,"col":0}}};
+const loginFromTokenIR: any = {"name":"LoginFromToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":821,"b":825,"line":23,"col":88}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL","loc":{"a":733,"b":850,"line":23,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -224,7 +255,7 @@ export interface ICreateTokenQuery {
   result: ICreateTokenResult;
 }
 
-const createTokenIR: any = {"name":"CreateToken","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":874,"b":875,"line":23,"col":64}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":879,"b":887,"line":23,"col":69}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":891,"b":895,"line":23,"col":81}]}},{"name":"createdAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":899,"b":907,"line":23,"col":89}]}}],"usedParamSet":{"id":true,"accountId":true,"token":true,"createdAt":true},"statement":{"body":"INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)","loc":{"a":810,"b":908,"line":23,"col":0}}};
+const createTokenIR: any = {"name":"CreateToken","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":942,"b":943,"line":26,"col":64}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":947,"b":955,"line":26,"col":69}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":959,"b":963,"line":26,"col":81}]}},{"name":"createdAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":967,"b":975,"line":26,"col":89}]}}],"usedParamSet":{"id":true,"accountId":true,"token":true,"createdAt":true},"statement":{"body":"INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)","loc":{"a":878,"b":976,"line":26,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -250,7 +281,7 @@ export interface IRevokeTokenQuery {
   result: IRevokeTokenResult;
 }
 
-const revokeTokenIR: any = {"name":"RevokeToken","params":[{"name":"revokedAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":966,"b":974,"line":26,"col":30}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":989,"b":993,"line":26,"col":53}]}}],"usedParamSet":{"revokedAt":true,"token":true},"statement":{"body":"UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token","loc":{"a":936,"b":993,"line":26,"col":0}}};
+const revokeTokenIR: any = {"name":"RevokeToken","params":[{"name":"revokedAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1034,"b":1042,"line":29,"col":30}]}},{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1057,"b":1061,"line":29,"col":53}]}}],"usedParamSet":{"revokedAt":true,"token":true},"statement":{"body":"UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token","loc":{"a":1004,"b":1061,"line":29,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -281,7 +312,7 @@ export interface IFindTokenQuery {
   result: IFindTokenResult;
 }
 
-const findTokenIR: any = {"name":"findToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1053,"b":1057,"line":29,"col":34}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT * FROM tokens WHERE token=:token","loc":{"a":1019,"b":1057,"line":29,"col":0}}};
+const findTokenIR: any = {"name":"findToken","params":[{"name":"token","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1121,"b":1125,"line":32,"col":34}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT * FROM tokens WHERE token=:token","loc":{"a":1087,"b":1125,"line":32,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -312,7 +343,7 @@ export interface IFindCurrentTokenQuery {
   result: IFindCurrentTokenResult;
 }
 
-const findCurrentTokenIR: any = {"name":"findCurrentToken","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1129,"b":1137,"line":32,"col":39}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL","loc":{"a":1090,"b":1160,"line":32,"col":0}}};
+const findCurrentTokenIR: any = {"name":"findCurrentToken","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1197,"b":1205,"line":35,"col":39}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL","loc":{"a":1158,"b":1228,"line":35,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -343,7 +374,7 @@ export interface IAccountSettingsQuery {
   result: IAccountSettingsResult;
 }
 
-const accountSettingsIR: any = {"name":"accountSettings","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1241,"b":1249,"line":35,"col":49}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM account_settings WHERE account_id=:accountId","loc":{"a":1192,"b":1249,"line":35,"col":0}}};
+const accountSettingsIR: any = {"name":"accountSettings","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1309,"b":1317,"line":38,"col":49}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM account_settings WHERE account_id=:accountId","loc":{"a":1260,"b":1317,"line":38,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -373,7 +404,7 @@ export interface IAccountEmailSettingsQuery {
   result: IAccountEmailSettingsResult;
 }
 
-const accountEmailSettingsIR: any = {"name":"accountEmailSettings","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1341,"b":1349,"line":38,"col":55}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM account_email_settings WHERE account_id=:accountId","loc":{"a":1286,"b":1349,"line":38,"col":0}}};
+const accountEmailSettingsIR: any = {"name":"accountEmailSettings","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1409,"b":1417,"line":41,"col":55}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM account_email_settings WHERE account_id=:accountId","loc":{"a":1354,"b":1417,"line":41,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -401,7 +432,7 @@ export interface IUpdateSettingsQuery {
   result: IUpdateSettingsResult;
 }
 
-const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"blogUrl","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1418,"b":1424,"line":41,"col":38}]}},{"name":"useAkismet","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1440,"b":1449,"line":41,"col":60}]}},{"name":"akismetKey","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1465,"b":1474,"line":41,"col":85}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1494,"b":1502,"line":41,"col":114}]}}],"usedParamSet":{"blogUrl":true,"useAkismet":true,"akismetKey":true,"accountId":true},"statement":{"body":"UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId","loc":{"a":1380,"b":1502,"line":41,"col":0}}};
+const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"blogUrl","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1486,"b":1492,"line":44,"col":38}]}},{"name":"useAkismet","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1508,"b":1517,"line":44,"col":60}]}},{"name":"akismetKey","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1533,"b":1542,"line":44,"col":85}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1562,"b":1570,"line":44,"col":114}]}}],"usedParamSet":{"blogUrl":true,"useAkismet":true,"akismetKey":true,"accountId":true},"statement":{"body":"UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId","loc":{"a":1448,"b":1570,"line":44,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -428,7 +459,7 @@ export interface IUpdateEmailSettingsQuery {
   result: IUpdateEmailSettingsResult;
 }
 
-const updateEmailSettingsIR: any = {"name":"updateEmailSettings","params":[{"name":"notifyOnComments","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1592,"b":1607,"line":44,"col":54}]}},{"name":"sendCommentsDigest","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1632,"b":1649,"line":44,"col":94}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1669,"b":1677,"line":44,"col":131}]}}],"usedParamSet":{"notifyOnComments":true,"sendCommentsDigest":true,"accountId":true},"statement":{"body":"UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId","loc":{"a":1538,"b":1677,"line":44,"col":0}}};
+const updateEmailSettingsIR: any = {"name":"updateEmailSettings","params":[{"name":"notifyOnComments","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1660,"b":1675,"line":47,"col":54}]}},{"name":"sendCommentsDigest","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1700,"b":1717,"line":47,"col":94}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1737,"b":1745,"line":47,"col":131}]}}],"usedParamSet":{"notifyOnComments":true,"sendCommentsDigest":true,"accountId":true},"statement":{"body":"UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId","loc":{"a":1606,"b":1745,"line":47,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -442,6 +473,7 @@ export const updateEmailSettings = new PreparedQuery<IUpdateEmailSettingsParams,
 /** 'FindUserByEmailOrUsername' parameters type */
 export interface IFindUserByEmailOrUsernameParams {
   username: string | null | void;
+  email: string | null | void;
 }
 
 /** 'FindUserByEmailOrUsername' return type */
@@ -459,14 +491,40 @@ export interface IFindUserByEmailOrUsernameQuery {
   result: IFindUserByEmailOrUsernameResult;
 }
 
-const findUserByEmailOrUsernameIR: any = {"name":"findUserByEmailOrUsername","params":[{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1758,"b":1765,"line":47,"col":39},{"a":1777,"b":1784,"line":47,"col":58}]}}],"usedParamSet":{"username":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username OR email=:username","loc":{"a":1719,"b":1784,"line":47,"col":0}}};
+const findUserByEmailOrUsernameIR: any = {"name":"findUserByEmailOrUsername","params":[{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1826,"b":1833,"line":50,"col":39}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1845,"b":1849,"line":50,"col":58}]}}],"usedParamSet":{"username":true,"email":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username OR email=:email","loc":{"a":1787,"b":1849,"line":50,"col":0}}};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM accounts WHERE username=:username OR email=:username
+ * SELECT * FROM accounts WHERE username=:username OR email=:email
  * ```
  */
 export const findUserByEmailOrUsername = new PreparedQuery<IFindUserByEmailOrUsernameParams,IFindUserByEmailOrUsernameResult>(findUserByEmailOrUsernameIR);
+
+
+/** 'ChangeAccountEmail' parameters type */
+export interface IChangeAccountEmailParams {
+  email: string | null | void;
+  accountId: string | null | void;
+}
+
+/** 'ChangeAccountEmail' return type */
+export type IChangeAccountEmailResult = void;
+
+/** 'ChangeAccountEmail' query type */
+export interface IChangeAccountEmailQuery {
+  params: IChangeAccountEmailParams;
+  result: IChangeAccountEmailResult;
+}
+
+const changeAccountEmailIR: any = {"name":"changeAccountEmail","params":[{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1911,"b":1915,"line":53,"col":27}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1927,"b":1935,"line":53,"col":43}]}}],"usedParamSet":{"email":true,"accountId":true},"statement":{"body":"UPDATE accounts SET email=:email WHERE id=:accountId","loc":{"a":1884,"b":1935,"line":53,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * UPDATE accounts SET email=:email WHERE id=:accountId
+ * ```
+ */
+export const changeAccountEmail = new PreparedQuery<IChangeAccountEmailParams,IChangeAccountEmailResult>(changeAccountEmailIR);
 
 

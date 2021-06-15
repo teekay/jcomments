@@ -1,5 +1,5 @@
 import { Account } from './account.interface'
-import { accountEmailSettings, accountSettings, findById, findByUsername, findCurrentToken, findUserByEmailOrUsername, IFindByIdResult, initialAccountEmailSettings, initialAccountSettings, login, signup, updateEmailSettings, updateSettings } from './accounts.queries'
+import { accountEmailSettings, accountSettings, changeAccountEmail, findByEmail, findById, findByUsername, findCurrentToken, findUserByEmailOrUsername, IFindByIdResult, initialAccountEmailSettings, initialAccountSettings, login, signup, updateEmailSettings, updateSettings } from './accounts.queries'
 import { Client } from 'pg'
 import { Inject, Injectable } from '@nestjs/common'
 import { EmailSettingsParam, SettingsParam } from './settings.param'
@@ -11,9 +11,9 @@ export class AccountService {
   constructor(@Inject('PG_CLIENT') private client: Client) {}
 
   async create(username: string, email: string, password: string): Promise<void> {
-    const existing = await this.findByUsername(username)
+    const existing = await this.findByUsernameOrEmail(username)
     if (existing) {
-      throw new Error(`${username} already exists`)
+      throw new Error(`${username} or email already exist`)
     }
     const accountId = uuidv4()
     await signup.run({ id: accountId, username, email, password, createdAt: new Date() }, this.client)
@@ -50,7 +50,10 @@ export class AccountService {
   }
 
   async findByUsernameOrEmail(usernameOrEmail: string): Promise<Account | undefined> {
-    const accounts = await findUserByEmailOrUsername.run({username: usernameOrEmail}, this.client)
+    const accounts = await findUserByEmailOrUsername.run({
+      username: usernameOrEmail.trim(),
+      email: usernameOrEmail.toLowerCase().trim()
+    }, this.client)
     if (accounts.length !== 1) return;
     return this.recordToAccount(accounts[0])
   }
@@ -93,6 +96,15 @@ export class AccountService {
 
   async updateEmailSettings(account: Account, settings: EmailSettingsParam): Promise<void> {
     await updateEmailSettings.run({accountId: account.id, ...settings}, this.client)
+  }
+
+  async changeEmail(account: Account, emailParam: string): Promise<void> {
+    const email = emailParam.toLowerCase().trim()
+    const e = await findByEmail.run( { email }, this.client)
+    if (e.length > 0) {
+      throw new Error("Email already exists")
+    }
+    await changeAccountEmail.run({ accountId: account.id, email }, this.client)
   }
 
   private recordToAccount(a: IFindByIdResult): Account {
