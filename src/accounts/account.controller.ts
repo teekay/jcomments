@@ -82,7 +82,7 @@ export class AccountController {
 
   @Post('email/change')
   @UseGuards(AuthenticatedGuard)
-  async changeEmail(@Req() req: Request, @Res() res: Response, @Body() form: { email: string }): Promise<void> {
+  async changeEmail(@Req() req, @Res() res: Response, @Body() form: { email: string }): Promise<void> {
     const account = _.get(req, 'user') as Account
     try {
       await this.accountService.changeEmail(account, form.email)

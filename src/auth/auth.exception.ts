@@ -1,13 +1,15 @@
 
+import _ from 'lodash';
 import { ExceptionFilter, Catch, ArgumentsHost, UnauthorizedException, ForbiddenException } from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch(UnauthorizedException)
 export class AuthExceptionFilter implements ExceptionFilter {
-  catch(_: UnauthorizedException, host: ArgumentsHost): void {
-    const ctx = host.switchToHttp();
-    const request = ctx.getRequest<Request>();
-    request.flash('login-error', 'Oops, those credentials did not work')
+  catch(_ex: UnauthorizedException, host: ArgumentsHost): void {
+    const ctx = host.switchToHttp()
+    const request = ctx.getRequest<Request>()
+    const flash = _.get(request, 'flash')
+    flash.call(request, 'login-error', 'Oops, those credentials did not work')
     const response = ctx.getResponse<Response>();
     response.redirect('/auth/login');
   }
@@ -15,10 +17,11 @@ export class AuthExceptionFilter implements ExceptionFilter {
 
 @Catch(ForbiddenException)
 export class SessionExpiredFilter implements ExceptionFilter {
-  catch(_: ForbiddenException, host: ArgumentsHost): void {
+  catch(_ex: ForbiddenException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
-    request.flash('login-error', 'Your session has expired. Please sign in again.')
+    const flash = _.get(request, 'flash')
+    flash.call(request, 'login-error', 'Your session has expired. Please sign in again.')
     const response = ctx.getResponse<Response>();
     response.redirect('/auth/login');
   }
