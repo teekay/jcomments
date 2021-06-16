@@ -6,28 +6,26 @@ import nodemailer from 'nodemailer'
 
 @Injectable()
 export class SendMailService {
-  private nodemailerMailgun
+  private nodemailerMailgun: nodemailer.Transporter
 
   constructor(private readonly configService: ConfigService,
     private readonly logger: Logger) {
     this.nodemailerMailgun = nodemailer.createTransport(mg(this.configService.mailgunAuth()))
   }
 
-  send(from: string, to: string | string[], subject: string, html?: string, text?: string): void {
-    this.nodemailerMailgun.sendMail({
-      from,
-      to, // An array if you have multiple recipients.
-      subject,
-      html,
-      text  // plain-text version
-    }, (err, info) => {
-      if (err) {
-        this.logger.warn(`Error: ${err}`)
-      }
-      else {
-        this.logger.debug(`Response: ${JSON.stringify(info)}`)
-      }
-    });
+  async send(from: string, to: string | string[], subject: string, html?: string, text?: string): Promise<void> {
+    try {
+      const info = await this.nodemailerMailgun.sendMail({
+        from,
+        to, // An array if you have multiple recipients.
+        subject,
+        html,
+        text  // plain-text version
+      });
+      this.logger.debug(`Mailgun response: ${JSON.stringify(info)}`)  
+    } catch (err) {
+      this.logger.warn(`Mailgun error: ${err}`)
+    }
   }
 
 }

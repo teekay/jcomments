@@ -7,9 +7,10 @@ import { EmailsModule } from '../emails/emails.module';
 import { forwardRef, MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { LoginMiddleware } from '../accounts/login.middleware';
 import { PersistenceModule } from '../persistence/persistence.module'
+import { QueueModule } from '../queue/queue.module';
 
 @Module({
-  imports: [ConfigModule, EmailsModule, PersistenceModule, forwardRef(() => AccountsModule)],
+  imports: [ConfigModule, EmailsModule, PersistenceModule, QueueModule, forwardRef(() => AccountsModule)],
   controllers: [CommentsController],
   providers: [CommentService, ContentFilteringService],
   exports: [CommentService]

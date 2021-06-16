@@ -15,6 +15,7 @@ import { Logger } from 'nestjs-pino'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { NestFactory } from '@nestjs/core'
 import passport from 'passport'
+import { QueuedMailer } from './emails/queued-mailer'
 import session from 'express-session'
 import { ValidationPipe } from '@nestjs/common'
 import { WebModule } from './web.module'
@@ -69,6 +70,9 @@ async function bootstrap() {
   app.use(flash())
   app.use(csurf({ cookie: true }))
 
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks();
+
   // CSRF error handler
   app.use(function (err, _req, res, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err)
@@ -78,6 +82,10 @@ async function bootstrap() {
     res.status(403)
     res.render('./home/views/csrf-error')
   })
+
+  // initialize the job queue
+  const queuedMailer = app.get(QueuedMailer)
+  await queuedMailer.init()
 
   await app.listen(process.env['WEB_PORT'] ?? 3030)
   logger.log(`JamComments web is running on: ${await app.getUrl()}`)
