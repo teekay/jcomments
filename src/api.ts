@@ -3,6 +3,7 @@ import { config as dotenv } from 'dotenv'
 import flash = require('connect-flash')
 import { Logger } from 'nestjs-pino'
 import { NestFactory } from '@nestjs/core'
+import { QueuedMailer } from './emails/queued-mailer'
 import { ValidationPipe } from '@nestjs/common'
 
 dotenv()
@@ -15,8 +16,16 @@ async function bootstrap() {
   app.useLogger(logger)
   app.getHttpAdapter().getInstance().disable('x-powered-by')
   app.useGlobalPipes(new ValidationPipe())
-  const port = +(process.env['API_PORT'] ?? 3000)
 
+  // Starts listening for shutdown hooks
+  app.enableShutdownHooks();
+
+  // initialize the job queue
+  const queuedMailer = app.get(QueuedMailer)
+  await queuedMailer.init()
+
+
+  const port = +(process.env['API_PORT'] ?? 3000)
   await app.listen(port)
   logger.log(`JamComments API is running on: ${await app.getUrl()}`)
 }
