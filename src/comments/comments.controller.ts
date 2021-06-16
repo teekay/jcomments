@@ -1,19 +1,27 @@
 import _ from 'lodash'
 import { Account } from '../accounts/account.interface'
+import { AccountService } from '../accounts/account.service'
 import { Body, Controller, Get, HttpStatus, Param, Post, Req, Res } from '@nestjs/common'
 import { CommentDto, CommentWithId } from './comment.interface'
 import { CommentService, SortOrder } from './comment.service'
+import { ConfigService } from '../config/config.service'
 import { ContentFilteringService } from './content-filtering-service'
+import { EmailService } from '../emails/email.service'
 import moment from 'moment'
 import { Request, Response } from 'express'
+import { SendMailService } from '../emails/sendmail.service'
 //import { Logger } from 'nestjs-pino'
 
 @Controller('comments')
 export class CommentsController {
 
-  constructor(private readonly commentsService: CommentService,
-    private readonly contentFilteringService: ContentFilteringService) {
-  }
+  constructor(
+    private readonly accountService: AccountService,
+    private readonly commentsService: CommentService,
+    private readonly contentFilteringService: ContentFilteringService,
+    private readonly configService: ConfigService,
+    private readonly sendMailService: SendMailService,
+    private readonly emailService: EmailService) {}
 
   @Get()
   async comments(@Req() req: Request): Promise<CommentWithId[]> {
@@ -72,11 +80,20 @@ export class CommentsController {
       postedAt: new Date()
     }, req.ip)
 
+    const emailSettings = await this.accountService.emailSettingsFor(account)
+    if (emailSettings?.notifyOnComments) {
+      // notify
+      // TODO move to a job queue
+      const email = this.emailService.notifyOnSingleComment(comment, `${this.configService.adminUrl()}/dashboard`)
+      this.sendMailService.send(this.configService.mailgunSender(), account.email, email.subject, email.html, email.text)  
+    }
+
     if (req.headers['content-type'] !== 'application/json') {
       // assuming the request comes from the web page -> redirect back
       return res.redirect(comment.postUrl)
     }
 
-    res.status(HttpStatus.CREATED).send() 
+    res.status(HttpStatus.CREATED).send()
+
   }
 }

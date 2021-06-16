@@ -11,70 +11,221 @@
     </li>
   </ul>
 
-<h3 class="mb-5">Account settings</h3>
+  <h3 class="mb-5">Account settings</h3>
 
-  <h4>Api key</h4>
-  <section class="row mb-4">
-    <div class="col">
-      <p><mark>{{ token.token }}</mark></p>
-      <p>Use this API key in your integration code to fetch comments from JamComments.</p>
-    </div>
-    <div class="col">
-      <form method="POST" action="/account/settings/token/refresh">
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" 
+        id="personal-tab"
+        data-bs-toggle="tab" data-bs-target="#personal" 
+        type="button" role="tab" aria-controls="personal" aria-selected="true">Personal</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" 
+        id="commenting-tab"
+        data-bs-toggle="tab" data-bs-target="#commenting" 
+        type="button" role="tab" aria-controls="home">Commenting</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" 
+        id="notifications-tab"
+        data-bs-toggle="tab" data-bs-target="#notifications" 
+        type="button" role="tab" aria-controls="home">Nofications</button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <section class="tab-pane fade show active" id="personal" aria-labelledby="personal-tab">
+      <section class="row mb-4">
+        <div class="col">
+          <p><b>Your username</b></p>
+          <p>(used for signing in)</p>
+        </div>
+        <div class="col">
+          <mark>{{ account.username }}</mark>
+        </div>
+        <div class="col"></div>
+      </section>
+      <section class="row mb-4">
+        <div class="col">
+          <p><b>Your email</b></p>
+          <p>(used to reset your password and for email notifications, never shared)</p>
+        </div>
+        <div class="col">
+          <form id="formChangeEmail"
+                method="POST"
+                action="/account/email/change"
+                class="d-none">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <div class="input-group mb-3">
+              <input type="email" name="email"
+                     class="form-control" 
+                     placeholder="New e-mail address"
+                     aria-label="New e-mail address"/>
+              <button class="btn btn-secondary" type="submit">Change</button>
+              <button class="btn btn-outline-secondary" id="btnCancelEmailChange" type="button">Cancel</button>
+            </div>
+          </form>
+          <mark id="lblAccountEmail">{{ account.email }}</mark><br/>
+          <a href="#" id="btnChangeEmail">change</a>
+          {{#if changeEmailError}}
+          <div class="alert alert-warning mt-2" role="alert">{{ changeEmailError }}</div>
+          {{/if}}
+        </div>
+        <div class="col"></div>
+      </section>
+
+      <h4>Api key</h4>
+      <section class="row mb-4">
+        <div class="col">
+          <p><mark id="lblApiKey">{{ truncate token.token 16 '...' }}</mark></p>
+          <p>Use this API key in your integration code to fetch comments from JamComments.</p>
+          <p>Example:</p>
+          <code>
+            <pre>
+&lt;form method="post" action="https://api.jamcomments.io/comments"&gt;
+  &lt;input type="hidden" name="token" value="{{ token.token }}"&gt;
+  ...
+&lt;/form&gt;
+            </pre>
+          </code>
+        </div>
+        <div class="col">
+
+          <form method="POST" action="/account/settings/token/refresh" id="formReiussueApiKey">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button type="button" class="btn btn-secondary me-2"
+                    id="btnRevealApiKey">Reveal</button>
+            <button type="button" class="btn btn-danger"
+                    data-bs-toggle="modal" data-bs-target="#reissueApiKeyModal">Reissue</button>
+          </form>
+        </div>
+        <div class="col"></div>
+      </section>
+    </section>
+
+    <section class="tab-pane fade show" id="commenting" aria-labelledby="commenting-tab">
+      <form method="POST" action="/account/settings" class="mb-4">
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <button type="submit" class="btn btn-secondary">Reissue</button>
+        <section class="row mb-3">
+          <label for="useAkismet" class="col form-label">Use anti-SPAM protection (Akismet)</label>
+          <div class="col form-check form-switch">
+            <input class="form-check-input" 
+              value="1"
+              type="checkbox" 
+              name="useAkismet" 
+              id="useAkismet"{{#if useAkismet}} checked{{/if}}>
+          </div>
+          <div class="col"></div>
+        </section>
+        <section class="row mb-3">
+          <label for="akismetKey" class="form-label">Akismet API key</label>
+          <div class="col input-group">
+            <input class="form-control"
+              type="text"
+              name="akismetKey"
+              id="akismetKey"
+              value="{{ akismetKey }}"/>
+            {{#if blogUrl }}
+            <button id="checkAkismetKey" 
+              type="button"
+              class="btn btn-dark">Check</button>
+            {{/if}}
+          </div>
+        <div class="col">
+          <span id="akismetKeyCheckResult"></span>
+        </div>
+        </section>
+        <section class="row mb-3">
+          <label for="blogUrl" class="form-label">Blog URL (required by Akismet)</label>
+          <div class="col">
+            <input class="form-control"
+              type="text"
+              name="blogUrl"
+              id="blogUrl"
+              placeholder="https://example.com"
+              value="{{ blogUrl }}"/>
+          </div>
+          <div class="col"></div>
+        </section>
+        <button type="submit" class="btn btn-primary">Save my settings</button>
       </form>
-    </div>
-    <div class="col"></div>
-  </section>
+    </section>
 
-  <h4 class="mb-3">Comments settings</h4>
-  <form method="POST" action="/account/settings">
-    <input type="hidden" name="_csrf" value="{{csrfToken}}">
-    <section class="row mb-3">
-      <label for="useAkismet" class="col form-label">Use anti-SPAM protection (Akismet)</label>
-      <div class="col form-check form-switch">
-        <input class="form-check-input" 
-          value="1"
-          type="checkbox" 
-          name="useAkismet" 
-          id="useAkismet"{{#if useAkismet}} checked{{/if}}>
-      </div>
-      <div class="col"></div>
+    <section class="tab-pane fade show" id="notifications" aria-labelledby="notifications-tab">
+      <h4 class="mb-3">Notifications</h4>
+      <form method="POST" action="/account/email/settings" class="mb-4">
+        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+        <p>Notify me about new comments:</p>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="notifyOnComments" name="notifyOnComments"{{# if notifyOnComments }} checked{{/if}}>
+          <label class="form-check-label" for="notifyOnComments">As soon as they come in</label>
+        </div>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="sendCommentsDigest" name="sendCommentsDigest"{{# if sendCommentsDigest }} checked{{/if}}>
+          <label class="form-check-label" for="sendCommentsDigest">Send me a daily digest</label>
+        </div>
+        <p class="mb-3">We'll send the notifications to <mark>{{ account.email }}</mark>.</p>
+        <button type="submit" class="btn btn-primary">Save my settings</button>
+      </form>
     </section>
-    <section class="row mb-3">
-      <label for="akismetKey" class="form-label">Akismet API key</label>
-      <div class="col input-group">
-        <input class="form-control"
-          type="text"
-          name="akismetKey"
-          id="akismetKey"
-          value="{{ akismetKey }}"/>
-        {{#if blogUrl }}
-        <button id="checkAkismetKey" 
-          type="button"
-          class="btn btn-dark">Check</button>
-        {{/if}}
+  </div>
+
+  <div class="modal" tabindex="-1" id="reissueApiKeyModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Really get a new token?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to get a new token?</p>
+          <p>If you proceed, copy the new key and rebuild your website immediately. All API calls using the old key will fail from now on.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelDelete">Cancel</button>
+          <button type="button" class="btn btn-primary" id="btnReissueApiKey">Yes, go ahead</button>
+        </div>
       </div>
-     <div class="col">
-       <span id="akismetKeyCheckResult"></span>
-     </div>
-    </section>
-    <section class="row mb-3">
-      <label for="blogUrl" class="form-label">Blog URL (required by Akismet)</label>
-      <div class="col">
-        <input class="form-control"
-          type="text"
-          name="blogUrl"
-          id="blogUrl"
-          placeholder="https://example.com"
-          value="{{ blogUrl }}"/>
-      </div>
-      <div class="col"></div>
-    </section>
-    <button type="submit" class="btn btn-primary">Update</button>
-  </form>
+    </div>
+  </div>
+  
 </div>
+<script>
+  document.querySelector('#btnChangeEmail').addEventListener('click', function() {
+    document.querySelector('#btnChangeEmail').classList.add('d-none');
+    document.querySelector('#lblAccountEmail').classList.add('d-none');
+    document.querySelector('#formChangeEmail').classList.remove('d-none');
+  });
+
+  document.querySelector('#btnCancelEmailChange').addEventListener('click', function() {
+    document.querySelector('#btnChangeEmail').classList.remove('d-none');
+    document.querySelector('#lblAccountEmail').classList.remove('d-none');
+    document.querySelector('#formChangeEmail').classList.add('d-none');
+  });
+
+  document.querySelector('#btnReissueApiKey').addEventListener('click', function() {
+    document.querySelector('#formReiussueApiKey').submit();
+  });
+  
+  function revealApiKey(ev) {
+    let btn = document.querySelector('#btnRevealApiKey');
+    document.querySelector('#lblApiKey').innerHTML = '{{ token.token }}';
+    btn.removeEventListener('click', revealApiKey);
+    btn.addEventListener('click', hideApiKey);
+    ev.target.innerHTML = 'Hide';
+  }
+
+  function hideApiKey(ev) {
+    let btn = document.querySelector('#btnRevealApiKey');
+    document.querySelector('#lblApiKey').innerHTML = '{{ token.token }}'.substring(0, 16) + '...';
+    btn.removeEventListener('click', hideApiKey);
+    btn.addEventListener('click', revealApiKey);
+    ev.target.innerHTML = 'Reveal';
+  }
+
+  document.querySelector('#btnRevealApiKey').addEventListener('click', revealApiKey);
+</script>
 
 {{#if blogUrl }}
 <script>

@@ -5638,7 +5638,7 @@ pg-types@^2.1.0, pg-types@^2.2.0:
     postgres-date "~1.0.4"
     postgres-interval "^1.1.0"
 
-pg@^8.2.1, pg@^8.6.0:
+pg@^8.2.1, pg@^8.5.1, pg@^8.6.0:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/pg/-/pg-8.6.0.tgz#e222296b0b079b280cce106ea991703335487db2"
   integrity sha512-qNS9u61lqljTDFvmk/N66EeGq3n6Ujzj0FFyNMGQr6XuEv4tgNTXvJQTfJdcvGit5p5/DWPu+wj920hAJFI+QQ==
@@ -5771,6 +5771,14 @@ postgres-interval@^1.1.0:
   integrity sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==
   dependencies:
     xtend "^4.0.0"
+
+postgres-migrations@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/postgres-migrations/-/postgres-migrations-5.1.1.tgz#a1137d9942ded2c9c77be735076b2e7452b06fe4"
+  integrity sha512-G5QgHhmgOUFJtkNsYi7tYXi2vit9hzJCm+HbsAVa9mhR6tW9lwX/o/s9Rbnx574BVRvkV5+gPWxGAP9l3FyBKg==
+  dependencies:
+    pg "^8.5.1"
+    sql-template-strings "^2.2.2"
 
 prelude-ls@^1.2.1:
   version "1.2.1"
@@ -6437,6 +6445,11 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
+
+sql-template-strings@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/sql-template-strings/-/sql-template-strings-2.2.2.tgz#3f11508a25addfce217a3042a9d300c3193b96ff"
+  integrity sha1-PxFQiiWt384hejBCqdMAwxk7lv8=
 
 stack-chain@^1.3.7:
   version "1.3.7"

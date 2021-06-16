@@ -10,7 +10,7 @@ import { FileInterceptor } from '@nestjs/platform-express'
 import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
 import { SessionExpiredFilter } from '../auth/auth.exception'
-import { SettingsParam } from './settings.param'
+import { EmailSettingsParam, SettingsParam } from './settings.param'
 import { TokenService } from './token.service'
 
 @Controller('account')
@@ -45,11 +45,7 @@ export class AccountController {
       const account = await this.accountService.login(username, password)
       if (!account) throw new Error('Could not fetch the account')
       await this.tokenService.create(account)
-      req.logIn(account as Express.User, function(err) {
-        if (err) {
-          res.redirect('/auth/login') // TODO error page
-          return
-        }
+      req.logIn(account as Express.User, function() {
         res.redirect('/dashboard/')
       })
     } catch (e) {
@@ -63,12 +59,16 @@ export class AccountController {
   async settings(@Req() req, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
+    const emailSettings = await this.accountService.emailSettingsFor(account)
     return res.render('./accounts/views/settings', { 
       layout: 'dashboard',
       section: 'Settings',
       csrfToken: req.csrfToken(),
       token: await this.accountService.token(account),
-      ...settings
+      account,
+      changeEmailError: req.flash('change-email-error'),
+      ...settings,
+      ...emailSettings
     })
   }
 
@@ -77,6 +77,31 @@ export class AccountController {
   async updateSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: SettingsParam): Promise<void> {
     const account = _.get(req, 'user') as Account
     await this.accountService.updateSettings(account, settingsParam)
+    return res.redirect('/account/settings')
+  }
+
+  @Post('email/change')
+  @UseGuards(AuthenticatedGuard)
+  async changeEmail(@Req() req, @Res() res: Response, @Body() form: { email: string }): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    try {
+      await this.accountService.changeEmail(account, form.email)
+      const accountWithNewEmail = await this.accountService.findById(account.id)
+      req.logIn(accountWithNewEmail as Express.User, function() {
+        res.redirect('/account/settings')
+      })
+      return
+    } catch (oops) {
+      req.flash('change-email-error', 'This email already belongs to someone else. Please choose another')
+    }
+    return res.redirect('/account/settings')
+  }
+
+  @Post('email/settings')
+  @UseGuards(AuthenticatedGuard)
+  async updateEmailSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: EmailSettingsParam): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    await this.accountService.updateEmailSettings(account, settingsParam)
     return res.redirect('/account/settings')
   }
 

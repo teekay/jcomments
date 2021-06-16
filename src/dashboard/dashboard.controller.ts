@@ -5,6 +5,7 @@ import { Body, Controller, Get, Post, Req, Res, UseFilters, UseGuards } from '@n
 import { CommentService } from '../comments/comment.service'
 import { Identifiable } from './identifiable.param'
 import { Logger } from "nestjs-pino";
+import moment from 'moment'
 import { Request, Response } from 'express'
 import { SessionExpiredFilter } from '../auth/auth.exception'
 
@@ -21,14 +22,20 @@ export class DashboardController {
     const account = _.get(req, 'user') as Account
     const page = +(req.query['page'] ?? 1)
     const size = +(req.query['size'] ?? 10)
-    const count = await this.commentService.commentCountForAccount(account)
-    const pages = _.range(1, Math.ceil(count / size) + 1)
-    const comments = await this.commentService.commentsForAccountPaged(account, size, page)
+    const commentCount = await this.commentService.commentCountForAccount(account)
+    const reviewCount = await this.commentService.reviewCountForAccount(account)
+    const pages = _.range(1, Math.ceil(commentCount / size) + 1)
+    const comments = (await this.commentService.commentsForAccountPaged(account, size, page)).map(c => {
+      return {
+        ...c,
+        relativePostedAt: moment(c.postedAt).fromNow()
+      }
+    })
     return res.render('./dashboard/views/index', { 
       layout: 'dashboard',
       csrfToken: req.csrfToken(),
       section: 'Dashboard',
-      comments, count, page, pages,
+      comments, commentCount, reviewCount, page, pages,
       importError: req.flash('import-error'),
       onFirstPage: page === 1,
       onLastPage: page >= (_.last(pages) ?? 0),
@@ -43,14 +50,15 @@ export class DashboardController {
     const account = _.get(req, 'user') as Account
     const page = +(req.query['page'] ?? 1)
     const size = +(req.query['size'] ?? 10)
-    const count = await this.commentService.reviewCountForAccount(account)
-    const pages = _.range(1, Math.ceil(count / size) + 1)
+    const commentCount = await this.commentService.commentCountForAccount(account)
+    const reviewCount = await this.commentService.reviewCountForAccount(account)
+    const pages = _.range(1, Math.ceil(reviewCount / size) + 1)
     const comments = await this.commentService.reviewsForAccountPaged(account, size, page)
     return res.render('./dashboard/views/review', { 
       layout: 'dashboard',
       csrfToken: req.csrfToken(),
       section: 'Dashboard',
-      comments, count, page, pages,
+      comments, commentCount, reviewCount, page, pages,
       onFirstPage: page === 1,
       onLastPage: page >= (_.last(pages) ?? 0),
       prevPage: page - 1,

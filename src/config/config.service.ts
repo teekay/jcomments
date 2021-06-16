@@ -18,7 +18,7 @@ export class ConfigService {
       ? true
       : false;
     this.hostName = process.env['HOST'] ?? ''
-    this.port = +(process.env['WEB_PORT'] ?? 80)
+    this.port = +(process.env['WEB_PORT_PUBLIC'] ?? 80)
   }
 
   validateOrThrow(): void {
@@ -41,6 +41,10 @@ export class ConfigService {
 
   portIfNot80(): string {
     return this.port === 80 ? '' : `:${this.port}`
+  }
+
+  adminUrl(): string {
+    return `${this.scheme()}${this.hostname()}${this.portIfNot80()}`
   }
 
   mailgunAuth(): MailgunAuth {

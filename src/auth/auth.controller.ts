@@ -13,6 +13,10 @@ export class AuthController {
 
   @Get('login')
   loginForm(@Req() req, @Res() res: Response): void {
+    if (req.isAuthenticated()) {
+      return res.redirect('/dashboard/');
+    }
+
     return res.render('./auth/views/login', { 
       layout: 'dashboard',
       section: 'Sign in',

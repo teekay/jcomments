@@ -13,6 +13,7 @@ async function bootstrap() {
   app.use(flash())
   const logger = app.get(Logger)
   app.useLogger(logger)
+  app.getHttpAdapter().getInstance().disable('x-powered-by')
   app.useGlobalPipes(new ValidationPipe())
   const port = +(process.env['API_PORT'] ?? 3000)
 
