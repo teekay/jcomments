@@ -1,17 +1,18 @@
-import { AccountsModule } from './accounts/account.module'
-import { AuthModule } from './auth/auth.module'
+import { AccountController } from './account.controller'
+import { AccountsModule } from '../shared/accounts/account.module'
+import { AuthModule } from '../shared/auth/auth.module'
 import { Client } from 'pg'
-import { CommentsModule } from './comments/comments.module'
-import { ConfigModule } from './config/config.module'
+import { CommentsModule } from '../shared/comments/comments.module'
+import { ConfigModule } from '../shared/config/config.module'
 import { DashboardModule } from './dashboard/dashboard.module'
-import { EmailsModule } from './emails/emails.module'
+import { EmailsModule } from '../shared/emails/emails.module'
 import { HomeModule } from './home/home.module'
 import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
 import { LoggerModule } from 'nestjs-pino'
-import { PersistenceModule } from './persistence/persistence.module'
+import { PersistenceModule } from '../shared/persistence/persistence.module'
 import PgBoss from 'pg-boss'
-import { QueueModule } from './queue/queue.module'
+import { QueueModule } from '../shared/queue/queue.module'
 
 @Module({
   imports: [AccountsModule, AuthModule, ConfigModule, EmailsModule, HomeModule, CommentsModule, DashboardModule, PersistenceModule, QueueModule,
@@ -22,6 +23,7 @@ import { QueueModule } from './queue/queue.module'
       prettifier: require('pino-colada')
     },
 }),],
+  controllers: [AccountController]
 })
 export class WebModule implements OnApplicationShutdown {
 

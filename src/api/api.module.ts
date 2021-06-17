@@ -1,15 +1,18 @@
-import { AccountsModule } from './accounts/account.module'
+import { AccountsModule } from '../shared/accounts/account.module'
 import { Client } from 'pg'
-import { CommentsModule } from './comments/comments.module'
+import { CommentsController } from './comments.controller'
+import { CommentsModule } from '../shared/comments/comments.module'
+import { ConfigModule } from '../shared/config/config.module'
+import { EmailsModule } from '../shared/emails/emails.module'
 import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
 import { LoggerModule } from 'nestjs-pino'
-import { PersistenceModule } from './persistence/persistence.module'
+import { PersistenceModule } from '../shared/persistence/persistence.module'
 import PgBoss from 'pg-boss'
-import { QueueModule } from './queue/queue.module'
+import { QueueModule } from '../shared/queue/queue.module'
 
 @Module({
-  imports: [AccountsModule, CommentsModule, PersistenceModule, QueueModule,
+  imports: [AccountsModule, ConfigModule, CommentsModule, EmailsModule, PersistenceModule, QueueModule,
     LoggerModule.forRoot({
     pinoHttp: {
       prettyPrint: true,
@@ -17,6 +20,7 @@ import { QueueModule } from './queue/queue.module'
       prettifier: require('pino-colada')
     },
 }),],
+  controllers: [CommentsController]
 })
 export class ApiModule implements OnApplicationShutdown {
 

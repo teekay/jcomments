@@ -1,17 +1,17 @@
 import _ from 'lodash'
-import { Account } from '../accounts/account.interface'
-import { AccountParam } from './account.param'
-import { AccountService } from './account.service'
-import { AkismetService } from '../comments/akismet.service'
-import { AuthenticatedGuard } from '../auth/authenticated.guard'
+import { Account } from '../shared/accounts/account.interface'
+import { AccountParam } from '../shared/accounts/account.param'
+import { AccountService } from '../shared/accounts/account.service'
+import { AkismetService } from '../shared/comments/akismet.service'
+import { AuthenticatedGuard } from '../shared/auth/authenticated.guard'
 import { Body, Controller, Get, Post, Req, Res, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common'
-import { CommentService } from '../comments/comment.service'
+import { CommentService } from '../shared/comments/comment.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
-import { SessionExpiredFilter } from '../auth/auth.exception'
-import { EmailSettingsParam, SettingsParam } from './settings.param'
-import { TokenService } from './token.service'
+import { SessionExpiredFilter } from '../shared/auth/auth.exception'
+import { EmailSettingsParam, SettingsParam } from '../shared/accounts/settings.param'
+import { TokenService } from '../shared/accounts/token.service'
 
 @Controller('account')
 @UseFilters(new SessionExpiredFilter())
@@ -28,7 +28,7 @@ export class AccountController {
     if (req.isAuthenticated()) {
       return res.redirect('/dashboard/');
     }
-    return res.render('./accounts/views/signup', { 
+    return res.render('../shared/accounts/views/signup', { 
       layout: 'dashboard',
       csrfToken: req.csrfToken() 
     })
@@ -50,7 +50,7 @@ export class AccountController {
       })
     } catch (e) {
       this.logger.error(e)
-      res.status(500).render('./accounts/views/signup-error')
+      res.status(500).render('../shared/accounts/views/signup-error')
     }
   }
 
@@ -60,7 +60,7 @@ export class AccountController {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
     const emailSettings = await this.accountService.emailSettingsFor(account)
-    return res.render('./accounts/views/settings', { 
+    return res.render('../shared/accounts/views/settings', { 
       layout: 'dashboard',
       section: 'Settings',
       csrfToken: req.csrfToken(),

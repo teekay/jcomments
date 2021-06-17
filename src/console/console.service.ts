@@ -1,9 +1,9 @@
-import { AccountService } from '../accounts/account.service'
+import { AccountService } from '../shared/accounts/account.service'
 import { Client } from 'pg'
 import { ConsoleService } from 'nestjs-console'
 import { migrate } from "postgres-migrations"
 import { Inject, Injectable } from '@nestjs/common'
-import { TokenService } from '../accounts/token.service'
+import { TokenService } from '../shared/accounts/token.service'
 
 @Injectable()
 export class CliService {

@@ -17,7 +17,7 @@ export class AuthController {
       return res.redirect('/dashboard/');
     }
 
-    return res.render('./auth/views/login', { 
+    return res.render('../shared/auth/views/login', { 
       layout: 'dashboard',
       section: 'Sign in',
       loginError: req.flash('login-error'),
@@ -40,7 +40,7 @@ export class AuthController {
 
   @Get('forgot-password')
   showForgotPassword(@Req() req, @Res() res: Response): void {
-    return res.render('./auth/views/forgot-password', { 
+    return res.render('../shared/auth/views/forgot-password', { 
       layout: 'dashboard',
       section: 'Forgot your password?',
       csrfToken: req.csrfToken() 
@@ -55,7 +55,7 @@ export class AuthController {
 
   @Get('forgot-password/wait')
   afterForgotPassword(@Res() res: Response): void {
-    res.render('./auth/views/forgot-password-wait', {
+    res.render('../shared/auth/views/forgot-password-wait', {
       layout: 'dashboard',
       section: 'Check your email',
     })
@@ -65,13 +65,13 @@ export class AuthController {
   async verifyPasswordReset(@Req() req, @Res() res: Response, @Param() params: { token: string }): Promise<void> {
     const isTokenOk = await this.authService.isTokenValid(params.token, new Date())
     if (!isTokenOk) {
-      res.status(403).render('./auth/views/reset-password-token-ko', {
+      res.status(403).render('../shared/auth/views/reset-password-token-ko', {
         section: 'Error resetting password'
       })
       return
     }
 
-    res.render('./auth/views/reset-password', {
+    res.render('../shared/auth/views/reset-password', {
       layout: 'dashboard',
       title: 'New password',
       token: params.token,
@@ -83,7 +83,7 @@ export class AuthController {
   async changePassword(@Res() res: Response, @Body() params: { token: string, password: string }): Promise<void> {
     const isTokenOk = await this.authService.isTokenValid(params.token, new Date())
     if (!isTokenOk) {
-      res.status(403).render('./auth/views/reset-password-token-ko', {
+      res.status(403).render('../shared/auth/views/reset-password-token-ko', {
         section: 'Error resetting password'
       })
       return
@@ -93,7 +93,7 @@ export class AuthController {
       return res.redirect('/auth/login')  
     } catch (oops) {
       this.logger.warn(oops)
-      res.status(500).render('./auth/views/reset-password-token-ko', {
+      res.status(500).render('../shared/auth/views/reset-password-token-ko', {
         section: 'Error resetting password'
       })
     }

@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { Client } from 'pg';
-import { loginFromToken } from './accounts.queries';
+import { loginFromToken } from './api.queries';
 
 @Injectable()
 export class LoginMiddleware implements NestMiddleware {

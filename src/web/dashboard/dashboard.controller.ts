@@ -1,13 +1,13 @@
 import _ from 'lodash'
-import { Account } from '../accounts/account.interface'
-import { AuthenticatedGuard } from '../auth/authenticated.guard'
+import { Account } from '../../shared/accounts/account.interface'
+import { AuthenticatedGuard } from '../../shared/auth/authenticated.guard'
 import { Body, Controller, Get, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common'
-import { CommentService } from '../comments/comment.service'
+import { CommentService } from '../../shared/comments/comment.service'
 import { Identifiable } from './identifiable.param'
 import { Logger } from "nestjs-pino";
 import moment from 'moment'
 import { Request, Response } from 'express'
-import { SessionExpiredFilter } from '../auth/auth.exception'
+import { SessionExpiredFilter } from '../../shared/auth/auth.exception'
 
 @Controller('dashboard')
 @UseFilters(new SessionExpiredFilter())

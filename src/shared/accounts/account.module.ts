@@ -1,4 +1,3 @@
-import { AccountController } from './account.controller'
 import { AccountService } from './account.service'
 import { AkismetService } from '../comments/akismet.service'
 import { CommentsModule } from '../comments/comments.module'
@@ -9,7 +8,7 @@ import { TokenService } from './token.service'
 
 @Module({
   imports: [forwardRef(() => CommentsModule), PersistenceModule, PassportModule],
-  controllers: [AccountController],
+  controllers: [],
   providers: [AccountService, TokenService, AkismetService],
   exports: [AccountService, TokenService, AkismetService],
 })
