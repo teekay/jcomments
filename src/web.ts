@@ -34,7 +34,7 @@ async function bootstrap() {
   app.disable('x-powered-by')
   app.useGlobalPipes(new ValidationPipe())
   app.useStaticAssets(join(__dirname, '..', 'public'))
-  app.setBaseViewsDir(join(__dirname, '..', 'src'))
+  app.setBaseViewsDir(join(__dirname, '..', 'src/web'))
   app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'public' }))
   app.setViewEngine('hbs')
   helpers({handlebars})

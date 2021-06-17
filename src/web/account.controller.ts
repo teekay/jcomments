@@ -28,7 +28,7 @@ export class AccountController {
     if (req.isAuthenticated()) {
       return res.redirect('/dashboard/');
     }
-    return res.render('./accounts/views/signup', { 
+    return res.render('../shared/accounts/views/signup', { 
       layout: 'dashboard',
       csrfToken: req.csrfToken() 
     })
@@ -50,7 +50,7 @@ export class AccountController {
       })
     } catch (e) {
       this.logger.error(e)
-      res.status(500).render('./accounts/views/signup-error')
+      res.status(500).render('../shared/accounts/views/signup-error')
     }
   }
 
@@ -60,7 +60,7 @@ export class AccountController {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
     const emailSettings = await this.accountService.emailSettingsFor(account)
-    return res.render('./accounts/views/settings', { 
+    return res.render('../shared/accounts/views/settings', { 
       layout: 'dashboard',
       section: 'Settings',
       csrfToken: req.csrfToken(),
