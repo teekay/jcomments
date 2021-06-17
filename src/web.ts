@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import bodyParser from 'body-parser'
-import { ConfigService } from './config/config.service'
+import { ConfigService } from './shared/config/config.service'
 import connectPgSimple from 'connect-pg-simple'
 import cookieParser from 'cookie-parser'
 import { config as dotenv } from 'dotenv'
@@ -15,10 +15,10 @@ import { Logger } from 'nestjs-pino'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { NestFactory } from '@nestjs/core'
 import passport from 'passport'
-import { QueuedMailer } from './emails/queued-mailer'
+import { QueuedMailer } from './shared/emails/queued-mailer'
 import session from 'express-session'
 import { ValidationPipe } from '@nestjs/common'
-import { WebModule } from './web.module'
+import { WebModule } from './web/web.module'
 
 dotenv()
 

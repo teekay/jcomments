@@ -19,9 +19,6 @@ SELECT * FROM accounts WHERE username=:username;
 /* @name findByEmail */
 SELECT * FROM accounts WHERE email=:email;
 
-/* @name LoginFromToken */
-SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL;
-
 /* @name CreateToken */
 INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt);
 

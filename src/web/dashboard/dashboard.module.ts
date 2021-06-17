@@ -1,5 +1,5 @@
-import { AuthModule } from '../auth/auth.module';
-import { CommentsModule } from '../comments/comments.module';
+import { AuthModule } from '../../shared/auth/auth.module';
+import { CommentsModule } from '../../shared/comments/comments.module';
 import { DashboardController } from './dashboard.controller';
 import { Module } from '@nestjs/common';
 

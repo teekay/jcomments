@@ -1,9 +1,9 @@
-import { AccountsModule } from '../accounts/account.module';
+import { AccountsModule } from '../shared/accounts/account.module';
 import { CliService } from './console.service';
 import { ConsoleModule } from 'nestjs-console';
 import { LoggerModule } from 'nestjs-pino';
 import { Module } from '@nestjs/common';
-import { PersistenceModule } from '../persistence/persistence.module';
+import { PersistenceModule } from '../shared/persistence/persistence.module';
 
 @Module({
   imports: [AccountsModule, ConsoleModule, PersistenceModule,
