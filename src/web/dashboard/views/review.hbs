@@ -11,7 +11,7 @@
     </li>
   </ul>
 
-  <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
+  <ul class="nav nav-tabs mb-3" id="dashboardTab" role="tablist">
     <li class="nav-item" role="presentation">
       <a href="/dashboard" class="nav-link" role="tab" aria-controls="comments" aria-selected="false">Comments ({{ commentCount }})</a>
     </li>
@@ -20,54 +20,48 @@
     </li>
   </ul>
 
-  <div class="tab-content" id="myTabContent">
-    <table class="table mt-3 ms-2">
-      <thead>
-        <tr>
-          <th scope="col">Posted</th>
-          <th scope="col">Commented on</th>
-          <th scope="col">Commenter</th>
-          <th scope="col">Comment</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each comments}}
-        <tr>
-          <td>{{ dateFormat postedAt 'llll' }}</td>
-          <td><a href="{{ postUrl }}">{{ postUrl }}</a></td>
-          <td>{{ author.name }} {{ author.email }}</td>
-          <td>{{ text }}</td>
-          <td>
-            <button class="btn delete-spam" data-id="{{ id }}"
-              title="Delete"><i class="cil-x-circle"></i></button>
-            <button class="btn not-spam-comment" data-id="{{ id }}"
-              title="Not spam"><i class="cil-thumb-up"></i></button>
-          </td>
-        </tr>
-        {{/each}}
-        {{#unless comments}}
-          <tr>
-            <td colspan="5">There's nothing for you to review at the moment</td>
-          </tr>
-        {{/unless}}
-      </tbody>
-    </table>
-    {{#if comments}}
-    <nav aria-label="Comment paging">
-      <ul class="pagination">      
-        <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
-          <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
-        </li>     
-        {{#each pages}}
-        <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
-        {{/each}}
-        <li class="page-item{{#if onLastPage }} disabled{{/if}}">
-          <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+  {{#each comments}}
+  <article class="comment-container mb-4 ms-1">
+    <div class="comment-target">
+      <a href="{{ postUrl }}">{{ postUrl }}</a>
+    </div>
+    <div class="comment-meta">
+      <span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span>
+      by
+      {{ author.name }}
+      {{#if author.email}}
+      , {{ author.email }}
+      {{/if}}
+      {{#if author.website}}
+      , {{ author.website }}
+      {{/if}}
+      <button class="btn delete-spam" data-id="{{ id }}"
+        title="Delete"><i class="cil-trash"></i></button>
+      <button class="btn not-spam-comment" data-id="{{ id }}"
+        title="Not spam"><i class="cil-thumb-up"></i></button>
+    </div>
+    <div class="comment-contents">
+      {{ text }}
+    </div>
+  </article>
+  {{/each}}
+  {{#unless comments}}
+  <p>There's nothing for you to review at the moment</p>
+  {{/unless}}
+  {{#if comments}}
+  <nav aria-label="Comment paging">
+    <ul class="pagination">      
+      <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
+        <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
+      </li>     
+      {{#each pages}}
+      <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
+      {{/each}}
+      <li class="page-item{{#if onLastPage }} disabled{{/if}}">
+        <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
+      </li>
+    </ul>
+  </nav>
   {{/if}}
   <div class="alert alert-warning d-none" id="infoProblemDeletingComment" role="alert">
     There was a problem deleting this comment, sorry about that!

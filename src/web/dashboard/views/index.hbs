@@ -11,7 +11,7 @@
     </li>
   </ul>
 
-  <ul class="nav nav-tabs" id="dashboardTab" role="tablist">
+  <ul class="nav nav-tabs mb-3" id="dashboardTab" role="tablist">
     <li class="nav-item" role="presentation">
       <a href="/dashboard" class="nav-link active" id="home-tab" role="tab" aria-controls="comments" aria-selected="true">Comments ({{ commentCount }})</a>
     </li>
@@ -20,45 +20,37 @@
     </li>
   </ul>
 
-  <div class="tab-content" id="myTabContent">
-    <table class="table mt-3 ms-2">
-      <thead>
-        <tr>
-          <th scope="col">Posted</th>
-          <th scope="col">Commented on</th>
-          <th scope="col">Commenter</th>
-          <th scope="col">Comment</th>
-          <th scope="col">Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each comments}}
-        <tr>
-          <td style="white-space:nowrap;"><span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span></td>
-          <td><a href="{{ postUrl }}">{{ postUrl }}</a></td>
-          <td>
-            {{ author.name }}
-            {{#if author.email}}
-            <br/>{{ author.email }}
-            {{/if}}
-            {{#if author.website}}
-            {{ author.website }}</td>
-            {{/if}}
-          <td>{{ truncate text 120 "..."}}</td>
-          <td>
-              <button class="btn delete-comment" data-id="{{ id }}"
-                title="Delete"><i class="cil-x-circle"></i></button>
-          </td>
-        </tr>
-        {{/each}}
-        {{#unless comments}}
-        <tr>
-          <td colspan="5">
-            <p>There are no comments yet, check back later!</p>
-            <p>On a second thought, maybe you want to import comments from your existing app?</p>
-            <p>It needs to be a JSON in the following format:</p>
-            <blockquote>
-              <pre>
+  {{#each comments}}
+  <article class="comment-container mb-4 ms-1">
+    <div class="comment-target">
+      <a href="{{ postUrl }}">{{ postUrl }}</a>
+    </div>
+    <div class="comment-meta">
+      <span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span>
+      by
+      {{ author.name }}
+      {{#if author.email}}
+      , {{ author.email }}
+      {{/if}}
+      {{#if author.website}}
+      , {{ author.website }}
+      {{/if}}
+      <button class="btn delete-comment" data-id="{{ id }}"
+              title="Delete"><i class="cil-trash"></i></button>
+    </div>
+    <div class="comment-contents">
+      {{ text }}
+    </div>
+  </article>
+  {{/each}}
+
+  {{#unless comments}}
+  <section class="import-comments">
+    <p>There are no comments yet, check back later!</p>
+    <p>On a second thought, maybe you want to import comments from your existing app?</p>
+    <p>It needs to be a JSON in the following format:</p>
+    <blockquote>
+      <pre>
 [
   {
   "posted_at": "2021-02-12 14:17:17",
@@ -69,46 +61,43 @@
   "website": "https://lucy.blogspot.com"
   }
 ]
-              </pre>
-            </blockquote>
-            <form action="/account/import?_csrf={{csrfToken}}"
-                  method="POST"
-                  enctype="multipart/form-data"
-                  class="row gy-2 gx-3 align-items-center">
-              <div class="col-auto">
-                <label class="visually-hidden" for="importjson">File</label>
-                <input type="file" id="importjson" name="importjson" required/>
-              </div>
-              <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Import</button>
-              </div>
-            </form>
-            {{#if importError}}
-            <div class="alert alert-warning mt-2" role="alert">
-              There was an error processing your JSON. Please have a look at it and make sure the format corresponds to what you see above.
-            </div>
-            {{/if}}
-          </td>
-        </tr>
-        {{/unless}}
-      </tbody>
-    </table>
-    {{#if comments}}
-    <nav aria-label="Comment paging">
-      <ul class="pagination">      
-        <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
-          <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
-        </li>     
-        {{#each pages}}
-        <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
-        {{/each}}
-        <li class="page-item{{#if onLastPage }} disabled{{/if}}">
-          <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
-        </li>
-      </ul>
-    </nav>
+      </pre>
+    </blockquote>
+    <form action="/account/import?_csrf={{csrfToken}}"
+          method="POST"
+          enctype="multipart/form-data"
+          class="row gy-2 gx-3 align-items-center">
+      <div class="col-auto">
+        <label class="visually-hidden" for="importjson">File</label>
+        <input type="file" id="importjson" name="importjson" required/>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Import</button>
+      </div>
+    </form>
+    {{#if importError}}
+    <div class="alert alert-warning mt-2" role="alert">
+      There was an error processing your JSON. Please have a look at it and make sure the format corresponds to what you see above.
+    </div>
     {{/if}}
-  </div>
+  </section>
+  {{/unless}}
+
+  {{#if comments}}
+  <nav aria-label="Comment paging">
+    <ul class="pagination">      
+      <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
+        <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
+      </li>     
+      {{#each pages}}
+      <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
+      {{/each}}
+      <li class="page-item{{#if onLastPage }} disabled{{/if}}">
+        <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
+      </li>
+    </ul>
+  </nav>
+  {{/if}}
   <div class="alert alert-warning d-none" id="infoProblemDeletingComment" role="alert">
     There was a problem deleting this comment, sorry about that!
   </div>
