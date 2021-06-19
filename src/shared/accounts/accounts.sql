@@ -38,7 +38,7 @@ SELECT * FROM account_settings WHERE account_id=:accountId;
 SELECT * FROM account_email_settings WHERE account_id=:accountId;
 
 /* @name updateSettings */
-UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId;
+UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId;
 
 /* @name updateEmailSettings */
 UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId;

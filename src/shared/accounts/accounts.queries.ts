@@ -335,6 +335,7 @@ export interface IAccountSettingsResult {
   blog_url: string | null;
   akismet_key: string | null;
   use_akismet: boolean | null;
+  require_moderation: boolean;
 }
 
 /** 'AccountSettings' query type */
@@ -386,6 +387,7 @@ export const accountEmailSettings = new PreparedQuery<IAccountEmailSettingsParam
 
 /** 'UpdateSettings' parameters type */
 export interface IUpdateSettingsParams {
+  requireModeration: boolean | null | void;
   blogUrl: string | null | void;
   useAkismet: boolean | null | void;
   akismetKey: string | null | void;
@@ -401,12 +403,12 @@ export interface IUpdateSettingsQuery {
   result: IUpdateSettingsResult;
 }
 
-const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"blogUrl","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1338,"b":1344,"line":41,"col":38}]}},{"name":"useAkismet","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1360,"b":1369,"line":41,"col":60}]}},{"name":"akismetKey","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1385,"b":1394,"line":41,"col":85}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1414,"b":1422,"line":41,"col":114}]}}],"usedParamSet":{"blogUrl":true,"useAkismet":true,"akismetKey":true,"accountId":true},"statement":{"body":"UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId","loc":{"a":1300,"b":1422,"line":41,"col":0}}};
+const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"requireModeration","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1348,"b":1364,"line":41,"col":48}]}},{"name":"blogUrl","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1377,"b":1383,"line":41,"col":77}]}},{"name":"useAkismet","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1399,"b":1408,"line":41,"col":99}]}},{"name":"akismetKey","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1424,"b":1433,"line":41,"col":124}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1453,"b":1461,"line":41,"col":153}]}}],"usedParamSet":{"requireModeration":true,"blogUrl":true,"useAkismet":true,"akismetKey":true,"accountId":true},"statement":{"body":"UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId","loc":{"a":1300,"b":1461,"line":41,"col":0}}};
 
 /**
  * Query generated from SQL:
  * ```
- * UPDATE account_settings SET blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId
+ * UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId
  * ```
  */
 export const updateSettings = new PreparedQuery<IUpdateSettingsParams,IUpdateSettingsResult>(updateSettingsIR);
@@ -428,7 +430,7 @@ export interface IUpdateEmailSettingsQuery {
   result: IUpdateEmailSettingsResult;
 }
 
-const updateEmailSettingsIR: any = {"name":"updateEmailSettings","params":[{"name":"notifyOnComments","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1512,"b":1527,"line":44,"col":54}]}},{"name":"sendCommentsDigest","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1552,"b":1569,"line":44,"col":94}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1589,"b":1597,"line":44,"col":131}]}}],"usedParamSet":{"notifyOnComments":true,"sendCommentsDigest":true,"accountId":true},"statement":{"body":"UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId","loc":{"a":1458,"b":1597,"line":44,"col":0}}};
+const updateEmailSettingsIR: any = {"name":"updateEmailSettings","params":[{"name":"notifyOnComments","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1551,"b":1566,"line":44,"col":54}]}},{"name":"sendCommentsDigest","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1591,"b":1608,"line":44,"col":94}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1628,"b":1636,"line":44,"col":131}]}}],"usedParamSet":{"notifyOnComments":true,"sendCommentsDigest":true,"accountId":true},"statement":{"body":"UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId","loc":{"a":1497,"b":1636,"line":44,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -460,7 +462,7 @@ export interface IFindUserByEmailOrUsernameQuery {
   result: IFindUserByEmailOrUsernameResult;
 }
 
-const findUserByEmailOrUsernameIR: any = {"name":"findUserByEmailOrUsername","params":[{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1678,"b":1685,"line":47,"col":39}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1697,"b":1701,"line":47,"col":58}]}}],"usedParamSet":{"username":true,"email":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username OR email=:email","loc":{"a":1639,"b":1701,"line":47,"col":0}}};
+const findUserByEmailOrUsernameIR: any = {"name":"findUserByEmailOrUsername","params":[{"name":"username","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1717,"b":1724,"line":47,"col":39}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1736,"b":1740,"line":47,"col":58}]}}],"usedParamSet":{"username":true,"email":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username OR email=:email","loc":{"a":1678,"b":1740,"line":47,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -486,7 +488,7 @@ export interface IChangeAccountEmailQuery {
   result: IChangeAccountEmailResult;
 }
 
-const changeAccountEmailIR: any = {"name":"changeAccountEmail","params":[{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1763,"b":1767,"line":50,"col":27}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1779,"b":1787,"line":50,"col":43}]}}],"usedParamSet":{"email":true,"accountId":true},"statement":{"body":"UPDATE accounts SET email=:email WHERE id=:accountId","loc":{"a":1736,"b":1787,"line":50,"col":0}}};
+const changeAccountEmailIR: any = {"name":"changeAccountEmail","params":[{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1802,"b":1806,"line":50,"col":27}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1818,"b":1826,"line":50,"col":43}]}}],"usedParamSet":{"email":true,"accountId":true},"statement":{"body":"UPDATE accounts SET email=:email WHERE id=:accountId","loc":{"a":1775,"b":1826,"line":50,"col":0}}};
 
 /**
  * Query generated from SQL:

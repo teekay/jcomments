@@ -75,6 +75,7 @@ export class AccountService {
     const s = await accountSettings.run({accountId: account.id}, this.client)
     if (s.length === 0) return
     return {
+      requireModeration: s[0].require_moderation ?? false,
       useAkismet: s[0].use_akismet ?? false,
       akismetKey: s[0].akismet_key ?? '',
       blogUrl: s[0].blog_url ?? ''
@@ -91,7 +92,13 @@ export class AccountService {
   }
 
   async updateSettings(account: Account, settings: SettingsParam): Promise<void> {
-    await updateSettings.run({accountId: account.id, ...settings}, this.client)
+    await updateSettings.run({
+      accountId: account.id,
+      requireModeration: settings.requireModeration ?? false,
+      useAkismet: settings.useAkismet ?? false,
+      akismetKey: settings.akismetKey,
+      blogUrl: settings.blogUrl
+    }, this.client)
   }
 
   async updateEmailSettings(account: Account, settings: EmailSettingsParam): Promise<void> {
