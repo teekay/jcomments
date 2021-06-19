@@ -23,7 +23,7 @@
   {{#each comments}}
   <article class="comment-container mb-4 ms-1">
     <div class="comment-target">
-      <a href="{{ postUrl }}">{{ postUrl }}</a>
+      <a href="{{ postUrl }}">{{#if postTitle}}{{ postTitle }}{{else}}{{ postUrl }}{{/if}}</a>
     </div>
     <div class="comment-meta">
       <span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span>
@@ -55,6 +55,7 @@
   {
   "posted_at": "2021-02-12 14:17:17",
   "page_url": "https://example.com/blog/2020-12-you-are-looking-awesome-today/",
+  "page_title": "You are looking awesome today!",
   "author": "Lucy L.",
   "text": "Wonderful post, thank you so much for inspiration!",
   "email": "lucy.poster@mailinator.com",
@@ -62,6 +63,7 @@
   }
 ]
       </pre>
+      (The <code>page_title</code> field is optional)
     </blockquote>
     <form action="/account/import?_csrf={{csrfToken}}"
           method="POST"

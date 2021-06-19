@@ -23,7 +23,7 @@
   {{#each comments}}
   <article class="comment-container mb-4 ms-1">
     <div class="comment-target">
-      <a href="{{ postUrl }}">{{ postUrl }}</a>
+      <a href="{{ postUrl }}">{{#if postTitle}}{{ postTitle }}{{else}}{{ postUrl }}{{/if}}</a>
     </div>
     <div class="comment-meta">
       <span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span>
