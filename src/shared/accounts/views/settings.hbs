@@ -108,6 +108,20 @@
       <form method="POST" action="/account/settings" class="mb-4">
         <input type="hidden" name="_csrf" value="{{csrfToken}}">
         <section class="row mb-3">
+          <label for="useAkismet" class="col form-label">Require moderation for all comments</label>
+          <div class="col form-check form-switch">
+            <input class="form-check-input" 
+              value="1"
+              type="checkbox" 
+              name="requireModeration" 
+              id="requireModeration"{{#if requireModeration}} checked{{/if}}>
+          </div>
+          <div class="col"></div>
+        </section>
+        <p class="feature-help mb-5">All comments will go to the moderation queue if you enable this option. You will have to approve them one-by-one
+          to make them available to your website's visitors.
+        </p>
+        <section class="row mb-3">
           <label for="useAkismet" class="col form-label">Use anti-SPAM protection (Akismet)</label>
           <div class="col form-check form-switch">
             <input class="form-check-input" 
@@ -148,6 +162,7 @@
           </div>
           <div class="col"></div>
         </section>
+        <p class="feature-help">If you enable Akismet integration, we will check each comment to determine if it's SPAM or not relying on the Akismet SPAM detection feature.</p>
         <button type="submit" class="btn btn-primary">Save my settings</button>
       </form>
     </section>

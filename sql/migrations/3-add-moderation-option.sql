@@ -1,0 +1,1 @@
+ALTER TABLE account_settings ADD require_moderation BOOLEAN NOT NULL DEFAULT false;

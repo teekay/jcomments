@@ -1,10 +1,11 @@
 export class SettingsParam {
-  akismetKey!: string
-  blogUrl!: string
-  useAkismet!: boolean
+  requireModeration = false
+  useAkismet = false
+  akismetKey = ''
+  blogUrl = ''
 }
 
 export class EmailSettingsParam {
-  notifyOnComments!: boolean
-  sendCommentsDigest!: boolean
+  notifyOnComments = false
+  sendCommentsDigest = false
 }

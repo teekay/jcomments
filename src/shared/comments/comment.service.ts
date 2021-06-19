@@ -19,10 +19,11 @@ export class CommentService {
 
   async create(account: Account, comment: CommentBase, ip: string): Promise<CommentCreatedResult> {
     const settings = await this.accountService.settingsFor(account)
-    if (settings?.akismetKey && settings.useAkismet) {
-      const isSpam = await this.akismetService.isCommentSpam(settings, comment, ip)
-      if (isSpam) {
-        this.logger.warn(`SPAM detected: ${JSON.stringify(comment)}`)
+    const toModeration = (settings?.requireModeration ?? false)
+    if (toModeration || (settings?.akismetKey && settings.useAkismet)) {
+      const flagIt = toModeration || (settings && await this.akismetService.isCommentSpam(settings, comment, ip))
+      if (flagIt) {
+        this.logger.warn(`${toModeration ? 'Moderation enforced':'SPAM detected'}: ${JSON.stringify(comment)}`)
         await flagCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
         return CommentCreatedResult.Flagged
       }
