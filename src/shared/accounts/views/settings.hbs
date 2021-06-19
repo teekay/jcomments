@@ -15,7 +15,7 @@
 
   <ul class="nav nav-tabs mb-4">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" 
+      <button class="nav-link" 
         id="personal-tab"
         data-bs-toggle="tab" data-bs-target="#personal" 
         type="button" role="tab" aria-controls="personal" aria-selected="true">Personal</button>
@@ -35,7 +35,7 @@
   </ul>
 
   <div class="tab-content">
-    <section class="tab-pane fade show active" id="personal" aria-labelledby="personal-tab">
+    <section class="tab-pane fade" id="personal" aria-labelledby="personal-tab">
       <section class="row mb-4">
         <div class="col">
           <p><b>Your username</b></p>
@@ -225,6 +225,18 @@
   }
 
   document.querySelector('#btnRevealApiKey').addEventListener('click', revealApiKey);
+  
+  // remember tabs
+  document.querySelectorAll('button[data-bs-toggle=tab]')
+    .forEach(b => 
+      b.addEventListener('click', ev => 
+        localStorage.setItem('lastSettingsTab', ev.target.id)));
+
+  (function() {
+    let lastTab = localStorage.getItem('lastSettingsTab');
+    let btn = document.querySelector(lastTab ? `#${lastTab}` : '#personal-tab');
+    btn.click();
+  })()
 </script>
 
 {{#if blogUrl }}
