@@ -17,17 +17,18 @@ export class CommentService {
     private readonly akismetService: AkismetService,
     private readonly logger: Logger) {}
 
-  async create(account: Account, comment: CommentBase, ip: string): Promise<void> {
+  async create(account: Account, comment: CommentBase, ip: string): Promise<CommentCreatedResult> {
     const settings = await this.accountService.settingsFor(account)
     if (settings?.akismetKey && settings.useAkismet) {
       const isSpam = await this.akismetService.isCommentSpam(settings, comment, ip)
       if (isSpam) {
         this.logger.warn(`SPAM detected: ${JSON.stringify(comment)}`)
         await flagCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
-        return
+        return CommentCreatedResult.Flagged
       }
     }
     await postCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
+    return CommentCreatedResult.Created
   }
 
   async commentsForUrl(account: Account, url: string, query?: CommentsQuery): Promise<CommentWithId[]> {
@@ -170,4 +171,8 @@ export interface JsonDump {
 
 export enum SortOrder {
   Asc, Desc
+}
+
+export enum CommentCreatedResult {
+  Created, Flagged
 }

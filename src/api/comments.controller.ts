@@ -3,7 +3,7 @@ import { Account } from '../shared/accounts/account.interface'
 import { AccountService } from '../shared/accounts/account.service'
 import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Req, Res } from '@nestjs/common'
 import { CommentDto, CommentWithId } from '../shared/comments/comment.interface'
-import { CommentService, SortOrder } from '../shared/comments/comment.service'
+import { CommentCreatedResult, CommentService, SortOrder } from '../shared/comments/comment.service'
 import { ConfigService } from '../shared/config/config.service'
 import { ContentFilteringService } from '../shared/comments/content-filtering-service'
 import { EmailService } from '../shared/emails/email.service'
@@ -76,7 +76,7 @@ export class CommentsController {
   async postCommentForUrl(@Req() req: Request, @Body() comment: CommentDto,
     @Res() res: Response): Promise<void> {
     const account = _.get(req, 'account') as Account
-    await this.commentsService.create(account, {
+    const result = await this.commentsService.create(account, {
       ... comment,
       postedAt: new Date()
     }, req.ip)
@@ -86,6 +86,11 @@ export class CommentsController {
       res.redirect(comment.postUrl)
     } else {
       res.status(HttpStatus.CREATED).send()
+    }
+
+    if (result === CommentCreatedResult.Flagged) {
+      // no email notification for spam
+      return
     }
 
     const emailSettings = await this.accountService.emailSettingsFor(account)

@@ -8,7 +8,7 @@ import { SettingsParam } from '../accounts/settings.param'
 export class AkismetService {
   constructor(private readonly logger: Logger) {}
 
-  async isCommentSpam(accountSettings: SettingsParam, comment: CommentBase, ipAddr: string) {
+  async isCommentSpam(accountSettings: SettingsParam, comment: CommentBase, ipAddr: string): Promise<boolean | undefined> {
     const key = accountSettings.akismetKey
     const blog = accountSettings.blogUrl
     if (!key || !blog) return
@@ -24,6 +24,7 @@ export class AkismetService {
       })
     } catch (oops) {
       this.logger.warn(`Could not reach Akismet`, oops)
+      // TODO we have to let the account owner know if there are persistent problems with Akismet
       return
     }
   }
