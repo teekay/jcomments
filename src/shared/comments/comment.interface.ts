@@ -1,6 +1,8 @@
-import { IsNotEmpty } from "class-validator";
-import { Account } from "../accounts/account.interface";
-import { Author, AuthorDto } from "./author.interface";
+import { Account } from "../accounts/account.interface"
+import { Author, AuthorDto } from "./author.interface"
+import { IsNotEmpty, IsNotEmptyObject, IsUrl, MaxLength, ValidateNested } from "class-validator"
+import { NonEmptyString } from "../validation/non-empty-string.validator"
+import { Type } from "class-transformer"
 
 export interface CommentBase {
   postUrl: string
@@ -23,11 +25,16 @@ export interface Comment extends CommentWithId {
 
 export class CommentDto {
   @IsNotEmpty()
-  postUrl!: string;
+  @MaxLength(2048)
+  @IsUrl()
+  postUrl!: string
   
   @IsNotEmpty()
-  text!: string;
+  @NonEmptyString({ message: 'comment cannot be an empty string or just white space'})
+  text!: string
   
-  @IsNotEmpty()
+  @ValidateNested()
+  @IsNotEmptyObject()
+  @Type(() => AuthorDto)
   author!: AuthorDto
-  }
+}

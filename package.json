@@ -44,6 +44,7 @@
     "handlebars-dateformat": "^1.1.1",
     "handlebars-helpers": "^0.10.0",
     "hbs": "^4.1.2",
+    "he": "^1.2.0",
     "jest": "^27.0.4",
     "jsdom": "^16.6.0",
     "lodash": "^4.17.21",
