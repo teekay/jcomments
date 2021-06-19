@@ -119,6 +119,7 @@ export class CommentService {
         accountId: account.id,
         createdAt: moment(comment.posted_at).toDate(),
         url: comment.page_url,
+        pageTitle: comment.page_title ?? null,
         text: comment.text,
         name: comment.author,
         email: comment.email,
@@ -133,6 +134,7 @@ export class CommentService {
       id: uuidv4(),
       accountId: account.id,
       url: comment.postUrl,
+      pageTitle: comment.postTitle ?? null,
       text: comment.text,
       name: comment.author.name,
       email: comment.author.email,
@@ -144,6 +146,7 @@ export class CommentService {
     return {
       id: r.id,
       postUrl: r.page_url,
+      postTitle: r.page_title|| '',
       postedAt: r.created_at,
       text: r.comment,
       author: {
@@ -163,6 +166,7 @@ export class CommentsQuery {
 export interface JsonDump {
   posted_at: string
   page_url: string
+  page_title?: string | null
   author: string
   text: string
   email?: string

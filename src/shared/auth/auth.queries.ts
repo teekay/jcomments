@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/auth/auth.sql" */
+/** Types generated for queries found in "src/shared/auth/auth.sql" */
 import { PreparedQuery } from '@pgtyped/query';
 
 /** 'ExpirePendingTokens' parameters type */

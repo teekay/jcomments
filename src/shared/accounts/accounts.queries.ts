@@ -1,4 +1,4 @@
-/** Types generated for queries found in "src/accounts/accounts.sql" */
+/** Types generated for queries found in "src/shared/accounts/accounts.sql" */
 import { PreparedQuery } from '@pgtyped/query';
 
 /** 'Signup' parameters type */
