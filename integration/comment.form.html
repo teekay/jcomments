@@ -1,0 +1,21 @@
+<!-- A sample form you can integrate to your website to let people post comments -->
+<!-- Just keep the field names, everything else is up to you -->
+<form method="POST"
+      action="{{ API_URL }}"
+      class="comment-form">
+  <!-- Replace the variables API_URL and API_TOKEN on the server side during website build -->
+  <input type="hidden" name="token" value="{{ API_TOKEN }}"/>
+  <!-- Replace URL with the full URL of the current page where this form is being embedded -->
+  <input type="hidden" name="postUrl" value="{{ URL }}"/>
+  <!-- (Optional) Replace TITLE with title of the current page where this form is being embedded, or remove this field -->
+  <input type="hidden" name="postTitle" value="{{ TITLE }}"/>
+  <div>
+    <textarea name="text" rows="5" style="width: 100%;  margin-bottom: 0.4em;" required></textarea>
+  </div>
+  <div class="container-flex" style=" margin-bottom: 1.6em;">
+    <input type="text" class="field" name="author[name]" placeholder="Your name or nick" required/>
+    <input type="email" class="field" name="author[email]" placeholder="Your email (optional)"/>
+    <input type="text" class="field" name="author[website]" placeholder="Your website (optional)"/>
+  </div>
+  <button type="submit" style="float: right;">Post your comment</button>
+</form>
