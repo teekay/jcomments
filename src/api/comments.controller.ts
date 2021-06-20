@@ -93,12 +93,16 @@ export class CommentsController {
       return
     }
 
-    const emailSettings = await this.accountService.emailSettingsFor(account)
-    if (emailSettings?.notifyOnComments) {
-      // notify
-      this.logger.debug("Scheduling an email notification about a new comment")
-      const email = this.emailService.notifyOnSingleComment(comment, `${this.configService.adminUrl()}/dashboard`)
-      this.jobQueue.publish('notify-on-new-comment-via-email', { account, email })
+    try {
+      const emailSettings = await this.accountService.emailSettingsFor(account)
+      if (emailSettings?.notifyOnComments) {
+        // notify
+        this.logger.debug("Scheduling an email notification about a new comment")
+        const email = this.emailService.notifyOnSingleComment(comment, `${this.configService.adminUrl()}/dashboard`)
+        this.jobQueue.publish('notify-on-new-comment-via-email', { account, email })
+      }
+    } catch (oops) {
+      this.logger.warn(`Trouble scheduling email notification: ${oops?.message}`)
     }
 
   }
