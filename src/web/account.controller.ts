@@ -5,13 +5,14 @@ import { AccountService } from '../shared/accounts/account.service'
 import { AkismetService } from '../shared/comments/akismet.service'
 import { AuthenticatedGuard } from '../shared/auth/authenticated.guard'
 import { Body, Controller, Get, Post, Req, Res, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common'
-import { CommentService } from '../shared/comments/comment.service'
+import { CommentService, SortOrder } from '../shared/comments/comment.service'
 import { FileInterceptor } from '@nestjs/platform-express'
 import { Logger } from 'nestjs-pino'
 import { Request, Response } from 'express'
 import { SessionExpiredFilter } from '../shared/auth/auth.exception'
 import { EmailSettingsParam, SettingsParam } from '../shared/accounts/settings.param'
 import { TokenService } from '../shared/accounts/token.service'
+import moment from 'moment'
 
 @Controller('account')
 @UseFilters(new SessionExpiredFilter())
@@ -151,5 +152,19 @@ export class AccountController {
       req.flash('import-error', 'There was an error parsing the JSON')
     }
     return res.redirect('/dashboard')
+  }
+
+  @Get('export')
+  @UseGuards(AuthenticatedGuard)
+  async export(@Req() req, @Res() res: Response): Promise<Response> {
+    const account = _.get(req, 'user') as Account
+    const allComments = await this.commentService.commentsForAccount(account, SortOrder.Asc)
+    res.setHeader('Content-Type', 'application/json')
+    res.setHeader('Content-Disposition', `attachment; filename=${moment().format('YYYY-MM-DD-HH-ss')}_${account.username}_comments.json`)
+    return res.json(allComments.map(c => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, ...rest } = c
+      return rest
+    }))
   }
 }
