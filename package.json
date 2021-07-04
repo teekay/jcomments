@@ -4,7 +4,7 @@
   "description": "A commenting platform for self-hosted static websites.",
   "main": "index.js",
   "engines": {
-    "node": "12.20.0"
+    "node": ">=12.20.0"
   },
   "scripts": {
     "api": "ts-node src/api.ts",

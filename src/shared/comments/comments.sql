@@ -42,3 +42,10 @@ DELETE FROM comments WHERE id=:id;
 
 /* @name DeleteSingleSpam */
 DELETE FROM reviews WHERE id=:id;
+
+/* @name DeleteAllComments */
+DELETE FROM comments WHERE account_id=:accountId;
+
+/* @name DeleteAllSpam */
+DELETE FROM reviews WHERE account_id=:accountId;
+

@@ -1,5 +1,5 @@
 import { Account } from './account.interface'
-import { accountEmailSettings, accountSettings, changeAccountEmail, findByEmail, findById, findByUsername, findCurrentToken, findUserByEmailOrUsername, IFindByIdResult, initialAccountEmailSettings, initialAccountSettings, login, signup, updateEmailSettings, updateSettings } from './accounts.queries'
+import { accountEmailSettings, accountSettings, changeAccountEmail, closeAccount, deleteEmailSettings, deleteSettings, deleteTokens, findByEmail, findById, findByUsername, findCurrentToken, findUserByEmailOrUsername, IFindByIdResult, initialAccountEmailSettings, initialAccountSettings, login, signup, updateEmailSettings, updateSettings } from './accounts.queries'
 import { Client } from 'pg'
 import { Inject, Injectable } from '@nestjs/common'
 import { EmailSettingsParam, SettingsParam } from './settings.param'
@@ -112,6 +112,13 @@ export class AccountService {
       throw new Error("Email already exists")
     }
     await changeAccountEmail.run({ accountId: account.id, email }, this.client)
+  }
+
+  async closeAccount(account: Account): Promise<void> {
+    await deleteSettings.run({ accountId: account.id }, this.client)
+    await deleteEmailSettings.run({ accountId: account.id }, this.client)
+    await deleteTokens.run({ accountId: account.id }, this.client)
+    await closeAccount.run({ accountId: account.id }, this.client)
   }
 
   private recordToAccount(a: IFindByIdResult): Account {

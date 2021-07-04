@@ -78,7 +78,7 @@ export class CommentsController {
     const account = _.get(req, 'account') as Account
     const result = await this.commentsService.create(account, {
       ... comment,
-      postedAt: new Date()
+      postedAt: moment().utc().toDate()
     }, req.ip)
 
     if (req.headers['content-type'] !== 'application/json') {

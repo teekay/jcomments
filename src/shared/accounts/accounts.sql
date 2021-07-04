@@ -48,3 +48,15 @@ SELECT * FROM accounts WHERE username=:username OR email=:email;
 
 /* @name changeAccountEmail */
 UPDATE accounts SET email=:email WHERE id=:accountId;
+
+/* @name deleteSettings */
+DELETE FROM account_settings WHERE account_id=:accountId;
+
+/* @name deleteEmailSettings */
+DELETE FROM account_email_settings WHERE account_id=:accountId;
+
+/* @name deleteTokens */
+DELETE FROM tokens WHERE account_id=:accountId;
+
+/* @name closeAccount */
+DELETE FROM accounts WHERE id=:accountId;

@@ -4,7 +4,7 @@ import { AccountService } from '../accounts/account.service'
 import { AkismetService } from './akismet.service'
 import { Client } from 'pg'
 import { Comment, CommentBase, CommentWithId } from './comment.interface'
-import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount, ICommentsForUrlSinceDateResult, ICommentsForUrlResult } from './comments.queries'
+import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount, ICommentsForUrlSinceDateResult, ICommentsForUrlResult, deleteAllComments, deleteAllSpam } from './comments.queries'
 import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from "nestjs-pino";
 import { v4 as uuidv4 } from 'uuid'
@@ -110,6 +110,11 @@ export class CommentService {
     await postCommentForUrlWithTimestamp.run(_.merge(
       {createdAt: comment.postedAt},
       this.commentToDbParam(account, comment)), this.client)
+  }
+
+  async deleteContentsForAccount(account: Account): Promise<void> {
+    await deleteAllComments.run({ accountId: account.id }, this.client)
+    await deleteAllSpam.run({ accountId: account.id }, this.client)
   }
 
   async import(account: Account, dump: JsonDump[]): Promise<void> {
