@@ -108,6 +108,14 @@
           <p><a href="/account/export">Download</a> all comments</p>
         </div>
       </section>
+      <h4>Close your account</h4>
+      <section class="row mb-4">
+        <div class="col">
+          <p>You can close your account anytime. Be sure to download your data before.</p>
+          <button type="button" class="btn btn-danger"
+                    data-bs-toggle="modal" data-bs-target="#closeAccountModal">Close my account</button>
+        </div>
+      </section>
     </section>
 
     <section class="tab-pane fade show" id="commenting" aria-labelledby="commenting-tab">
@@ -206,6 +214,28 @@
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelDelete">Cancel</button>
           <button type="button" class="btn btn-primary" id="btnReissueApiKey">Yes, go ahead</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal" tabindex="-1" id="closeAccountModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Really close your account?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to close your account?</p>
+          <p>This action is irreversible. All your data will be erased if you continue.</p>
+        </div>
+        <div class="modal-footer">
+          <form method="POST" action="/account/close">
+            <input type="hidden" name="_csrf" value="{{csrfToken}}">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelDelete">Cancel</button>
+            <button type="submit" class="btn btn-primary">Yes, do it already</button>
+          </form>
         </div>
       </div>
     </div>

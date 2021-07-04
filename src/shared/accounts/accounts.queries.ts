@@ -499,3 +499,103 @@ const changeAccountEmailIR: any = {"name":"changeAccountEmail","params":[{"name"
 export const changeAccountEmail = new PreparedQuery<IChangeAccountEmailParams,IChangeAccountEmailResult>(changeAccountEmailIR);
 
 
+/** 'DeleteSettings' parameters type */
+export interface IDeleteSettingsParams {
+  accountId: string | null | void;
+}
+
+/** 'DeleteSettings' return type */
+export type IDeleteSettingsResult = void;
+
+/** 'DeleteSettings' query type */
+export interface IDeleteSettingsQuery {
+  params: IDeleteSettingsParams;
+  result: IDeleteSettingsResult;
+}
+
+const deleteSettingsIR: any = {"name":"deleteSettings","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1904,"b":1912,"line":53,"col":47}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM account_settings WHERE account_id=:accountId","loc":{"a":1857,"b":1912,"line":53,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM account_settings WHERE account_id=:accountId
+ * ```
+ */
+export const deleteSettings = new PreparedQuery<IDeleteSettingsParams,IDeleteSettingsResult>(deleteSettingsIR);
+
+
+/** 'DeleteEmailSettings' parameters type */
+export interface IDeleteEmailSettingsParams {
+  accountId: string | null | void;
+}
+
+/** 'DeleteEmailSettings' return type */
+export type IDeleteEmailSettingsResult = void;
+
+/** 'DeleteEmailSettings' query type */
+export interface IDeleteEmailSettingsQuery {
+  params: IDeleteEmailSettingsParams;
+  result: IDeleteEmailSettingsResult;
+}
+
+const deleteEmailSettingsIR: any = {"name":"deleteEmailSettings","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2001,"b":2009,"line":56,"col":53}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM account_email_settings WHERE account_id=:accountId","loc":{"a":1948,"b":2009,"line":56,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM account_email_settings WHERE account_id=:accountId
+ * ```
+ */
+export const deleteEmailSettings = new PreparedQuery<IDeleteEmailSettingsParams,IDeleteEmailSettingsResult>(deleteEmailSettingsIR);
+
+
+/** 'DeleteTokens' parameters type */
+export interface IDeleteTokensParams {
+  accountId: string | null | void;
+}
+
+/** 'DeleteTokens' return type */
+export type IDeleteTokensResult = void;
+
+/** 'DeleteTokens' query type */
+export interface IDeleteTokensQuery {
+  params: IDeleteTokensParams;
+  result: IDeleteTokensResult;
+}
+
+const deleteTokensIR: any = {"name":"deleteTokens","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2075,"b":2083,"line":59,"col":37}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM tokens WHERE account_id=:accountId","loc":{"a":2038,"b":2083,"line":59,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM tokens WHERE account_id=:accountId
+ * ```
+ */
+export const deleteTokens = new PreparedQuery<IDeleteTokensParams,IDeleteTokensResult>(deleteTokensIR);
+
+
+/** 'CloseAccount' parameters type */
+export interface ICloseAccountParams {
+  accountId: string | null | void;
+}
+
+/** 'CloseAccount' return type */
+export type ICloseAccountResult = void;
+
+/** 'CloseAccount' query type */
+export interface ICloseAccountQuery {
+  params: ICloseAccountParams;
+  result: ICloseAccountResult;
+}
+
+const closeAccountIR: any = {"name":"closeAccount","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2143,"b":2151,"line":62,"col":31}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM accounts WHERE id=:accountId","loc":{"a":2112,"b":2151,"line":62,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM accounts WHERE id=:accountId
+ * ```
+ */
+export const closeAccount = new PreparedQuery<ICloseAccountParams,ICloseAccountResult>(closeAccountIR);
+
+

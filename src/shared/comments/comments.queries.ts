@@ -491,3 +491,53 @@ const deleteSingleSpamIR: any = {"name":"DeleteSingleSpam","params":[{"name":"id
 export const deleteSingleSpam = new PreparedQuery<IDeleteSingleSpamParams,IDeleteSingleSpamResult>(deleteSingleSpamIR);
 
 
+/** 'DeleteAllComments' parameters type */
+export interface IDeleteAllCommentsParams {
+  accountId: string | null | void;
+}
+
+/** 'DeleteAllComments' return type */
+export type IDeleteAllCommentsResult = void;
+
+/** 'DeleteAllComments' query type */
+export interface IDeleteAllCommentsQuery {
+  params: IDeleteAllCommentsParams;
+  result: IDeleteAllCommentsResult;
+}
+
+const deleteAllCommentsIR: any = {"name":"DeleteAllComments","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2124,"b":2132,"line":47,"col":39}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM comments WHERE account_id=:accountId","loc":{"a":2085,"b":2132,"line":47,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM comments WHERE account_id=:accountId
+ * ```
+ */
+export const deleteAllComments = new PreparedQuery<IDeleteAllCommentsParams,IDeleteAllCommentsResult>(deleteAllCommentsIR);
+
+
+/** 'DeleteAllSpam' parameters type */
+export interface IDeleteAllSpamParams {
+  accountId: string | null | void;
+}
+
+/** 'DeleteAllSpam' return type */
+export type IDeleteAllSpamResult = void;
+
+/** 'DeleteAllSpam' query type */
+export interface IDeleteAllSpamQuery {
+  params: IDeleteAllSpamParams;
+  result: IDeleteAllSpamResult;
+}
+
+const deleteAllSpamIR: any = {"name":"DeleteAllSpam","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2200,"b":2208,"line":50,"col":38}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM reviews WHERE account_id=:accountId","loc":{"a":2162,"b":2208,"line":50,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * DELETE FROM reviews WHERE account_id=:accountId
+ * ```
+ */
+export const deleteAllSpam = new PreparedQuery<IDeleteAllSpamParams,IDeleteAllSpamResult>(deleteAllSpamIR);
+
+
