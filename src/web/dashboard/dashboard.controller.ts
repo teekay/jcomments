@@ -53,7 +53,12 @@ export class DashboardController {
     const commentCount = await this.commentService.commentCountForAccount(account)
     const reviewCount = await this.commentService.reviewCountForAccount(account)
     const pages = _.range(1, Math.ceil(reviewCount / size) + 1)
-    const comments = await this.commentService.reviewsForAccountPaged(account, size, page)
+    const comments = (await this.commentService.reviewsForAccountPaged(account, size, page)).map(c => {
+      return {
+        ...c,
+        relativePostedAt: moment(c.postedAt).fromNow()
+      }
+    })
     return res.render('./dashboard/views/review', { 
       layout: 'dashboard',
       csrfToken: req.csrfToken(),
