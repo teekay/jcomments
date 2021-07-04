@@ -123,7 +123,7 @@ export class CommentService {
       await postCommentForUrlWithTimestamp.run({
         id: uuidv4(),
         accountId: account.id,
-        createdAt: moment(comment.posted_at).toDate(),
+        createdAt: moment(comment.posted_at).utc(true).toDate(),
         url: comment.page_url,
         pageTitle: comment.page_title ?? null,
         text: comment.text,
@@ -153,7 +153,7 @@ export class CommentService {
       id: r.id,
       postUrl: r.page_url,
       postTitle: r.page_title|| '',
-      postedAt: r.created_at,
+      postedAt: moment(r.created_at).utc(true).toDate(),
       text: r.comment,
       author: {
         name: r.reader_name,
