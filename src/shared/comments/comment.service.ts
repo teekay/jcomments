@@ -9,6 +9,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from "nestjs-pino";
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
+import { interpretedQuery } from '../logging/logged-query'
 
 @Injectable()
 export class CommentService {
@@ -68,7 +69,9 @@ export class CommentService {
   async commentsForAccountPaged(account: Account, batchSize?: number, page?: number): Promise<CommentWithId[]> {
     const limit = batchSize ?? 10
     const offset = ((page ?? 1) - 1) * limit
-    const pagedComments = await commentsForAccountPaged.run({ accountId: account.id, limit: `${limit}`, offset: `${offset}` }, this.client)
+    const params = { accountId: account.id, limit: `${limit}`, offset: `${offset}` }
+    const pagedComments = await commentsForAccountPaged.run(params, this.client)
+    this.logger.debug(interpretedQuery(commentsForAccountPaged, params))
     return pagedComments.map(this.recordToClass)
   }
 
