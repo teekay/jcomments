@@ -1,4 +1,4 @@
-# JamComments
+<img src="https://github.com/teekay/JamComments/blob/master/jamcomments_logo.svg" style="width: 210px;"/>
 
 A commenting platform for self-hosted static websites.
 
