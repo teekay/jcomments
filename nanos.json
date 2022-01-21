@@ -1,0 +1,6 @@
+{
+  "dirs": ["./"],
+  "CloudConfig": {
+        "Platform": "hyper-v"
+    }
+}
