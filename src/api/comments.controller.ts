@@ -102,7 +102,7 @@ export class CommentsController {
         this.jobQueue.publish('notify-on-new-comment-via-email', { account, email })
       }
     } catch (oops) {
-      this.logger.warn(`Trouble scheduling email notification: ${oops?.message}`)
+      this.logger.warn(`Trouble scheduling email notification: ${(oops as Error)?.message}`)
     }
 
   }

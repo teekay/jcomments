@@ -23,7 +23,7 @@ export class AkismetService {
         ip: ipAddr
       })
     } catch (oops) {
-      this.logger.warn(`Could not reach Akismet`, oops)
+      this.logger.warn(`Could not reach Akismet`, (oops as Error)?.message)
       // TODO we have to let the account owner know if there are persistent problems with Akismet
       return
     }
@@ -39,7 +39,7 @@ export class AkismetService {
     try {
       return await akismet.verifyKey(key)
     } catch (oops) {
-      this.logger.warn(`Could not reach Akismet`, oops)
+      this.logger.warn(`Could not reach Akismet`, (oops as Error)?.message)
     }
     return
   }
