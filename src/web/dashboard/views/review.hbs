@@ -20,6 +20,10 @@
     </li>
   </ul>
 
+  <section class="mb-4">
+      <button type="button" id="btnSelectAll" class="btn-primary">Select all</button> and <button type="button" id="btnDeleteMultiple" class="btn-danger">delete selected</button>
+  </section>
+
   {{#each comments}}
   <article class="comment-container mb-4 ms-1">
     <div class="comment-target">
@@ -41,6 +45,7 @@
         title="Not spam"><i class="cil-thumb-up"></i></button>
     </div>
     <div class="comment-contents">
+      <input type="checkbox" class="comment-single-select" value="{{ id }}"/>
       {{ text }}
     </div>
   </article>
@@ -155,4 +160,50 @@
       });
     });
   })
+
+  document.getElementById('btnSelectAll').addEventListener('click', function(ev) {
+      Array.from(document.getElementsByClassName('comment-single-select')).forEach(e => {
+          e.checked = true;
+      })
+  });
+
+  document.getElementById('btnDeleteMultiple').addEventListener('click', function(ev) {
+      ev.preventDefault();
+      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      let element = ev.target.parentNode;
+      let ids = Array.from(document.getElementsByClassName('comment-single-select')).filter(e => e.checked).map(e => e.value);
+      if (!ids.length) return;
+
+      let confirmModal = new bootstrap.Modal(document.getElementById('deleteCommentModal'));
+      let btnConfirm = document.querySelector('#btnDeleteComment');
+      let btnCancel = document.querySelector('#btnCancelDelete');
+      let confirm = () => {
+        fetch('/dashboard/spam/delete', {
+          method: 'POST',
+          body: JSON.stringify({ ids }),
+          headers: {
+            'CSRF-Token': token,
+            'content-type': 'application/json'
+          }
+        }).then(response => {
+          if (response.status === 201) {
+            document.location = document.location;
+            return;
+          }
+          console.error(response.status);
+          document.querySelector('#infoProblemDeletingComment').classList.remove('d-none');
+          confirmModal.hide();
+        });
+      };
+      let cancel = () => {
+        btnConfirm.removeEventListener('click', confirm);
+        btnCancel.removeEventListener('click', cancel);
+      }
+
+      btnConfirm.addEventListener('click', confirm);
+      btnCancel.addEventListener('click', cancel);
+
+      confirmModal.show();
+
+  });
 </script>

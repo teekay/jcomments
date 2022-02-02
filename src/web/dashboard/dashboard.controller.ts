@@ -88,15 +88,17 @@ export class DashboardController {
   @Post('spam/delete')
   @UseGuards(AuthenticatedGuard)
   async deleteSpamComment(@Req() req: Request, @Res() res: Response,
-    @Body() id: Identifiable): Promise<void> {
+    @Body() body: { ids: string[]}): Promise<void> {
     const account = _.get(req, 'user') as Account
-    const comment = await this.commentService.findSpamById(account, id.id)
-    if (!comment) {
-      // this includes situations when the comment would belong to a different account
-      this.logger.warn(`Comment ${id.id} not found for account ${account.id}`)
-      return res.status(404).end()
+    for (const id of body.ids) {
+        const comment = await this.commentService.findSpamById(account, id)
+        if (!comment) {
+        // this includes situations when the comment would belong to a different account
+        this.logger.warn(`Comment ${id} not found for account ${account.id}`)
+        continue
+      }
+      await this.commentService.deleteSingleSpam(comment)
     }
-    await this.commentService.deleteSingleSpam(comment)
     return res.status(201).end()
   }
   
