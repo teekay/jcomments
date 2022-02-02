@@ -52,13 +52,13 @@
   <nav aria-label="Comment paging">
     <ul class="pagination">      
       <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
-        <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
+        <a class="page-link" href="/dashboard/review?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
       </li>     
       {{#each pages}}
-      <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
+      <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/review?page={{ this }}">{{ this }}</a></li>
       {{/each}}
       <li class="page-item{{#if onLastPage }} disabled{{/if}}">
-        <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
+        <a class="page-link" href="/dashboard/review?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
       </li>
     </ul>
   </nav>
