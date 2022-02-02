@@ -178,7 +178,7 @@
       let btnConfirm = document.querySelector('#btnDeleteComment');
       let btnCancel = document.querySelector('#btnCancelDelete');
       let confirm = () => {
-        fetch('/dashboard/spam/delete', {
+        fetch('/dashboard/spam/deleteAll', {
           method: 'POST',
           body: JSON.stringify({ ids }),
           headers: {
