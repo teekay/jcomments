@@ -4,7 +4,7 @@ import { AccountService } from '../accounts/account.service'
 import { AkismetService } from './akismet.service'
 import { Client } from 'pg'
 import { Comment, CommentBase, CommentWithId } from './comment.interface'
-import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount, ICommentsForUrlSinceDateResult, ICommentsForUrlResult, deleteAllComments, deleteAllSpam } from './comments.queries'
+import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount, ICommentsForUrlSinceDateResult, ICommentsForUrlResult, deleteAllComments, deleteAllSpam, flagCommentForUrlWithTimestamp } from './comments.queries'
 import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from "nestjs-pino";
 import { v4 as uuidv4 } from 'uuid'
@@ -30,6 +30,16 @@ export class CommentService {
       }
     }
     await postCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
+    return CommentCreatedResult.Created
+  }
+
+  async createWithOption(account: Account, comment: CommentBase, toModeration: boolean): Promise<CommentCreatedResult> {
+    if (toModeration) {
+      this.logger.warn(`Moderation enforced: ${JSON.stringify(comment)}`)
+      await flagCommentForUrlWithTimestamp.run({...this.commentToDbParam(account, comment), createdAt: comment.postedAt}, this.client)
+      return CommentCreatedResult.Flagged
+    }
+    await postCommentForUrlWithTimestamp.run({...this.commentToDbParam(account, comment), createdAt: comment.postedAt}, this.client)
     return CommentCreatedResult.Created
   }
 

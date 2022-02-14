@@ -3,13 +3,13 @@ import { PreparedQuery } from '@pgtyped/query';
 
 /** 'PostCommentForUrl' parameters type */
 export interface IPostCommentForUrlParams {
-  id: string | null | void;
   accountId: string | null | void;
-  url: string | null | void;
+  email: string | null | void;
+  id: string | null | void;
+  name: string | null | void;
   pageTitle: string | null | void;
   text: string | null | void;
-  name: string | null | void;
-  email: string | null | void;
+  url: string | null | void;
   website: string | null | void;
 }
 
@@ -22,7 +22,7 @@ export interface IPostCommentForUrlQuery {
   result: IPostCommentForUrlResult;
 }
 
-const postCommentForUrlIR: any = {"name":"PostCommentForUrl","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":161,"b":162,"line":2,"col":131}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":166,"b":174,"line":2,"col":136}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":178,"b":180,"line":2,"col":148}]}},{"name":"pageTitle","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":184,"b":192,"line":2,"col":154}]}},{"name":"text","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":196,"b":199,"line":2,"col":166}]}},{"name":"name","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":203,"b":206,"line":2,"col":173}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":210,"b":214,"line":2,"col":180}]}},{"name":"website","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":218,"b":224,"line":2,"col":188}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"pageTitle":true,"text":true,"name":true,"email":true,"website":true},"statement":{"body":"INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, 'now'::timestamp)","loc":{"a":30,"b":243,"line":2,"col":0}}};
+const postCommentForUrlIR: any = {"name":"PostCommentForUrl","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":161,"b":162,"line":2,"col":131}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":166,"b":174,"line":2,"col":136}]}},{"name":"url","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":178,"b":180,"line":2,"col":148}]}},{"name":"pageTitle","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":184,"b":192,"line":2,"col":154}]}},{"name":"text","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":196,"b":199,"line":2,"col":166}]}},{"name":"name","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":203,"b":206,"line":2,"col":173}]}},{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":210,"b":214,"line":2,"col":180}]}},{"name":"website","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":218,"b":224,"line":2,"col":188}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"pageTitle":true,"text":true,"name":true,"email":true,"website":true},"statement":{"body":"INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, 'now'::timestamp)","loc":{"a":30,"b":243,"line":2,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -35,15 +35,15 @@ export const postCommentForUrl = new PreparedQuery<IPostCommentForUrlParams,IPos
 
 /** 'PostCommentForUrlWithTimestamp' parameters type */
 export interface IPostCommentForUrlWithTimestampParams {
-  id: string | null | void;
   accountId: string | null | void;
-  url: string | null | void;
+  createdAt: Date | null | void;
+  email: string | null | void;
+  id: string | null | void;
+  name: string | null | void;
   pageTitle: string | null | void;
   text: string | null | void;
-  name: string | null | void;
-  email: string | null | void;
+  url: string | null | void;
   website: string | null | void;
-  createdAt: Date | null | void;
 }
 
 /** 'PostCommentForUrlWithTimestamp' return type */
@@ -55,7 +55,7 @@ export interface IPostCommentForUrlWithTimestampQuery {
   result: IPostCommentForUrlWithTimestampResult;
 }
 
-const postCommentForUrlWithTimestampIR: any = {"name":"PostCommentForUrlWithTimestamp","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":421,"b":422,"line":5,"col":131}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":426,"b":434,"line":5,"col":136}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":438,"b":440,"line":5,"col":148}]}},{"name":"pageTitle","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":444,"b":452,"line":5,"col":154}]}},{"name":"text","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":456,"b":459,"line":5,"col":166}]}},{"name":"name","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":463,"b":466,"line":5,"col":173}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":470,"b":474,"line":5,"col":180}]}},{"name":"website","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":478,"b":484,"line":5,"col":188}]}},{"name":"createdAt","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":488,"b":496,"line":5,"col":198}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"pageTitle":true,"text":true,"name":true,"email":true,"website":true,"createdAt":true},"statement":{"body":"INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, :createdAt)","loc":{"a":290,"b":497,"line":5,"col":0}}};
+const postCommentForUrlWithTimestampIR: any = {"name":"PostCommentForUrlWithTimestamp","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":421,"b":422,"line":5,"col":131}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":426,"b":434,"line":5,"col":136}]}},{"name":"url","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":438,"b":440,"line":5,"col":148}]}},{"name":"pageTitle","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":444,"b":452,"line":5,"col":154}]}},{"name":"text","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":456,"b":459,"line":5,"col":166}]}},{"name":"name","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":463,"b":466,"line":5,"col":173}]}},{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":470,"b":474,"line":5,"col":180}]}},{"name":"website","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":478,"b":484,"line":5,"col":188}]}},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":488,"b":496,"line":5,"col":198}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"pageTitle":true,"text":true,"name":true,"email":true,"website":true,"createdAt":true},"statement":{"body":"INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, :createdAt)","loc":{"a":290,"b":497,"line":5,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -68,13 +68,13 @@ export const postCommentForUrlWithTimestamp = new PreparedQuery<IPostCommentForU
 
 /** 'FlagCommentForUrl' parameters type */
 export interface IFlagCommentForUrlParams {
-  id: string | null | void;
   accountId: string | null | void;
-  url: string | null | void;
+  email: string | null | void;
+  id: string | null | void;
+  name: string | null | void;
   pageTitle: string | null | void;
   text: string | null | void;
-  name: string | null | void;
-  email: string | null | void;
+  url: string | null | void;
   website: string | null | void;
 }
 
@@ -87,7 +87,7 @@ export interface IFlagCommentForUrlQuery {
   result: IFlagCommentForUrlResult;
 }
 
-const flagCommentForUrlIR: any = {"name":"FlagCommentForUrl","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":661,"b":662,"line":8,"col":130}]}},{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":666,"b":674,"line":8,"col":135}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":678,"b":680,"line":8,"col":147}]}},{"name":"pageTitle","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":683,"b":691,"line":8,"col":152}]}},{"name":"text","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":695,"b":698,"line":8,"col":164}]}},{"name":"name","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":702,"b":705,"line":8,"col":171}]}},{"name":"email","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":709,"b":713,"line":8,"col":178}]}},{"name":"website","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":717,"b":723,"line":8,"col":186}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"pageTitle":true,"text":true,"name":true,"email":true,"website":true},"statement":{"body":"INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, 'now'::timestamp)","loc":{"a":531,"b":742,"line":8,"col":0}}};
+const flagCommentForUrlIR: any = {"name":"FlagCommentForUrl","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":661,"b":662,"line":8,"col":130}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":666,"b":674,"line":8,"col":135}]}},{"name":"url","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":678,"b":680,"line":8,"col":147}]}},{"name":"pageTitle","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":683,"b":691,"line":8,"col":152}]}},{"name":"text","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":695,"b":698,"line":8,"col":164}]}},{"name":"name","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":702,"b":705,"line":8,"col":171}]}},{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":709,"b":713,"line":8,"col":178}]}},{"name":"website","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":717,"b":723,"line":8,"col":186}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"pageTitle":true,"text":true,"name":true,"email":true,"website":true},"statement":{"body":"INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, 'now'::timestamp)","loc":{"a":531,"b":742,"line":8,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -96,6 +96,39 @@ const flagCommentForUrlIR: any = {"name":"FlagCommentForUrl","params":[{"name":"
  * ```
  */
 export const flagCommentForUrl = new PreparedQuery<IFlagCommentForUrlParams,IFlagCommentForUrlResult>(flagCommentForUrlIR);
+
+
+/** 'FlagCommentForUrlWithTimestamp' parameters type */
+export interface IFlagCommentForUrlWithTimestampParams {
+  accountId: string | null | void;
+  createdAt: Date | null | void;
+  email: string | null | void;
+  id: string | null | void;
+  name: string | null | void;
+  pageTitle: string | null | void;
+  text: string | null | void;
+  url: string | null | void;
+  website: string | null | void;
+}
+
+/** 'FlagCommentForUrlWithTimestamp' return type */
+export type IFlagCommentForUrlWithTimestampResult = void;
+
+/** 'FlagCommentForUrlWithTimestamp' query type */
+export interface IFlagCommentForUrlWithTimestampQuery {
+  params: IFlagCommentForUrlWithTimestampParams;
+  result: IFlagCommentForUrlWithTimestampResult;
+}
+
+const flagCommentForUrlWithTimestampIR: any = {"name":"FlagCommentForUrlWithTimestamp","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":919,"b":920,"line":11,"col":130}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":924,"b":932,"line":11,"col":135}]}},{"name":"url","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":936,"b":938,"line":11,"col":147}]}},{"name":"pageTitle","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":941,"b":949,"line":11,"col":152}]}},{"name":"text","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":953,"b":956,"line":11,"col":164}]}},{"name":"name","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":960,"b":963,"line":11,"col":171}]}},{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":967,"b":971,"line":11,"col":178}]}},{"name":"website","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":975,"b":981,"line":11,"col":186}]}},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":985,"b":993,"line":11,"col":196}]}}],"usedParamSet":{"id":true,"accountId":true,"url":true,"pageTitle":true,"text":true,"name":true,"email":true,"website":true,"createdAt":true},"statement":{"body":"INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, :createdAt)","loc":{"a":789,"b":994,"line":11,"col":0}}};
+
+/**
+ * Query generated from SQL:
+ * ```
+ * INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, :createdAt)
+ * ```
+ */
+export const flagCommentForUrlWithTimestamp = new PreparedQuery<IFlagCommentForUrlWithTimestampParams,IFlagCommentForUrlWithTimestampResult>(flagCommentForUrlWithTimestampIR);
 
 
 /** 'CommentCountForAccount' parameters type */
@@ -114,7 +147,7 @@ export interface ICommentCountForAccountQuery {
   result: ICommentCountForAccountResult;
 }
 
-const commentCountForAccountIR: any = {"name":"CommentCountForAccount","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":840,"b":848,"line":11,"col":59}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT COUNT(*) as \"Total\" FROM comments WHERE account_id=:accountId","loc":{"a":781,"b":848,"line":11,"col":0}}};
+const commentCountForAccountIR: any = {"name":"CommentCountForAccount","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1092,"b":1100,"line":14,"col":59}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT COUNT(*) as \"Total\" FROM comments WHERE account_id=:accountId","loc":{"a":1033,"b":1100,"line":14,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -141,7 +174,7 @@ export interface IReviewCountForAccountQuery {
   result: IReviewCountForAccountResult;
 }
 
-const reviewCountForAccountIR: any = {"name":"ReviewCountForAccount","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":944,"b":952,"line":14,"col":58}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT COUNT(*) as \"Total\" FROM reviews WHERE account_id=:accountId","loc":{"a":886,"b":952,"line":14,"col":0}}};
+const reviewCountForAccountIR: any = {"name":"ReviewCountForAccount","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1196,"b":1204,"line":17,"col":58}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT COUNT(*) as \"Total\" FROM reviews WHERE account_id=:accountId","loc":{"a":1138,"b":1204,"line":17,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -160,15 +193,15 @@ export interface IFindByIdForAccountParams {
 
 /** 'FindByIdForAccount' return type */
 export interface IFindByIdForAccountResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'FindByIdForAccount' query type */
@@ -177,7 +210,7 @@ export interface IFindByIdForAccountQuery {
   result: IFindByIdForAccountResult;
 }
 
-const findByIdForAccountIR: any = {"name":"FindByIdForAccount","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1028,"b":1036,"line":17,"col":41}]}},{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1046,"b":1047,"line":17,"col":59}]}}],"usedParamSet":{"accountId":true,"id":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND id=:id","loc":{"a":987,"b":1047,"line":17,"col":0}}};
+const findByIdForAccountIR: any = {"name":"FindByIdForAccount","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1280,"b":1288,"line":20,"col":41}]}},{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1298,"b":1299,"line":20,"col":59}]}}],"usedParamSet":{"accountId":true,"id":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND id=:id","loc":{"a":1239,"b":1299,"line":20,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -195,15 +228,15 @@ export interface ICommentsForAccountParams {
 
 /** 'CommentsForAccount' return type */
 export interface ICommentsForAccountResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'CommentsForAccount' query type */
@@ -212,7 +245,7 @@ export interface ICommentsForAccountQuery {
   result: ICommentsForAccountResult;
 }
 
-const commentsForAccountIR: any = {"name":"CommentsForAccount","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1123,"b":1131,"line":20,"col":41}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC","loc":{"a":1082,"b":1156,"line":20,"col":0}}};
+const commentsForAccountIR: any = {"name":"CommentsForAccount","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1375,"b":1383,"line":23,"col":41}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC","loc":{"a":1334,"b":1408,"line":23,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -232,15 +265,15 @@ export interface ICommentsForAccountPagedParams {
 
 /** 'CommentsForAccountPaged' return type */
 export interface ICommentsForAccountPagedResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'CommentsForAccountPaged' query type */
@@ -249,7 +282,7 @@ export interface ICommentsForAccountPagedQuery {
   result: ICommentsForAccountPagedResult;
 }
 
-const commentsForAccountPagedIR: any = {"name":"CommentsForAccountPaged","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1237,"b":1245,"line":23,"col":41}]}},{"name":"limit","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1279,"b":1283,"line":23,"col":83}]}},{"name":"offset","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1293,"b":1298,"line":23,"col":97}]}}],"usedParamSet":{"accountId":true,"limit":true,"offset":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset","loc":{"a":1196,"b":1298,"line":23,"col":0}}};
+const commentsForAccountPagedIR: any = {"name":"CommentsForAccountPaged","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1489,"b":1497,"line":26,"col":41}]}},{"name":"limit","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1531,"b":1535,"line":26,"col":83}]}},{"name":"offset","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1545,"b":1550,"line":26,"col":97}]}}],"usedParamSet":{"accountId":true,"limit":true,"offset":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset","loc":{"a":1448,"b":1550,"line":26,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -268,15 +301,15 @@ export interface IFindSpamByIdForAccountParams {
 
 /** 'FindSpamByIdForAccount' return type */
 export interface IFindSpamByIdForAccountResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'FindSpamByIdForAccount' query type */
@@ -285,7 +318,7 @@ export interface IFindSpamByIdForAccountQuery {
   result: IFindSpamByIdForAccountResult;
 }
 
-const findSpamByIdForAccountIR: any = {"name":"FindSpamByIdForAccount","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1377,"b":1385,"line":26,"col":40}]}},{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1395,"b":1396,"line":26,"col":58}]}}],"usedParamSet":{"accountId":true,"id":true},"statement":{"body":"SELECT * FROM reviews WHERE account_id=:accountId AND id=:id","loc":{"a":1337,"b":1396,"line":26,"col":0}}};
+const findSpamByIdForAccountIR: any = {"name":"FindSpamByIdForAccount","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1629,"b":1637,"line":29,"col":40}]}},{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1647,"b":1648,"line":29,"col":58}]}}],"usedParamSet":{"accountId":true,"id":true},"statement":{"body":"SELECT * FROM reviews WHERE account_id=:accountId AND id=:id","loc":{"a":1589,"b":1648,"line":29,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -303,15 +336,15 @@ export interface IReviewsForAccountParams {
 
 /** 'ReviewsForAccount' return type */
 export interface IReviewsForAccountResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'ReviewsForAccount' query type */
@@ -320,7 +353,7 @@ export interface IReviewsForAccountQuery {
   result: IReviewsForAccountResult;
 }
 
-const reviewsForAccountIR: any = {"name":"ReviewsForAccount","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1470,"b":1478,"line":29,"col":40}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC","loc":{"a":1430,"b":1503,"line":29,"col":0}}};
+const reviewsForAccountIR: any = {"name":"ReviewsForAccount","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1722,"b":1730,"line":32,"col":40}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC","loc":{"a":1682,"b":1755,"line":32,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -340,15 +373,15 @@ export interface IReviewsForAccountPagedParams {
 
 /** 'ReviewsForAccountPaged' return type */
 export interface IReviewsForAccountPagedResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'ReviewsForAccountPaged' query type */
@@ -357,7 +390,7 @@ export interface IReviewsForAccountPagedQuery {
   result: IReviewsForAccountPagedResult;
 }
 
-const reviewsForAccountPagedIR: any = {"name":"ReviewsForAccountPaged","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1582,"b":1590,"line":32,"col":40}]}},{"name":"limit","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1624,"b":1628,"line":32,"col":82}]}},{"name":"offset","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1638,"b":1643,"line":32,"col":96}]}}],"usedParamSet":{"accountId":true,"limit":true,"offset":true},"statement":{"body":"SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset","loc":{"a":1542,"b":1643,"line":32,"col":0}}};
+const reviewsForAccountPagedIR: any = {"name":"ReviewsForAccountPaged","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1834,"b":1842,"line":35,"col":40}]}},{"name":"limit","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1876,"b":1880,"line":35,"col":82}]}},{"name":"offset","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1890,"b":1895,"line":35,"col":96}]}}],"usedParamSet":{"accountId":true,"limit":true,"offset":true},"statement":{"body":"SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset","loc":{"a":1794,"b":1895,"line":35,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -376,15 +409,15 @@ export interface ICommentsForUrlParams {
 
 /** 'CommentsForUrl' return type */
 export interface ICommentsForUrlResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'CommentsForUrl' query type */
@@ -393,7 +426,7 @@ export interface ICommentsForUrlQuery {
   result: ICommentsForUrlResult;
 }
 
-const commentsForUrlIR: any = {"name":"CommentsForUrl","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1715,"b":1723,"line":35,"col":41}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1739,"b":1741,"line":35,"col":65}]}}],"usedParamSet":{"accountId":true,"url":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at ASC","loc":{"a":1674,"b":1765,"line":35,"col":0}}};
+const commentsForUrlIR: any = {"name":"CommentsForUrl","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1967,"b":1975,"line":38,"col":41}]}},{"name":"url","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1991,"b":1993,"line":38,"col":65}]}}],"usedParamSet":{"accountId":true,"url":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at ASC","loc":{"a":1926,"b":2017,"line":38,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -407,21 +440,21 @@ export const commentsForUrl = new PreparedQuery<ICommentsForUrlParams,ICommentsF
 /** 'CommentsForUrlSinceDate' parameters type */
 export interface ICommentsForUrlSinceDateParams {
   accountId: string | null | void;
-  url: string | null | void;
   date: Date | null | void;
+  url: string | null | void;
 }
 
 /** 'CommentsForUrlSinceDate' return type */
 export interface ICommentsForUrlSinceDateResult {
-  id: string;
   account_id: string;
-  page_url: string;
   comment: string;
-  reader_name: string;
-  reader_email: string | null;
-  reader_website: string | null;
   created_at: Date;
+  id: string;
   page_title: string | null;
+  page_url: string;
+  reader_email: string | null;
+  reader_name: string;
+  reader_website: string | null;
 }
 
 /** 'CommentsForUrlSinceDate' query type */
@@ -430,7 +463,7 @@ export interface ICommentsForUrlSinceDateQuery {
   result: ICommentsForUrlSinceDateResult;
 }
 
-const commentsForUrlSinceDateIR: any = {"name":"CommentsForUrlSinceDate","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1846,"b":1854,"line":38,"col":41}]}},{"name":"url","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1870,"b":1872,"line":38,"col":65}]}},{"name":"date","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1892,"b":1895,"line":38,"col":87}]}}],"usedParamSet":{"accountId":true,"url":true,"date":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at ASC","loc":{"a":1805,"b":1919,"line":38,"col":0}}};
+const commentsForUrlSinceDateIR: any = {"name":"CommentsForUrlSinceDate","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2098,"b":2106,"line":41,"col":41}]}},{"name":"url","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2122,"b":2124,"line":41,"col":65}]}},{"name":"date","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2144,"b":2147,"line":41,"col":87}]}}],"usedParamSet":{"accountId":true,"url":true,"date":true},"statement":{"body":"SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at ASC","loc":{"a":2057,"b":2171,"line":41,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -455,7 +488,7 @@ export interface IDeleteSingleCommentQuery {
   result: IDeleteSingleCommentResult;
 }
 
-const deleteSingleCommentIR: any = {"name":"DeleteSingleComment","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1986,"b":1987,"line":41,"col":31}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM comments WHERE id=:id","loc":{"a":1955,"b":1987,"line":41,"col":0}}};
+const deleteSingleCommentIR: any = {"name":"DeleteSingleComment","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2238,"b":2239,"line":44,"col":31}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM comments WHERE id=:id","loc":{"a":2207,"b":2239,"line":44,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -480,7 +513,7 @@ export interface IDeleteSingleSpamQuery {
   result: IDeleteSingleSpamResult;
 }
 
-const deleteSingleSpamIR: any = {"name":"DeleteSingleSpam","params":[{"name":"id","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2050,"b":2051,"line":44,"col":30}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM reviews WHERE id=:id","loc":{"a":2020,"b":2051,"line":44,"col":0}}};
+const deleteSingleSpamIR: any = {"name":"DeleteSingleSpam","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2302,"b":2303,"line":47,"col":30}]}}],"usedParamSet":{"id":true},"statement":{"body":"DELETE FROM reviews WHERE id=:id","loc":{"a":2272,"b":2303,"line":47,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -505,7 +538,7 @@ export interface IDeleteAllCommentsQuery {
   result: IDeleteAllCommentsResult;
 }
 
-const deleteAllCommentsIR: any = {"name":"DeleteAllComments","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2124,"b":2132,"line":47,"col":39}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM comments WHERE account_id=:accountId","loc":{"a":2085,"b":2132,"line":47,"col":0}}};
+const deleteAllCommentsIR: any = {"name":"DeleteAllComments","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2376,"b":2384,"line":50,"col":39}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM comments WHERE account_id=:accountId","loc":{"a":2337,"b":2384,"line":50,"col":0}}};
 
 /**
  * Query generated from SQL:
@@ -530,7 +563,7 @@ export interface IDeleteAllSpamQuery {
   result: IDeleteAllSpamResult;
 }
 
-const deleteAllSpamIR: any = {"name":"DeleteAllSpam","params":[{"name":"accountId","transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2200,"b":2208,"line":50,"col":38}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM reviews WHERE account_id=:accountId","loc":{"a":2162,"b":2208,"line":50,"col":0}}};
+const deleteAllSpamIR: any = {"name":"DeleteAllSpam","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2452,"b":2460,"line":53,"col":38}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM reviews WHERE account_id=:accountId","loc":{"a":2414,"b":2460,"line":53,"col":0}}};
 
 /**
  * Query generated from SQL:

@@ -7,6 +7,9 @@ INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name,
 /* @name FlagCommentForUrl */
 INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, 'now'::timestamp);
 
+/* @name FlagCommentForUrlWithTimestamp */
+INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, :createdAt);
+
 /* @name CommentCountForAccount */
 SELECT COUNT(*) as "Total" FROM comments WHERE account_id=:accountId;
 

@@ -1,16 +1,20 @@
+import _ from 'lodash'
 import { AccountService } from '../shared/accounts/account.service'
 import { Client } from 'pg'
+import { CommentBase } from '../shared/comments/comment.interface'
+import { CommentService, JsonDump } from '../shared/comments/comment.service'
 import { ConsoleService } from 'nestjs-console'
-import { migrate } from "postgres-migrations"
 import { Inject, Injectable } from '@nestjs/common'
+import { migrate } from "postgres-migrations"
+import { randCatchPhrase, randQuote, randSlug, randUrl, randUser } from '@ngneat/falso'
 import { TokenService } from '../shared/accounts/token.service'
-
 @Injectable()
 export class CliService {
   constructor(
     @Inject('PG_CLIENT') private client: Client,
     private readonly consoleService: ConsoleService,
     private readonly accountService: AccountService,
+    private readonly commentService: CommentService,
     private readonly tokenService: TokenService) {
     const cli = this.consoleService.getCli()
     if (!cli) throw new Error('Could not get the console')
@@ -59,10 +63,27 @@ export class CliService {
     )
 
     this.consoleService.createCommand({
-      command: 'migrate',
+      command: 'db:migrate',
       description: 'Migrates the database'
     },
     this.migrate,
+    cli)
+
+    this.consoleService.createCommand({
+      command: 'db:seed',
+      description: 'Seeds the database with sample data',
+      options: [{
+        flags: '-a --account <account ID>',
+        required: true
+      }, {
+        flags: '-n --num <number of comments>',
+        defaultValue: 10
+      }, {
+        flags: '-s --spam <number of spam comments>',
+        defaultValue: 5
+      }]
+    },
+    this.seed,
     cli)
 
   }
@@ -101,5 +122,49 @@ export class CliService {
       console.warn('Migration failed')
       throw oops
     }
+  }
+
+  seed = async(args: {account: string, num: number, spam: number}): Promise<void> => {
+    const account = await this.accountService.findById(args.account)
+    if (!account) throw new Error(`No account found for id ${args.account}`)
+    const now = new Date()
+    const comments = _.range(0, args.num).map((i: number) => {
+      const postDate = new Date(now)
+      postDate.setDate(postDate.getDate() - i)
+      const commenter = randUser()
+      const comment: JsonDump = {
+        page_url: `https://example.com/blog/${randSlug()}`,
+        page_title: randCatchPhrase(),
+        text: randQuote(),
+        author: `${commenter.firstName} ${commenter.lastName}`,
+        email: commenter.email,
+        website: randUrl(),
+        posted_at: postDate.toISOString()
+      }
+      return comment    
+    });
+    await this.commentService.import(account, comments)
+    console.log(`Seeded ${comments.length} comments`)
+
+    const promises = _.range(0, args.spam).map((i: number) => {
+      const postDate = new Date(now)
+      postDate.setDate(postDate.getDate() - i)
+      const commenter = randUser()
+      const comment: CommentBase = {
+        postUrl: `https://example.com/blog/${randSlug()}`,
+        postTitle: randCatchPhrase(),
+        text: randQuote(),
+        author: { 
+          name:  `${commenter.firstName} ${commenter.lastName}`,
+          email: commenter.email,
+          website: randUrl()
+        },
+        postedAt: postDate
+      }
+
+      return this.commentService.createWithOption(account, comment, true)    
+      });
+    await Promise.all(promises)
+    console.log(`Seeded ${promises.length} SPAM comments`)
   }
 }

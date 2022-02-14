@@ -684,6 +684,14 @@
     optional "0.1.4"
     tslib "2.2.0"
 
+"@ngneat/falso@^2.23.0":
+  version "2.23.0"
+  resolved "https://registry.yarnpkg.com/@ngneat/falso/-/falso-2.23.0.tgz#d7cee45ceabaf3981fefd45fbb94f96de565d259"
+  integrity sha512-P61JN4I9NVRa6hpV7CYYTez8d4jqwm9yRK0z9hEDSCL77PdrQHW/J4rZPX27LABLjrvQaoaFS0gSYq82laQt0A==
+  dependencies:
+    seedrandom "3.0.5"
+    uuid "8.3.2"
+
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/@nodelib/fs.scandir/-/fs.scandir-2.1.4.tgz#d4b3549a5db5de2683e0c1071ab4f140904bbf69"
@@ -714,12 +722,12 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
-"@pgtyped/cli@^0.10.4":
-  version "0.10.4"
-  resolved "https://registry.yarnpkg.com/@pgtyped/cli/-/cli-0.10.4.tgz#524b17f112c5d32f1a47efcbb6ac7adfbd01e9fa"
-  integrity sha512-AG/pPGmbzPPcd76pqJAqQapL25xpyr27cbDVI8/yMYKUy2NkqczqhhgN6+mugF5Z1w+wHn2STOaKgr1Ytj11eg==
+"@pgtyped/cli@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@pgtyped/cli/-/cli-0.13.0.tgz#41b5f1a9e8628e7909bb2f7b31db7dd36f3382ee"
+  integrity sha512-Rca9rZmm1bXSZPxiTaLD5uv11RQKZVNkJd00RAdeJp4++K3X2DXxHi8uKEcq3lkvClPQBvm36tQS4u0SsSLnAQ==
   dependencies:
-    "@pgtyped/query" "^0.10.4"
+    "@pgtyped/query" "^0.13.0"
     "@types/nunjucks" "^3.1.3"
     camel-case "^4.1.1"
     chalk "^4.0.0"
@@ -730,27 +738,27 @@
     glob "^7.1.6"
     io-ts "^2.1.2"
     io-ts-reporters "^1.0.0"
-    minimist "^1.2.5"
     nunjucks "3.2.3"
     pascal-case "^3.1.1"
     ts-parse-database-url "^1.0.3"
+    yargs "^17.0.1"
 
-"@pgtyped/query@^0.10.4":
-  version "0.10.4"
-  resolved "https://registry.yarnpkg.com/@pgtyped/query/-/query-0.10.4.tgz#f8cec445088d5a26d9cca45a80885acd4652d9f0"
-  integrity sha512-V7oFezoYGpOGmE/oiqZp82cCC2ko3VE7JFl+EvhP0xdf08u6dTaBd1E8dXkycjqjw7qGNH3+z0LJEA3rVUDsRA==
+"@pgtyped/query@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@pgtyped/query/-/query-0.13.0.tgz#fd02928bceb28079007497a23270a6301a334f95"
+  integrity sha512-/7I/wK5FcMt/c4lXaR79W00Krmu6LshNoyT6zkI4OBmNrpFjYyuNGjx9GjobX09IMj1yQiMBhLiV7rdXCUIA1A==
   dependencies:
-    "@pgtyped/wire" "^0.10.1"
+    "@pgtyped/wire" "^0.13.0"
     "@types/chalk" "^2.2.0"
     "@types/debug" "^4.1.4"
     antlr4ts "0.5.0-alpha.4"
     chalk "^4.1.0"
     debug "^4.1.1"
 
-"@pgtyped/wire@^0.10.1":
-  version "0.10.1"
-  resolved "https://registry.yarnpkg.com/@pgtyped/wire/-/wire-0.10.1.tgz#629829ca25cbb57b8e86d0b04aee8563dc68c4dc"
-  integrity sha512-eJ0G5r5RJmeGuDeanx9raYHRgfEDk+tzKKGzNxgrNjKNSk5mKAtqXye6lujL9PxpZJXGMfX82bBDHCCB8wyb2A==
+"@pgtyped/wire@^0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@pgtyped/wire/-/wire-0.13.0.tgz#3c75fcc73d427ca02e9753619109440aa96bd2f4"
+  integrity sha512-jHN/0xm7JlHGRxQy7mtGQ9bPEZEvKDgwJ7P7gqTzpszdmXom94vxGWTtLnRmGByUEXIrTkAyv0Du5jpqIrM7fg==
   dependencies:
     "@types/debug" "^4.1.4"
     debug "^4.1.1"
@@ -6280,6 +6288,11 @@ schema-utils@^3.0.0:
     "@types/json-schema" "^7.0.6"
     ajv "^6.12.5"
     ajv-keywords "^3.5.2"
+
+seedrandom@3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/seedrandom/-/seedrandom-3.0.5.tgz#54edc85c95222525b0c7a6f6b3543d8e0b3aa0a7"
+  integrity sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==
 
 self-closing-tags@^1.0.1:
   version "1.0.1"
