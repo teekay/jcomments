@@ -1,0 +1,162 @@
+openapi: 3.0.1
+
+info:
+  title: JamCommentsApi
+  version: v1
+
+servers:
+  - url: https://example.com
+    description: development
+  - url: https://example.com
+    description: production
+
+paths:
+  '/comments/:url':
+    get:
+      summary: 'get comments for url'
+      operationId: 'get-comments-for-url'
+      parameters:
+        - name: url
+          in: path
+          description: 'URL-encoded URL of the source article, blog posts, or page'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommentWithId'
+        '400':
+          description: 'Pre-conditions not met'
+          content:
+            text/plain:
+              schema:
+                type: string
+        '401':
+          description: 'Unable to authenticate'
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: 'Internal server error'
+
+  '/comments':
+    post:
+      summary: 'post a comment for a url'
+      operationId: 'post-a-comment'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCommentRequest'
+      responses:
+        '201':
+          description: 'Comment successfully created'
+        '301':
+          description: 'Comment successfully created, redirecting to source'
+        '400':
+          description: 'Pre-conditions not met'
+          content:
+            text/plain:
+              schema:
+                type: string
+        '401':
+          description: 'Unable to authenticate'
+          content:
+            text/plain:
+              schema:
+                type: string
+        '500':
+          description: 'Internal server error'
+
+components:
+  schemas:
+    CommentWithId:
+      type: object
+      properties:
+        id:
+          type: string
+          description: 'Unique identifier of the comment'
+        postUrl:
+          type: string
+          description: 'URL of the source article, blog post, or page'
+        postTitle:
+          type: string
+          description: 'Optional post title'
+        text:
+          type: string
+          description: 'Comment text'
+        author:
+          $ref: '#/components/schemas/Author'
+        postedAt:
+          type: string
+          format: date-time
+      required:
+        - postUrl
+        - text
+        - author
+        - postedAt
+      additionalProperties: false
+
+    Author:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Commenter's name"
+        email:
+          type: string
+          description: 'Optional email of the commenter'
+        website:
+          type: string
+          description: 'Optional website of the commenter'
+      required:
+        - name
+      additionalProperties: false
+
+    PostCommentRequest:
+      type: object
+      properties:
+        postUrl:
+          type: string
+          maxLength: 2048
+          description: 'URL of the source article, blog post, or page'
+        postTitle:
+          type: string
+          maxLength: 2048
+          description: 'Optional post title'
+        text:
+          type: string
+          description: 'Comment text'
+        author:
+          $ref: '#/components/schemas/PostCommentRequestAuthor'
+      required:
+        - postUrl
+        - text
+        - author
+      additionalProperties: false
+
+    PostCommentRequestAuthor:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 512
+          description: "Commenter's name"
+        email:
+          type: string
+          maxLength: 512
+          description: 'Optional email of the commenter'
+        website:
+          type: string
+          maxLength: 1024
+          description: 'Optional website of the commenter'
+      required:
+        - name
+      additionalProperties: false
+
