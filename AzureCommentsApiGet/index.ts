@@ -5,7 +5,7 @@ import { CommentService } from "../src/shared/comments/comment.service"
 import _ from 'lodash'
 
 const commentsApi: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-    context.log('HTTP trigger function processed a request.')
+    context.log('JamComments - fetch comments for a URL')
 
     const app = await bootstrap()
     const commentService = app.get(CommentService)

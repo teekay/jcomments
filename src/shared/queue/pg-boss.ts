@@ -10,8 +10,10 @@ export const jobQueueProviders = [
         user: process.env.PGUSER ?? 'postgres',
         password: process.env.PGPASSWORD ?? 'password',
         database: process.env.PGDATABASE ?? 'postgres',
+        ssl: !!(process.env.PGSSL) && process.env.PGSSL !== 'false'
       };
-      const boss = new PgBoss(`postgres://${c.user}:${c.password}@${c.host}:${c.port}/${c.database}`)
+      const connectionString = `postgres://${c.user}:${encodeURIComponent(c.password)}@${c.host}:${c.port}/${c.database}${c.ssl ? '?ssl=true' : ''}`
+      const boss = new PgBoss(connectionString)
       await boss.start()
       return boss
     }
