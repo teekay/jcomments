@@ -8,7 +8,7 @@
         "methods": [
           "get"
         ],
-        "route": "comments/{url}"
+        "route": "comments"
       },
       {
         "type": "http",

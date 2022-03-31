@@ -13,11 +13,14 @@
     "cli": "ts-node src/cli.ts",
     "sql": "pgtyped -c config.json",
     "test": "jest",
-    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "prebuild": "npm run generate",
     "build": "tsc -p tsconfig.json && mkdir -p build/shared/emails && cp -r ./src/shared/emails/views ./build/shared/emails",
     "clean": "rm -rf build && rm -rf generated",
-    "ts-node": "ts-node"
+    "ts-node": "ts-node",
+    "prettier-format": "prettier --config .prettierrc src/**/*.ts tests/**/*.ts --write",
+    "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "lint-fix": "eslint \"./src/**/*.ts\" \"./tests/**/*.ts\" --fix"
+
   },
   "repository": "git+https://github.com/teekay/JamComments.git",
   "keywords": [],

@@ -11,17 +11,51 @@ servers:
     description: production
 
 paths:
-  '/comments/:url':
+  '/comments':
     get:
-      summary: 'get comments for url'
-      operationId: 'get-comments-for-url'
+      summary: 'get comments for url or account'
+      operationId: 'get-comments-for-url-or-account'
       parameters:
         - name: url
-          in: path
+          in: query
           description: 'URL-encoded URL of the source article, blog posts, or page'
-          required: true
+          required: false
           schema:
             type: string
+        - name: format
+          in: query
+          description: 'Optional format for comment text (markdown, html, text)'
+          required: false
+          schema:
+            type: string
+            enum:
+              - markdown
+              - html
+              - text
+        - name: sort
+          in: query
+          description: 'Optional sort order if url is ommitted (asc, desc)'
+          required: false
+          schema:
+            type: string
+            default: 'asc'
+            enum:
+              - asc
+              - desc
+        - name: since
+          in: query
+          description: 'Optional ID of the last comment fetched previously'
+          required: false
+          schema:
+            type: string
+            format: guid
+        - name: fromDate
+          in: query
+          description: 'Optional timestamp of the last comment fetched previously, ignored if the parameter since is used'
+          required: false
+          schema:
+            type: string
+            format: date-time
       responses:
         '200':
           description: 'Successful response'
@@ -43,8 +77,6 @@ paths:
                 type: string
         '500':
           description: 'Internal server error'
-
-  '/comments':
     post:
       summary: 'post a comment for a url'
       operationId: 'post-a-comment'
