@@ -48,7 +48,7 @@ async function bootstrap() {
   app.use(
     session({
       name: 'JamComments',
-      store: new (connectPgSimple(session))({tableName: 'sessions'}),
+      store: new (connectPgSimple(session))({tableName: 'sessions', pgPromise: app.get('PG_CLIENT')}),
       cookie: {
         maxAge: sessionLifetime,
         sameSite: true,
