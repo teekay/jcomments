@@ -11,7 +11,7 @@ export const databaseProviders = [
         password: process.env.PGPASSWORD ?? 'password',
         database: process.env.PGDATABASE ?? 'postgres',
         port: (process.env.PGPORT ? Number(process.env.PGPORT) : undefined) ?? 5432,
-        ssl: !!(process.env.PGSSL) && process.env.PGSSL !== 'false',
+        ssl: process.env.PGSSLMODE === 'require',
         connectionTimeoutMillis: 5000
       }
       const client= new Client(dbConfig)

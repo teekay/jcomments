@@ -6,8 +6,17 @@ The comments API can run on Azure Functions. The Consumption tier is totally fin
 
 ## ZIP deploy
 
+Deploy function app:
+
 ```sh
 yarn build
-zip -r app.zip . --exclude @.funcignore --exclude .funcignore
+zip -r app.zip . -x@.funcignore -x .funcignore
 az functionapp deployment source config-zip -g ${MY_RESOURCE_GROUP} -n ${MY_APP_NAME} --src app.zip
+```
+
+Deploy admin app to App Service:
+
+```sh
+ zip -r appservice.zip . -x@.funcignore -x .funcignore
+
 ```
