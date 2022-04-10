@@ -4,25 +4,21 @@ import { AccountService } from '../shared/accounts/account.service'
 import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Req, Res } from '@nestjs/common'
 import { CommentDto, CommentWithId } from '../shared/comments/comment.interface'
 import { CommentCreatedResult, CommentService, SortOrder } from '../shared/comments/comment.service'
-import { ConfigService } from '../shared/config/config.service'
 import { ContentFilteringService } from '../shared/comments/content-filtering-service'
-import { EmailService } from '../shared/emails/email.service'
 import { Logger } from 'nestjs-pino'
 import moment from 'moment'
-import PgBoss from 'pg-boss'
 import { Request, Response } from 'express'
 import { CommentInFormat } from '../shared/comments/formatted-comment'
+import { Queue } from '../shared/queue/queue.interface'
 
 @Controller('comments')
 export class CommentsController {
   constructor(
-    @Inject('PG_BOSS') private readonly jobQueue: PgBoss,
+    @Inject(Queue) private readonly jobQueue: Queue,
     private readonly accountService: AccountService,
     private readonly commentsService: CommentService,
     private readonly contentFilteringService: ContentFilteringService,
-    private readonly configService: ConfigService,
     private readonly logger: Logger,
-    private readonly emailService: EmailService
   ) {}
 
   @Get()
@@ -82,8 +78,7 @@ export class CommentsController {
       if (emailSettings?.notifyOnComments) {
         // notify
         this.logger.debug('Scheduling an email notification about a new comment')
-        const email = this.emailService.notifyOnSingleComment(comment, `${this.configService.adminUrl()}/dashboard`)
-        this.jobQueue.publish('notify-on-new-comment-via-email', { account, email })
+        this.jobQueue.publish({ account, comment })
       }
     } catch (oops) {
       this.logger.warn(`Trouble scheduling email notification: ${(oops as Error)?.message}`)

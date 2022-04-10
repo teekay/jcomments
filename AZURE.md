@@ -14,9 +14,9 @@ zip -r app.zip . -x@.funcignore -x .funcignore
 az functionapp deployment source config-zip -g ${MY_RESOURCE_GROUP} -n ${MY_APP_NAME} --src app.zip
 ```
 
-Deploy admin app to App Service:
+Deploy admin app to App Service and make it run from package:
 
 ```sh
- zip -r appservice.zip . -x@.funcignore -x .funcignore
-
+ zip -r appservice.zip . -x@.appserviceignore -x .funcignore
+az webapp deployment source config-zip --resource-group <group-name> --name <app-name> --src <filename>.zip
 ```

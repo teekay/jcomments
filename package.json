@@ -14,13 +14,15 @@
     "sql": "pgtyped -c config.json",
     "test": "jest",
     "prebuild": "yarn generate",
-    "build": "tsc -p tsconfig.json && copyfiles ./src/**/*.hbs build",
+    "build": "tsc -p tsconfig.json",
+    "postbuild": "copyfiles ./src/**/*.hbs public/* build",
     "clean": "rm -rf build && rm -rf generated",
     "ts-node": "ts-node",
     "prettier-format": "prettier --config .prettierrc src/**/*.ts tests/**/*.ts --write",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "eslint \"./src/**/*.ts\" \"./tests/**/*.ts\" --fix",
-    "start": "node ./build/src/web.js"
+    "start": "node ./build/src/web.js",
+    "watch": "tsc -p tsconfig.json -w"
   },
   "repository": "git+https://github.com/teekay/JamComments.git",
   "keywords": [],
@@ -32,6 +34,7 @@
   "homepage": "https://github.com/teekay/JamComments#readme",
   "dependencies": {
     "@azure/functions": "^3.0.0",
+    "@azure/service-bus": "^7.5.1",
     "@nestjs/common": "7.6.15",
     "@nestjs/core": "7.6.15",
     "@nestjs/passport": "^7.1.5",

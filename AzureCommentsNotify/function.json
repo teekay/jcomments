@@ -1,0 +1,15 @@
+{
+    "bindings": [
+      {
+        "topicName": "comment-events",
+        "subscriptionName": "CommentPosted",
+        "connection": "SERVICEBUS_CONNECTION",
+        "name": "commentPostedEvent",
+        "type": "serviceBusTrigger",
+        "direction": "in"
+      }
+    ],
+    "scriptFile": "../build/AzureCommentsNotify/index.js",
+    "disabled": false
+  }
+  
