@@ -16,6 +16,7 @@
 # For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
+name: Deploy JamComments dashboard to Azure App Service
 
 on:
   push:
@@ -28,8 +29,11 @@ env:
   NODE_VERSION: '14.x'                # set this to the node version to use
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     steps:
     - uses: actions/checkout@v3
 
@@ -44,25 +48,6 @@ jobs:
         yarn
         yarn build
         yarn test
-
-    - name: Upload artifact for deployment job
-      uses: actions/upload-artifact@v3
-      with:
-        name: jamcomments
-        path: .
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-    steps:
-    - name: Download artifact from build job
-      uses: actions/download-artifact@v3
-      with:
-        name: jamcomments
 
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp 
