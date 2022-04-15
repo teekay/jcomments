@@ -1,0 +1,2834 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "flexibleServers_jamcomments_staging_pg_name": {
+            "defaultValue": "jamcomments-staging-pg",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+            "apiVersion": "2021-06-01",
+            "name": "[parameters('flexibleServers_jamcomments_staging_pg_name')]",
+            "location": "East US",
+            "sku": {
+                "name": "Standard_B1ms",
+                "tier": "Burstable"
+            },
+            "properties": {
+                "version": "13",
+                "administratorLogin": "jcstgadmin",
+                "availabilityZone": "1",
+                "storage": {
+                    "storageSizeGB": 32
+                },
+                "backup": {
+                    "backupRetentionDays": 7,
+                    "geoRedundantBackup": "Disabled"
+                },
+                "network": {},
+                "highAvailability": {
+                    "mode": "Disabled"
+                },
+                "maintenanceWindow": {
+                    "customWindow": "Disabled",
+                    "dayOfWeek": 0,
+                    "startHour": 0,
+                    "startMinute": 0
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/application_name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/archive_timeout')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "900",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/array_nulls')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_analyze_scale_factor')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_analyze_threshold')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "50",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_freeze_max_age')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "200000000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_max_workers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "3",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_multixact_freeze_max_age')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "400000000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_naptime')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "60",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_vacuum_cost_delay')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_vacuum_cost_limit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "-1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_vacuum_insert_scale_factor')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_vacuum_insert_threshold')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_vacuum_scale_factor')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_vacuum_threshold')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "50",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/autovacuum_work_mem')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "-1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/azure.accepted_password_auth_method')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "md5",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/azure.enable_temp_tablespaces_on_local_ssd')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/azure.extensions')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "PGCRYPTO",
+                "source": "user-override"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/backend_flush_after')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "256",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/backslash_quote')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "safe_encoding",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/bgwriter_delay')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "50",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/bgwriter_flush_after')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "64",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/bgwriter_lru_maxpages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "100",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/bgwriter_lru_multiplier')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/bytea_output')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "hex",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/check_function_bodies')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/checkpoint_completion_target')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.9",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/checkpoint_timeout')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "300",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/checkpoint_warning')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "30",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/client_encoding')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "UTF8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/client_min_messages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "notice",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/commit_delay')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/commit_siblings')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "5",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/connection_throttle.bucket_limit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/connection_throttle.enable')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/connection_throttle.factor_bias')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/connection_throttle.hash_entries_max')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "500",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/connection_throttle.reset_time')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "120",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/connection_throttle.restore_factor')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/connection_throttle.update_time')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "20",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/constraint_exclusion')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "partition",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cpu_index_tuple_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.005",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cpu_operator_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.0025",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cpu_tuple_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.01",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cron.database_name')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "postgres",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cron.log_run')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cron.log_statement')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cron.max_running_jobs')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "32",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/cursor_tuple_fraction')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/DateStyle')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "ISO, MDY",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/deadlock_timeout')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/debug_pretty_print')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/debug_print_parse')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/debug_print_plan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/debug_print_rewritten')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/default_statistics_target')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "100",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/default_tablespace')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/default_text_search_config')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "pg_catalog.english",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/default_transaction_deferrable')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/default_transaction_isolation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "read committed",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/default_transaction_read_only')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/effective_cache_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "229376",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/effective_io_concurrency')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_bitmapscan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_gathermerge')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_hashagg')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_hashjoin')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_indexonlyscan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_indexscan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_material')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_mergejoin')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_nestloop')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_partitionwise_aggregate')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_partitionwise_join')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_seqscan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_sort')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/enable_tidscan')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/escape_string_warning')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/exit_on_error')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/extra_float_digits')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/force_parallel_mode')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/from_collapse_limit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/geqo')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/geqo_effort')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "5",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/geqo_generations')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/geqo_pool_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/geqo_seed')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/geqo_selection_bias')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/geqo_threshold')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "12",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/gin_fuzzy_search_limit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/gin_pending_list_limit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "4096",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/huge_pages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "try",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/idle_in_transaction_session_timeout')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/intelligent_tuning')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/intelligent_tuning.metric_targets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "none",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/IntervalStyle')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "postgres",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/jit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/jit_above_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "100000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/jit_inline_above_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "500000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/jit_optimize_above_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "500000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/join_collapse_limit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/lc_monetary')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "en_US.utf-8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/lc_numeric')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "en_US.utf-8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/lo_compat_privileges')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/lock_timeout')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_autovacuum_min_duration')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "-1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_checkpoints')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_connections')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_destination')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "stderr",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_disconnections')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_duration')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_error_verbosity')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "default",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_executor_stats')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_line_prefix')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "%t-%c-",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_lock_waits')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_min_duration_statement')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "-1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_min_error_statement')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "error",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_min_messages')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "warning",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_replication_commands')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_statement')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "none",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_statement_stats')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/log_temp_files')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "-1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/maintenance_work_mem')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "99328",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_connections')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "50",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_locks_per_transaction')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "64",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_logical_replication_workers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "4",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_parallel_maintenance_workers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "64",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_parallel_workers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_parallel_workers_per_gather')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_pred_locks_per_page')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_pred_locks_per_relation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "-2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_prepared_transactions')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_replication_slots')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "10",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_standby_archive_delay')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "30000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_standby_streaming_delay')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "30000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_sync_workers_per_subscription')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_wal_senders')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "10",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_wal_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1024",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/max_worker_processes')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "8",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/min_parallel_index_scan_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "64",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/min_parallel_table_scan_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1024",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/min_wal_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "80",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/parallel_setup_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/parallel_tuple_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0.1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/password_encryption')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "md5",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_partman_bgw.analyze')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_partman_bgw.dbname')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_partman_bgw.interval')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "3600",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_partman_bgw.jobmon')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_partman_bgw.role')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.index_generation_interval')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "15",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.interval_length_minutes')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "15",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.is_enabled_fs')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.max_plan_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "7500",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.query_capture_mode')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "none",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.retention_period_in_days')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "7",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.store_query_plans')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_qs.track_utility')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_stat_statements.max')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "5000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_stat_statements.save')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_stat_statements.track')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "top",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pg_stat_statements.track_utility')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.log')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "none",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.log_catalog')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.log_client')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.log_level')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "log",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.log_parameter')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.log_relation')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.log_statement_once')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgaudit.role')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pglogical.batch_inserts')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pglogical.conflict_log_level')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "log",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pglogical.conflict_resolution')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "apply_remote",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pglogical.use_spi')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgms_stats.is_enabled_fs')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgms_wait_sampling.history_period')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "100",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgms_wait_sampling.is_enabled_fs')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/pgms_wait_sampling.query_capture_mode')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "none",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/postgis.gdal_enabled_drivers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "DISABLE_ALL",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/quote_all_identifiers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/random_page_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/require_secure_transport')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/row_security')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/search_path')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "\"$user\", public",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/seq_page_cost')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/session_replication_role')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "origin",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/shared_buffers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "32768",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/shared_preload_libraries')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "pg_cron,pg_stat_statements",
+                "source": "user-override"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/ssl_max_protocol_version')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/ssl_min_protocol_version')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "TLSv1.2",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/standard_conforming_strings')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/statement_timeout')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/synchronize_seqscans')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/synchronous_commit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/tcp_keepalives_count')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "9",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/tcp_keepalives_idle')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "120",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/tcp_keepalives_interval')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "30",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/temp_buffers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1024",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/temp_tablespaces')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/TimeZone')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "UTC",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/track_activities')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/track_activity_query_size')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1024",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/track_commit_timestamp')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/track_counts')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "on",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/track_functions')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "none",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/track_io_timing')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/transform_null_equals')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_cost_delay')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_cost_limit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "200",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_cost_page_dirty')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "20",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_cost_page_hit')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "1",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_cost_page_miss')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "10",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_defer_cleanup_age')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "0",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_freeze_min_age')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "50000000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_freeze_table_age')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "150000000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_multixact_freeze_min_age')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "5000000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/vacuum_multixact_freeze_table_age')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "150000000",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/wal_buffers')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "2048",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/wal_compression')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "off",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/wal_level')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "replica",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/wal_receiver_status_interval')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "10",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/wal_writer_delay')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "200",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/wal_writer_flush_after')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "128",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/work_mem')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "4096",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/xmlbinary')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "base64",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/configurations",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/xmloption')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "value": "content",
+                "source": "system-default"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/databases",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/azure_maintenance')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "charset": "UTF8",
+                "collation": "en_US.utf8"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/databases",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/azure_sys')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "charset": "UTF8",
+                "collation": "en_US.utf8"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/databases",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/jamcomments')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "charset": "UTF8",
+                "collation": "en_US.utf8"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/databases",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/postgres')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "charset": "UTF8",
+                "collation": "en_US.utf8"
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(parameters('flexibleServers_jamcomments_staging_pg_name'), '/ClientIPAddress_2022-3-30_7-28-26_tk')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', parameters('flexibleServers_jamcomments_staging_pg_name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "78.45.28.223",
+                "endIpAddress": "78.45.28.223"
+            }
+        }
+    ]
+}
