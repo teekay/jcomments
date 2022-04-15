@@ -21,6 +21,7 @@
     "prettier-format": "prettier --config .prettierrc src/**/*.ts tests/**/*.ts --write",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "eslint \"./src/**/*.ts\" \"./tests/**/*.ts\" --fix",
+    "prestart": "ts-node src/cli.ts db:migrate",
     "start": "node ./build/src/web.js",
     "watch": "tsc -p tsconfig.json -w"
   },
