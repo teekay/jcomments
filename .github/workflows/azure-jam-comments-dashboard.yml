@@ -21,7 +21,7 @@ name: Deploy JamComments dashboard to Azure App Service
 on:
   push:
     branches:
-      - features/azure-functions
+      - master
   workflow_dispatch:
 
 env:

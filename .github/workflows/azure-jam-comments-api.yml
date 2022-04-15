@@ -3,7 +3,7 @@ name: Deploy JamComments API to Azure Functions
 on:
   push:
     branches:
-      - features/azure-functions
+      - master
   workflow_dispatch:
 
 env:
