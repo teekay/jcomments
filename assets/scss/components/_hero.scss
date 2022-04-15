@@ -1,0 +1,56 @@
+//
+
+// CSS styles relevent to the hero componment seen on the main dashboard page (`index.html`), and on the sign-in (`sign-in.html`) and sign-up (`sign-up.html`) screens
+
+//
+
+.hero {
+    grid-column: 1;
+    grid-row: 2;
+    box-sizing: border-box;
+    padding: var(--gap-xs) var(--gap-small);
+    height: 390px;
+
+    .header-image {
+        max-width: 100%;
+        height: 200px;
+        margin: 0 auto var(--gap-small);
+    }
+
+    .section-header {
+        text-align: center;
+
+        .section-title {
+            color: var(--brand-light);
+            font-size: var(--font-size-xl);
+            line-height: var(--line-height-xl);
+            font-weight: var(--font-weight-normal);
+            margin: 0;
+            span {
+                color: var(--dark-purple);
+            }
+        }
+    }
+
+    @media only screen and (min-width: #{$breakpoint-1} ) {
+        height: 450px;
+        .section-header {
+            .section-title {
+                font-size: var(--font-size-jumbo);
+                line-height: var(--line-height-jumbo);
+            }
+        }
+        .header-image {
+            margin: var(--gap-small) auto;
+            height: 290px;
+
+        }
+    }
+
+    @media only screen and (min-width: #{$breakpoint-2} ) {
+        height: 500px;
+        grid-column: 1 / span 12;
+        gap: var(--gap-large);
+
+    }
+}

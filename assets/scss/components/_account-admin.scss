@@ -1,0 +1,58 @@
+//////////////////////////////////////////////////////////////////
+
+// CSS styles relevent to the account admin section found on the main dashboard page as shown on `index.html`
+
+//////////////////////////////////////////////////////////////////
+
+
+.account-admin {
+    grid-column: 1;
+    grid-row: 4;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-small);
+    align-content: center;
+
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-sm);
+    box-sizing: border-box;
+    padding: var(--gap-xs) var(--gap-small);
+
+    .admin-setting {
+        display: grid;
+        grid-template-columns: 1fr;
+        align-items: center;
+        gap: var(--gap-small);
+        text-align: center;
+        width: 100%;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .admin-setting-tooltip {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--gap-xs);
+        }
+
+        &.api-key .card-content code {
+            margin-top: auto;
+            margin-bottom: 0;
+        }
+    }
+    @media only screen and (min-width: #{$breakpoint-2} ) {
+        grid-column: 1 / span 12;
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 100%;
+
+        .admin-setting {
+            width: unset;
+            &.api-key {
+                .card-content {
+                    padding: var(--gap-xs);
+                }
+            }
+        }
+    }
+}

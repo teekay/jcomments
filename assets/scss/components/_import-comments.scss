@@ -1,0 +1,17 @@
+//////////////////////////////////////////////////////////////////
+
+// CSS styles relevent to the IMPORT COMMENTS component found on the main dashboard page as shown on `index.html`
+
+//////////////////////////////////////////////////////////////////
+
+.admin-setting.import {
+    #drop-area {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-xs);
+    }
+    #fileElem {
+        // hides the default button in favor of the drag and drop
+        display: none;
+    }
+}

@@ -1,0 +1,63 @@
+//////////////////////////////////////////////////////////////////
+
+// these rules are specific to comment pagingation that allows for navigating the comment archive. Shown on `comments-awaiting-review.html` and `comments-approved.html`
+
+//////////////////////////////////////////////////////////////////
+
+.section-footer {
+    grid-column: 1 / span 12;
+    display: flex;
+
+    ol.paginate-comments {
+        padding-left: 0;
+        display: flex;
+        column-gap: var(--gap-xs);
+        margin: 0 auto;
+
+        li.paginate {
+            border-radius: 100%;
+            font-size: var(--font-size-small);
+            width: var(--gap-medium);
+            height: var(--gap-medium);
+            display: flex;
+            background-color: var(--light);
+            border: 1px solid var(--outline);
+            &:hover {
+                background-color: var(--light-light);
+            }
+
+            a {
+                margin: auto;
+                width: var(--gap-medium);
+                height: var(--gap-medium);
+                padding: var(--gap-xs);
+                box-sizing: border-box;
+                text-align: center;
+                line-height: 1.5;
+                font-size: var(--font-size-xs);
+                border-radius: 100%;
+                color: var(--dark-dark-purple);
+
+                &.active {
+                    background-color: var(--light-light);
+                    border: 1px solid var(--outline);
+                }
+            }
+            &.previous {
+                a {
+                    content: url("/assets/images/icons/arrow-left.svg");
+                    background-color: var(--light);
+                    border: 1px solid var(--outline);
+                }
+            }
+
+            &.next {
+                a {
+                    content: url("/assets/images/icons/arrow-right.svg");
+                    background-color: var(--light);
+                    border: 1px solid var(--outline);
+                }
+            }
+        }
+    }
+}

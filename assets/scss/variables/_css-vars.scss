@@ -1,0 +1,91 @@
+:root {
+  //////////////////////////////
+  /* Colors: */
+  //////////////////////////////
+  --site-background: #FBFCFF;
+  --whitespace: #ffffff;
+  --light: rgba(241, 244, 255, 0.6);
+  --light-light: #fbfcff;
+  --light-medium: #dbdfec6e;
+  --brand-medium: #f7806e;
+  --brand: #f9573e;
+  --brand-light: #feeae7;
+  --light-purple: #72738e;
+  --dark-purple: #090e58;
+  --dark-dark-purple: #0a1d3a;
+  --active-tab: #d0f3ed;
+  --approved-check: #00b8ac;
+  --approved-background: #d4f5f1;
+
+  --grey: #00000029;
+  --black: #000000;
+  --outline: #dbdfec;
+
+  //////////////////////////////
+  /* Transitions and interactions: */
+  //////////////////////////////
+  --transition-time: 0.15s;
+
+  //////////////////////////////
+  /* Paddings and Spacings and Gaps: */
+  //////////////////////////////
+  --gap-xs: 10px;
+  --gap-small: 20px;
+  --gap-medium: 40px;
+  --gap-large: 60px;
+  --gap-xl: 80px;
+
+  //////////////////////////////
+  /* Icon values */
+  //////////////////////////////
+  --icon-small: 30px;
+  --icon-medium: 60px;
+  --icon-large: 80px;
+
+  //////////////////////////////
+  /* Font/text values */
+  //////////////////////////////
+  --font-family-heading: "Qanelas";
+  --font-family-body: "Poppins";
+  --font-weight-light: 300;
+  --font-weight-normal: normal;
+  --font-weight-bold: bold;
+
+  // font size xs
+  --font-size-xs: 14px;
+  --line-height-xs: 25px;
+
+  // font size small
+  --font-size-small: 16px;
+  --line-height-small: 24px;
+
+  // font size medium
+  --font-size-medium: 18px;
+  --line-height-medium: 27px;
+
+  // font size large
+  --font-size-large: 20px;
+  --line-height-large: 30px;
+
+  // font size xl
+  --font-size-xl: 35px;
+  --line-height-xl: 43px;
+
+  // font size jumbo
+  --font-size-jumbo: 55px;
+  --line-height-jumbo: 67px;
+
+  /* Other values */
+  --text-transform-uppercase: uppercase;
+
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+}
+
+$breakpoint-1: 960px;
+$breakpoint-2: 1200px;
+$breakpoint-3: 1400px;
+
+/* Character Styles */
+
+$box-shadow: 0px 3px 6px #00000029;

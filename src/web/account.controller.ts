@@ -46,6 +46,7 @@ export class AccountController {
     }
     return res.render('../shared/accounts/views/signup', {
       layout: 'dashboard',
+      section: 'Sign up',
       csrfToken: req.csrfToken(),
     })
   }

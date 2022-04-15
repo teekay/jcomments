@@ -1,0 +1,181 @@
+//////////////////////////////////////////////////////////////////
+
+// these rules are specific to user settings tabs shown on `settings.html`
+
+//////////////////////////////////////////////////////////////////
+
+
+.settings.container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-xs);
+
+    .settings-tabs {
+        display: flex;
+        gap: var(--gap-xs);
+
+        .tablinks {
+            text-transform: uppercase;
+            background-color: transparent;
+            border: none;
+            color: var(--dark-purple);
+            font-size: var(--font-size-xs);
+
+            &.active {
+                background: var(--active-tab);
+            }
+        }
+    }
+
+    .settings-column {
+        display: flex;
+        flex-direction: column;
+        gap: var(--gap-xs);
+        .settings-tab {
+            padding: var(--gap-small);
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-small);
+            column-gap: var(--gap-medium);
+            min-height: 75px;
+            align-content: center;
+            position: relative;
+
+            > div {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .update-user-setting {
+                grid-column: 2;
+            }
+
+            .admin-setting-heading {
+                margin-top: 0;
+                color: var(--black);
+                display: flex;
+                column-gap: var(--gap-xs);
+                img {
+                    margin: 5px auto 0;
+                }
+            }
+
+            .admin-setting-description {
+                color: var(--light-purple);
+                display: flex;
+                align-items: center;
+                gap: var(--gap-xs);
+            }
+            .admin-setting-user {
+                margin-top: var(--gap-xs);
+                color: var(--brand);
+            }
+
+            .admin-setting-button {
+                margin: auto 0;
+            }
+
+            &#api-key {
+                .btn::before {
+                    content: url("/assets/images/icons/key-light.svg");
+                }
+            }
+            &#your-data {
+                .btn::before {
+                    content: url("/assets/images/icons/download-light.svg");
+                }
+            }
+            &#close-account {
+                .btn::before {
+                    content: url("/assets/images/icons/exclaim-light.svg");
+                }
+            }
+
+            &#anti-spam {
+                > div {
+                    grid-column: 1 / span 2;
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--gap-small);
+                }
+
+            }
+            &#notify-new-comments {
+                display: flex;
+                flex-direction: column;
+                .notify-settings {
+                    display: flex;
+                    flex-direction: column;
+                    gap: var(--gap-xs);
+
+                    .notify-setting {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        gap: var(--gap-xs);
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: #{$breakpoint-1} ) {
+    .settings.container {
+        grid-column: 1 / span 12;
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--gap-small);
+        max-width: 1100px;
+
+        .settings-tabs {
+            grid-column: 1 / span 12;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--gap-small);
+
+            .tablinks {
+                font-size: var(--font-size-medium);
+                padding: var(--gap-small);
+            }
+        }
+
+        .settings-column {
+            grid-column: 1 / span 12;
+
+            .settings-tab {
+                display: grid;
+                //////////////////////////////
+                // create column for a button
+                //////////////////////////////
+                &.has-button {
+                    grid-template-columns: 1fr 230px;
+                }
+
+                .admin-setting-heading {
+                    grid-column: 1;
+                    margin: 0;
+                }
+
+                .admin-setting-description {
+                    grid-column: 1;
+                }
+                .admin-setting-user {
+                    grid-column: 1;
+                }
+                &#notify-new-comments {
+                    .notify-settings {
+                        max-width: 346px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* hide the tab content until clicked */
+.tabcontent {
+    display: none;
+    transition: all ease var(--transition-time);
+}
+

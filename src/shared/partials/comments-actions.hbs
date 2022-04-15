@@ -1,0 +1,32 @@
+            <div class="comments-actions">
+                <div class="select-comments-action">
+                    <input type="checkbox" id="comment-action-select-all" name="comment-action">
+                    <label for="comment-action">Select All</label>
+                    <div class="comments-action-select">
+                        <select name="languages" id="manageComments">
+                            <option value="default">Select action...</option>
+                            <option class="select-option" value="approve-selected">Approve Selected</option>
+                            <option class="select-option" value="markcomments-as-spam">Mark as Spam</option>
+                            <option class="select-option" value="delete-comments">Delete</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sort-comments">
+                    <select name="languages" id="sortComments">
+                        <option value="default">Sort By...</option>
+                        <option class="select-option" value="date-newewst-first">Date – Newest First</option>
+                        <option class="select-option" value="date-oldest-first">Date – Oldest First</option>
+                        <option class="select-option" value="commented-article">Commented Article</option>
+                        <option class="select-option" value="author">Author</option>
+                        <option class="select-option" value="author-website">Author's Website</option>
+                    </select>
+                </div>
+            </div>
+            <script>
+                document.getElementById('comment-action-select-all').addEventListener('click', function(ev) {
+                    let toSelect = !!ev.target.checked;
+                    Array.from(document.getElementsByClassName('comment-single-select')).forEach(e => {
+                      e.checked = toSelect;
+                    });
+                });
+            </script>

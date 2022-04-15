@@ -1,0 +1,47 @@
+body {
+    background: var(--light-medium);
+    padding-bottom: 100px;
+}
+#main {
+    display: grid;
+    align-items: center;
+    box-sizing: border-box;
+    overflow-x: hidden;
+
+    &.dashboard {
+        // create a background color block on the dashboard page
+        &::before {
+            content: "";
+            background-color: var(--brand-medium);
+            grid-column: 1;
+            grid-row: 1 / span 3;
+            height: calc(100% + 300px);
+        }
+    }
+}
+@media only screen and (min-width: #{$breakpoint-1} ) {
+    #main {
+        gap: var(--gap-medium);
+        grid-column: 1 / span 12;
+
+
+    }
+}
+
+@media only screen and (min-width: #{$breakpoint-2} ) {
+    #main {
+        grid-column: 1 / span 12;
+        grid-template-columns: repeat(12, 1fr);
+        gap: var(--gap-small);
+        padding-top: var(--gap-xs);
+        padding-bottom: var(--gap-xs);
+
+        &.dashboard {
+            // create a background color block on the dashboard page
+
+            &::before {
+                grid-column: 1 / span 12;
+            }
+        }
+    }
+}

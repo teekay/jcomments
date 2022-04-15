@@ -1,167 +1,108 @@
-<div class="container">
-  <ul class="nav nav-pills mb-5">
-    <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="/dashboard">Dashboard</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="/account/settings">Settings</a>
-    </li>
-    <li class="nav-item pull-right">
-      <a class="nav-link" href="/auth/logout">Sign out</a>
-    </li>
-  </ul>
+{{> hamburgerMenu }}
+<main id="main" class="manage-comments">
+    <section class="settings container">
+        <!-- begin approved comments page header -->
+        <header class="section-header has-search">
+            <h1 class="heading-font">Approved ({{ commentCount }}))</h1>
+            {{> commentsSearch }}
+        </header>
+        {{> commentsActions }}
+        <section class="settings-column comments">
+            {{#each comments}}
+            <div class="card approved">
+                <input type="checkbox" id="comment-action-{{ id }}" name="comment-action">
+                <div class="comment-info">
+                    <span class="commenter-name">
+                        {{#if author.email}}
+                        <a href="mailto: {{ author.email }}">{{ author.name }}</a>
+                        {{else}}
+                        {{ author.name }}
+                        {{/if}}
+                    </span>
+                    {{#if author.website}}
+                    <span class="commenter-url"><a href="{{ author.website }}" target="_blank" rel="noreferrer"
+                            title="Visit commenter's homepage">({{ author.website }})</a></span>
+                    {{/if}}
+                    commented <span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span>.
+                </div>
+                <div class="comment-info">
+                    <span class="commenter-comment">{{ text }}</span>
+                </div>
+                <div class="comment-info">
+                    on <span class="comment-post"><a href="{{ postUrl }}" target="_blank" rel="noreferrer"
+                            title="Visit commented post">{{#if postTitle}}{{ postTitle }}{{else}}{{ postUrl }}{{/if}}</a></span>
+                </div>
+                <div class="manage-comment">
+                    <button data-id="{{ id }}" 
+                            title="delete comment" class="btn delete"><img class="icon icon-small"
+                            src="/assets/images/icons/trash.svg" alt=""></button>
+                </div>
+            </div>
+            {{/each}}
 
-  <ul class="nav nav-tabs mb-3" id="dashboardTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <a href="/dashboard" class="nav-link active" id="home-tab" role="tab" aria-controls="comments" aria-selected="true">Comments ({{ commentCount }})</a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="/dashboard/review" class="nav-link" id="profile-tab" role="tab" aria-controls="reviews" aria-selected="false">For review ({{ reviewCount }})</a>
-    </li>
-  </ul>
+            {{#unless comments}}
+            <section class="import-comments">
+                <p>There are no comments yet, check back later!</p>
+                <p>On a second thought, maybe you want to import comments from your existing app?</p>
+                <p>It needs to be a JSON in the following format:</p>
+                <blockquote>
+                <pre>
+            [
+            {
+            "posted_at": "2021-02-12 14:17:17",
+            "page_url": "https://example.com/blog/2020-12-you-are-looking-awesome-today/",
+            "page_title": "You are looking awesome today!",
+            "author": "Lucy L.",
+            "text": "Wonderful post, thank you so much for inspiration!",
+            "email": "lucy.poster@mailinator.com",
+            "website": "https://lucy.blogspot.com"
+            }
+            ]
+                </pre>
+                (The <code>page_title</code> field is optional)
+                </blockquote>
+                <form action="/account/import?_csrf={{csrfToken}}"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    class="row gy-2 gx-3 align-items-center">
+                <div class="col-auto">
+                    <label class="visually-hidden" for="importjson">File</label>
+                    <input type="file" id="importjson" name="importjson" required/>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+                </form>
+                {{#if importError}}
+                <div class="alert alert-warning mt-2" role="alert">
+                There was an error processing your JSON. Please have a look at it and make sure the format corresponds to what you see above.
+                </div>
+                {{/if}}
+            </section>
+            {{/unless}}
 
-  {{#each comments}}
-  <article class="comment-container mb-4 ms-1">
-    <div class="comment-target">
-      <a href="{{ postUrl }}">{{#if postTitle}}{{ postTitle }}{{else}}{{ postUrl }}{{/if}}</a>
-    </div>
-    <div class="comment-meta">
-      <span title="{{ dateFormat postedAt 'llll' }}">{{ relativePostedAt }}</span>
-      by
-      {{ author.name }}
-      {{#if author.email}}
-      , {{ author.email }}
-      {{/if}}
-      {{#if author.website}}
-      , {{ author.website }}
-      {{/if}}
-      <button class="btn delete-comment" data-id="{{ id }}"
-              title="Delete"><i class="cil-trash"></i></button>
-    </div>
-    <div class="comment-contents">
-      {{ text }}
-    </div>
-  </article>
-  {{/each}}
+        </section>
+        {{#if comments}}
+        <footer class="section-footer container">
+            <ol class="paginate-comments">
+                <li class="paginate previous{{#if onFirstPage }} disabled{{/if}}">
+                    <a href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>previous</a>
+                </li>
+                {{#each pages}}
+                <li class="paginate"><a class="{{#is this ../page}}active{{/is}}" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
+                {{/each}}
+                <li class="paginate next{{#if onLastPage }} disabled{{/if}}">
+                    <a href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>next</a>
+                </li>
+            </ol>
+        </footer>
+        {{/if}}
+    </section>
+</main>
 
-  {{#unless comments}}
-  <section class="import-comments">
-    <p>There are no comments yet, check back later!</p>
-    <p>On a second thought, maybe you want to import comments from your existing app?</p>
-    <p>It needs to be a JSON in the following format:</p>
-    <blockquote>
-      <pre>
-[
-  {
-  "posted_at": "2021-02-12 14:17:17",
-  "page_url": "https://example.com/blog/2020-12-you-are-looking-awesome-today/",
-  "page_title": "You are looking awesome today!",
-  "author": "Lucy L.",
-  "text": "Wonderful post, thank you so much for inspiration!",
-  "email": "lucy.poster@mailinator.com",
-  "website": "https://lucy.blogspot.com"
-  }
-]
-      </pre>
-      (The <code>page_title</code> field is optional)
-    </blockquote>
-    <form action="/account/import?_csrf={{csrfToken}}"
-          method="POST"
-          enctype="multipart/form-data"
-          class="row gy-2 gx-3 align-items-center">
-      <div class="col-auto">
-        <label class="visually-hidden" for="importjson">File</label>
-        <input type="file" id="importjson" name="importjson" required/>
-      </div>
-      <div class="col-auto">
-        <button type="submit" class="btn btn-primary">Import</button>
-      </div>
-    </form>
-    {{#if importError}}
-    <div class="alert alert-warning mt-2" role="alert">
-      There was an error processing your JSON. Please have a look at it and make sure the format corresponds to what you see above.
-    </div>
-    {{/if}}
-  </section>
-  {{/unless}}
+{{> modalDeleteComment }}
 
-  {{#if comments}}
-  <nav aria-label="Comment paging">
-    <ul class="pagination">      
-      <li class="page-item{{#if onFirstPage }} disabled{{/if}}">
-        <a class="page-link" href="/dashboard/?page={{ prevPage }}"{{#if onFirstPage }} tabindex="-1" aria-disabled="true"{{/if}}>Previous</a>
-      </li>     
-      {{#each pages}}
-      <li class="page-item{{#is this ../page}} active{{/is}}"><a class="page-link" href="/dashboard/?page={{ this }}">{{ this }}</a></li>
-      {{/each}}
-      <li class="page-item{{#if onLastPage }} disabled{{/if}}">
-        <a class="page-link" href="/dashboard/?page={{ nextPage }}"{{#if onLastPage }} tabindex="-1" aria-disabled="true"{{/if}}>Next</a>
-      </li>
-    </ul>
-  </nav>
-  {{/if}}
-  <div class="alert alert-warning d-none" id="infoProblemDeletingComment" role="alert">
-    There was a problem deleting this comment, sorry about that!
-  </div>
-</div>
-
-<div class="modal" tabindex="-1" id="deleteCommentModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Really delete?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to delete this comment?</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelDelete">Cancel</button>
-        <button type="button" class="btn btn-primary" id="btnDeleteComment">Yup, delete this!</button>
-      </div>
-    </div>
-  </div>
-</div>
-
+<script src="/js/delete-comment-modal.js"></script>
 <script>
-  document.querySelectorAll('.delete-comment').forEach(el => {
-    el.addEventListener('click', function(ev) {
-      ev.preventDefault();
-      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-      let element = ev.target.parentNode;
-      let id = element.getAttribute('data-id');
-      if (!id) return;
-
-      let confirmModal = new bootstrap.Modal(document.getElementById('deleteCommentModal'));
-      let btnConfirm = document.querySelector('#btnDeleteComment')
-      let btnCancel = document.querySelector('#btnCancelDelete')
-      let confirm = () => {
-        fetch('/dashboard/comment/delete', {
-          method: 'POST',
-          body: JSON.stringify({ id }),
-          headers: {
-            'CSRF-Token': token,
-            'content-type': 'application/json'
-          }
-        }).then(response => {
-          if (response.status === 201) {
-            document.location = document.location;
-            return;
-          }
-          console.error(response.status);
-          document.querySelector('#infoProblemDeletingComment').classList.remove('d-none');
-          confirmModal.hide();
-        });
-      };
-      let cancel = () => {
-        btnConfirm.removeEventListener('click', confirm);
-        btnCancel.removeEventListener('click', cancel);
-      }
-
-      btnConfirm.addEventListener('click', confirm);
-      btnCancel.addEventListener('click', cancel);
-
-      confirmModal.show();
-    })
-  })
+  deleteCommentModal('.delete', '/dashboard/comment/delete')();
 </script>

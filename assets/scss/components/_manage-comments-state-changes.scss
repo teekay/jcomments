@@ -1,0 +1,86 @@
+////////////////////////////////////////////////////////////////////
+//
+// DEPRECATED
+//
+// manage-comments-state-changes can be implemented by uncommenting the `@import` rule in scss/style.scss
+//
+////////////////////////////////////////
+//
+// Add the following classes to the `.card-awaiting-review` class if you need visualize the various state changes in the UI
+//
+// `.is-approved` will apply a small banner of APPROVED
+// `.is-deleted` will apply a small banner of DELETED
+// `.is-spam` will apply a small banner of SPAM
+//
+//////////////////////////////////////////////////////////////////
+
+.card.awaiting-review {
+    &.is-approved,
+    &.is-deleted,
+    &.is-spam {
+        position: relative;
+        padding-left: var(--gap-small) !important;
+
+        input {
+            display: none;
+        }
+        .manage-comment {
+            grid-row: 1 / span 1 !important;
+            grid-column: 3 !important;
+
+            .approve,
+            .delete {
+                display: none;
+            }
+            .undo {
+                display: grid !important;
+                grid-template-columns: var(--gap-small) var(--gap-medium) !important;
+                height: auto;
+            }
+        }
+
+        .comment-info {
+            grid-column: 1 / span 2 !important;
+            opacity: 0.5;
+        }
+        &::before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            height: 93px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            grid-column: 1 / span 3;
+            grid-row: 1 / span 3;
+            margin: auto;
+            z-index: 2;
+            content: " ";
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+
+    &.is-approved::before {
+        background-image: url("/assets/images/icons/is-approved.svg");
+    }
+
+    &.is-deleted::before {
+        background-image: url("/assets/images/icons/is-deleted.svg");
+    }
+
+    &.is-spam::before {
+        background-image: url("/assets/images/icons/is-spam.svg");
+    }
+
+    @media only screen and (min-width: #{$breakpoint-1} ) {
+        &.is-approved,
+        &.is-deleted,
+        &.is-spam {
+            &::before {
+                grid-column: 1 / span 2;
+            }
+        }
+    }
+}

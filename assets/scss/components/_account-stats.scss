@@ -1,0 +1,73 @@
+
+//////////////////////////////////////////////////////////////////
+
+// CSS styles relevent to the account stats section found on the main dashboard page as shown on `index.html`
+
+//////////////////////////////////////////////////////////////////
+
+
+.account-stats {
+    grid-column: 1;
+    grid-row: 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--gap-small);
+    text-align: center;
+    box-sizing: border-box;
+    padding: var(--gap-xs) var(--gap-small);
+
+    .stats-container {
+        div {
+            .comment-count {
+                font-size: var(--font-size-xl);
+                line-height: var(--line-height-large);
+                line-height: unset;
+                margin-top: var(--gap-small);
+                margin-bottom: var(--gap-small);
+            }
+
+            .icon {
+                background: var(--light);
+                margin: auto;
+                padding: var(--gap-xs);
+                border-radius: 100%;
+            }
+            small {
+                color: var(--brand-light);
+            }
+        }
+    }
+
+    @media only screen and (min-width: #{$breakpoint-2} ) {
+        grid-column: 1 / span 12;
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 100%;
+
+        .stats-container {
+            div {
+                display: grid;
+                column-gap: var(--gap-small);
+                align-items: center;
+                .comment-count {
+                    line-height: var(--line-height-xl);
+
+                    grid-column: 2;
+                    grid-row: 1;
+                    margin: 0 auto 0 0;
+                }
+
+                .icon {
+                    grid-column: 1;
+                    grid-row: 1 / span 2;
+                    margin: auto 0 auto auto !important;
+                }
+
+                small {
+                    grid-column: 2;
+                    grid-row: 2;
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+}
