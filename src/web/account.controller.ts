@@ -4,7 +4,19 @@ import { AccountParam } from '../shared/accounts/account.param'
 import { AccountService } from '../shared/accounts/account.service'
 import { AkismetService } from '../shared/comments/akismet.service'
 import { AuthenticatedGuard } from '../shared/auth/authenticated.guard'
-import { Body, Controller, Get, Inject, Post, Req, Res, UploadedFile, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Req,
+  Res,
+  UploadedFile,
+  UseFilters,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common'
 import { CommentService, SortOrder } from '../shared/comments/comment.service'
 import { EmailSettingsParam, SettingsParam } from '../shared/accounts/settings.param'
 import { FileInterceptor } from '@nestjs/platform-express'
@@ -18,37 +30,38 @@ import { TokenService } from '../shared/accounts/token.service'
 @Controller('account')
 @UseFilters(new SessionExpiredFilter())
 export class AccountController {
-
-  constructor(@Inject('PG_BOSS') private readonly jobQueue: PgBoss,
+  constructor(
+    @Inject('PG_BOSS') private readonly jobQueue: PgBoss,
     private readonly accountService: AccountService,
     private readonly tokenService: TokenService,
     private readonly akismetService: AkismetService,
     private readonly commentService: CommentService,
-    private readonly logger: Logger) {}
+    private readonly logger: Logger
+  ) {}
 
   @Get('signup')
   signup(@Req() req, @Res() res: Response): void {
     if (req.isAuthenticated()) {
-      return res.redirect('/dashboard/');
+      return res.redirect('/dashboard/')
     }
-    return res.render('../shared/accounts/views/signup', { 
+    return res.render('../shared/accounts/views/signup', {
       layout: 'dashboard',
-      csrfToken: req.csrfToken() 
+      csrfToken: req.csrfToken(),
     })
   }
 
   @Post('signup')
   async doSignup(@Req() req: Request, @Res() res: Response, @Body() accountParam: AccountParam): Promise<void> {
     if (req.isAuthenticated()) {
-      return res.redirect('/dashboard/');
+      return res.redirect('/dashboard/')
     }
     try {
-      const {username, email, password} = accountParam
+      const { username, email, password } = accountParam
       await this.accountService.create(username, email, password)
       const account = await this.accountService.login(username, password)
       if (!account) throw new Error('Could not fetch the account')
       await this.tokenService.create(account)
-      req.logIn(account as Express.User, function() {
+      req.logIn(account as Express.User, function () {
         res.redirect('/dashboard/')
       })
     } catch (e) {
@@ -63,7 +76,7 @@ export class AccountController {
     const account = _.get(req, 'user') as Account
     const settings = await this.accountService.settingsFor(account)
     const emailSettings = await this.accountService.emailSettingsFor(account)
-    return res.render('../shared/accounts/views/settings', { 
+    return res.render('../shared/accounts/views/settings', {
       layout: 'dashboard',
       section: 'Settings',
       csrfToken: req.csrfToken(),
@@ -71,7 +84,7 @@ export class AccountController {
       account,
       changeEmailError: req.flash('change-email-error'),
       ...settings,
-      ...emailSettings
+      ...emailSettings,
     })
   }
 
@@ -90,7 +103,7 @@ export class AccountController {
     try {
       await this.accountService.changeEmail(account, form.email)
       const accountWithNewEmail = await this.accountService.findById(account.id)
-      req.logIn(accountWithNewEmail as Express.User, function() {
+      req.logIn(accountWithNewEmail as Express.User, function () {
         res.redirect('/account/settings')
       })
       return
@@ -102,7 +115,11 @@ export class AccountController {
 
   @Post('email/settings')
   @UseGuards(AuthenticatedGuard)
-  async updateEmailSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: EmailSettingsParam): Promise<void> {
+  async updateEmailSettings(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Body() settingsParam: EmailSettingsParam
+  ): Promise<void> {
     const account = _.get(req, 'user') as Account
     await this.accountService.updateEmailSettings(account, settingsParam)
     return res.redirect('/account/settings')
@@ -133,23 +150,21 @@ export class AccountController {
       return
     }
     const isKeyAnyGood = await this.akismetService.verifyKey(settings)
-    const returnCode = _.isUndefined(isKeyAnyGood) ?
-      (503) :
-      isKeyAnyGood ?
-        (200) :
-        (403)
+    const returnCode = _.isUndefined(isKeyAnyGood) ? 503 : isKeyAnyGood ? 200 : 403
     res.status(returnCode).end()
   }
 
   @Post('import')
   @UseGuards(AuthenticatedGuard)
-  @UseInterceptors(FileInterceptor('importjson', { limits: { fileSize: +(process.env['UPLOAD_MAX_SIZE_BYTES'] ?? 1024 * 10) }}))
+  @UseInterceptors(
+    FileInterceptor('importjson', { limits: { fileSize: +(process.env['UPLOAD_MAX_SIZE_BYTES'] ?? 1024 * 10) } })
+  )
   async import(@Req() req, @Res() res: Response, @UploadedFile() file): Promise<void> {
     const account = _.get(req, 'user') as Account
     try {
       const json = JSON.parse(file.buffer.toString())
       this.commentService.import(account, json)
-    } catch(parseError) {
+    } catch (parseError) {
       this.logger.warn(parseError)
       req.flash('import-error', 'There was an error parsing the JSON')
     }
@@ -162,12 +177,17 @@ export class AccountController {
     const account = _.get(req, 'user') as Account
     const allComments = await this.commentService.commentsForAccount(account, SortOrder.Asc)
     res.setHeader('Content-Type', 'application/json')
-    res.setHeader('Content-Disposition', `attachment; filename=${moment().format('YYYY-MM-DD-HH-ss')}_${account.username}_comments.json`)
-    return res.json(allComments.map(c => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, ...rest } = c
-      return rest
-    }))
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename=${moment().format('YYYY-MM-DD-HH-ss')}_${account.username}_comments.json`
+    )
+    return res.json(
+      allComments.map((c) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { id, ...rest } = c
+        return rest
+      })
+    )
   }
 
   @Post('close')
@@ -176,6 +196,6 @@ export class AccountController {
     // TODO delete in a queue
     const account = _.get(req, 'user') as Account
     this.jobQueue.publish('notify-on-account-closing', { accountId: account.id })
-    res.redirect('/auth/logout');
+    res.redirect('/auth/logout')
   }
 }

@@ -87,3 +87,9 @@ build
 config.json
 
 uploads/*
+
+.vscode
+
+generated
+
+local.settings.json

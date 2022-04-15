@@ -48,7 +48,7 @@ async function bootstrap() {
   app.use(
     session({
       name: 'JamComments',
-      store: new (connectPgSimple(session))({tableName: 'sessions'}),
+      store: new (connectPgSimple(session))({tableName: 'sessions'}), // connection string created implicitly from env vars, see https://node-postgres.com/features/connecting
       cookie: {
         maxAge: sessionLifetime,
         sameSite: true,
@@ -90,7 +90,7 @@ async function bootstrap() {
   const accountCloser = app.get(AccountCloser)
   await accountCloser.init()
 
-  await app.listen(process.env['WEB_PORT'] ?? 3030)
+  await app.listen(process.env['PORT'] ?? process.env['WEB_PORT'] ?? 3030)
   logger.log(`JamComments web is running on: ${await app.getUrl()}`)
 }
 

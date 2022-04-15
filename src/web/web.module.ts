@@ -15,28 +15,37 @@ import PgBoss from 'pg-boss'
 import { QueueModule } from '../shared/queue/queue.module'
 
 @Module({
-  imports: [AccountsModule, AuthModule, ConfigModule, EmailsModule, HomeModule, CommentsModule, DashboardModule, PersistenceModule, QueueModule,
+  imports: [
+    AccountsModule,
+    AuthModule,
+    ConfigModule,
+    EmailsModule,
+    HomeModule,
+    CommentsModule,
+    DashboardModule,
+    PersistenceModule,
+    QueueModule,
     LoggerModule.forRoot({
-    pinoHttp: {
-      level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
-      prettyPrint: true,
-      prettifier: require('pino-colada')
-    },
-}),],
-  controllers: [AccountController]
+      pinoHttp: {
+        level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
+        prettyPrint: true,
+        prettifier: require('pino-colada'),
+      },
+    }),
+  ],
+  controllers: [AccountController],
 })
 export class WebModule implements OnApplicationShutdown {
-
   constructor(
     @Inject('PG_CLIENT') private client: Client,
     @Inject('PG_BOSS') private boss: PgBoss,
-    private readonly logger: Logger) {}
+    private readonly logger: Logger
+  ) {}
 
   async onApplicationShutdown(signal?: string): Promise<void> {
     this.logger.log(`Application exiting with code ${signal}`)
     await this.boss.stop()
     await this.client.end()
-    this.logger.log("JamComments web stopped")
+    this.logger.log('JamComments web stopped')
   }
-
 }

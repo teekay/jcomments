@@ -1,0 +1,79 @@
+asyncapi: 2.2.0
+info:
+  title: JAM Comments
+  version: 1.0.0
+defaultContentType: 'application/json'
+
+channels:
+  comment-events:
+    subscribe:
+      message:
+        oneOf:
+          - $ref: '#/components/messages/CommentPosted'
+
+components:
+  messages:
+    CommentPosted:
+      headers:
+        allOf:
+          - $ref: '#/components/schemas/MessageProperties'
+        type: object
+      payload:
+        $ref: '#/components/schemas/CommentPosted'
+
+  schemas:
+    MessageProperties:
+      type: object
+      additionalProperties:
+        oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+      properties:
+        'type':
+          type: string
+    CommentPosted:
+      type: object
+      required:
+        - account
+        - comment
+      additionalProperties: false
+      properties:
+        account:
+          type: object
+          required:
+            - id
+            - email
+          properties:
+            id: 
+              type: string
+              format: guid
+            email:
+              type: string
+              format: email
+        comment:
+          type: object
+          required:
+            - postUrl
+            - text
+            - author
+          additionalProperties: false
+          properties:
+            postUrl:
+              type: string
+            postTitle:
+              type: string
+            text:
+              type: string
+            author:
+              type: object
+              required:
+                -name
+              additionalProperties: false
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                website:
+                  type: string

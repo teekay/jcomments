@@ -4,25 +4,22 @@ import { AccountService } from '../shared/accounts/account.service'
 import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Req, Res } from '@nestjs/common'
 import { CommentDto, CommentWithId } from '../shared/comments/comment.interface'
 import { CommentCreatedResult, CommentService, SortOrder } from '../shared/comments/comment.service'
-import { ConfigService } from '../shared/config/config.service'
 import { ContentFilteringService } from '../shared/comments/content-filtering-service'
-import { EmailService } from '../shared/emails/email.service'
 import { Logger } from 'nestjs-pino'
 import moment from 'moment'
-import PgBoss from 'pg-boss'
 import { Request, Response } from 'express'
+import { CommentInFormat } from '../shared/comments/formatted-comment'
+import { Queue } from '../shared/queue/queue.interface'
 
 @Controller('comments')
 export class CommentsController {
-
   constructor(
-    @Inject('PG_BOSS') private readonly jobQueue: PgBoss,
+    @Inject(Queue) private readonly jobQueue: Queue,
     private readonly accountService: AccountService,
     private readonly commentsService: CommentService,
     private readonly contentFilteringService: ContentFilteringService,
-    private readonly configService: ConfigService,
     private readonly logger: Logger,
-    private readonly emailService: EmailService) {}
+  ) {}
 
   @Get()
   async comments(@Req() req: Request): Promise<CommentWithId[]> {
@@ -31,19 +28,17 @@ export class CommentsController {
   }
 
   @Get(':url')
-  async commentsForUrl(@Req() req: Request, @Param() params : { url: string }): Promise<CommentWithId[]> {
-    const since  = req.query['since'] as string
+  async commentsForUrl(@Req() req: Request, @Param() params: { url: string }): Promise<CommentWithId[]> {
+    const since = req.query['since'] as string
     const fromDate = req.query['fromDate'] as string
     const maybeDate = moment(fromDate)
     return this.formattedForContentType(
-      (await this.commentsService
-        .commentsForUrl(
-          _.get(req, 'account') as Account,
-          params.url, {
-          afterId: since,
-          fromDate: fromDate && maybeDate.isValid() ? maybeDate.toDate() : undefined
-          })
-      ), this.formatFromRequest(req))
+      await this.commentsService.commentsForUrl(_.get(req, 'account') as Account, params.url, {
+        afterId: since,
+        fromDate: fromDate && maybeDate.isValid() ? maybeDate.toDate() : undefined,
+      }),
+      this.formatFromRequest(req)
+    )
   }
 
   private formatFromRequest(req: Request): string {
@@ -51,35 +46,20 @@ export class CommentsController {
   }
 
   private formattedForContentType(comments: CommentWithId[], format?: string): CommentWithId[] {
-    switch(format) {
-      case 'markdown':
-        return comments.map(c => {
-          c.text = this.contentFilteringService.toMarkdown(c.text)
-          return c
-        })
-      case 'html':
-        return comments.map(c => {          
-          c.text = this.contentFilteringService.toHtml(c.text)
-          return c
-        })
-      case 'text':  
-        return comments.map(c => {          
-          c.text = this.contentFilteringService.toPlainText(c.text)
-          return c
-        })
-      default:
-        return comments
-    }
+    return comments.map((c) => new CommentInFormat(c, this.contentFilteringService).toFormat(format)) as CommentWithId[]
   }
 
   @Post()
-  async postCommentForUrl(@Req() req: Request, @Body() comment: CommentDto,
-    @Res() res: Response): Promise<void> {
+  async postCommentForUrl(@Req() req: Request, @Body() comment: CommentDto, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'account') as Account
-    const result = await this.commentsService.create(account, {
-      ... comment,
-      postedAt: moment().utc().toDate()
-    }, req.ip)
+    const result = await this.commentsService.create(
+      account,
+      {
+        ...comment,
+        postedAt: moment().utc().toDate(),
+      },
+      req.ip
+    )
 
     if (req.headers['content-type'] !== 'application/json') {
       // assuming the request comes from the web page -> redirect back
@@ -97,13 +77,11 @@ export class CommentsController {
       const emailSettings = await this.accountService.emailSettingsFor(account)
       if (emailSettings?.notifyOnComments) {
         // notify
-        this.logger.debug("Scheduling an email notification about a new comment")
-        const email = this.emailService.notifyOnSingleComment(comment, `${this.configService.adminUrl()}/dashboard`)
-        this.jobQueue.publish('notify-on-new-comment-via-email', { account, email })
+        this.logger.debug('Scheduling an email notification about a new comment')
+        this.jobQueue.publish({ account, comment })
       }
     } catch (oops) {
       this.logger.warn(`Trouble scheduling email notification: ${(oops as Error)?.message}`)
     }
-
   }
 }

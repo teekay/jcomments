@@ -30,7 +30,10 @@
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "AzureCommentsApiGet/**/*.ts",
+    "AzureCommentsApiPost/**/*.ts",
+    "AzureCommentsNotify/**/*.ts"
   ],
   "exclude": [
     "node_modules",

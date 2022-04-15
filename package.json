@@ -7,15 +7,23 @@
     "node": ">=12.20.0"
   },
   "scripts": {
+    "generate": "json2ts -i schemas/**/* -o generated/ && ts-auto-guard --paths ./generated/*.ts --export-all",
     "api": "ts-node src/api.ts",
     "web": "ts-node src/web.ts",
     "cli": "ts-node src/cli.ts",
     "sql": "pgtyped -c config.json",
     "test": "jest",
+    "prebuild": "yarn generate",
+    "build": "tsc -p tsconfig.json",
+    "postbuild": "copyfiles ./src/**/*.hbs public/* build",
+    "clean": "rm -rf build && rm -rf generated",
+    "ts-node": "ts-node",
+    "prettier-format": "prettier --config .prettierrc src/**/*.ts tests/**/*.ts --write",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
-    "build": "tsc -p tsconfig.json && cp -r ./src/shared/emails/views ./build/shared/emails",
-    "clean": "rm -rf build",
-    "ts-node": "ts-node"
+    "lint-fix": "eslint \"./src/**/*.ts\" \"./tests/**/*.ts\" --fix",
+    "prestart": "ts-node src/cli.ts db:migrate",
+    "start": "node ./build/src/web.js",
+    "watch": "tsc -p tsconfig.json -w"
   },
   "repository": "git+https://github.com/teekay/JamComments.git",
   "keywords": [],
@@ -26,6 +34,8 @@
   },
   "homepage": "https://github.com/teekay/JamComments#readme",
   "dependencies": {
+    "@azure/functions": "^3.0.0",
+    "@azure/service-bus": "^7.5.1",
     "@nestjs/common": "7.6.15",
     "@nestjs/core": "7.6.15",
     "@nestjs/passport": "^7.1.5",
@@ -70,6 +80,7 @@
     "rimraf": "3.0.2",
     "rxjs": "6.6.7",
     "showdown": "^1.9.1",
+    "ts-auto-guard": "^2.4.1",
     "uuid": "^8.3.2",
     "xss": "^1.0.9",
     "yargs": "^17.0.1"
@@ -94,7 +105,9 @@
     "@types/yargs": "^17.0.0",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
+    "copyfiles": "^2.4.1",
     "eslint": "^7.27.0",
+    "json-schema-to-typescript": "^10.1.5",
     "prettier": "2.3.0",
     "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
