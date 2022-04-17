@@ -3,14 +3,14 @@
     <section class="settings container">
         <!-- begin approved comments page header -->
         <header class="section-header has-search">
-            <h1 class="heading-font">Approved ({{ commentCount }}))</h1>
+            <h1 class="heading-font">Approved ({{ commentCount }})</h1>
             {{> commentsSearch }}
         </header>
         {{> commentsActions }}
         <section class="settings-column comments">
             {{#each comments}}
             <div class="card approved">
-                <input type="checkbox" id="comment-action-{{ id }}" name="comment-action">
+                <input type="checkbox" id="comment-action-{{ id }}" class="comment-single-select" name="comment-action" value="{{ id }}">
                 <div class="comment-info">
                     <span class="commenter-name">
                         {{#if author.email}}
@@ -101,8 +101,12 @@
 </main>
 
 {{> modalDeleteComment }}
+{{> modalDeleteComments }}
 
 <script src="/js/delete-comment-modal.js"></script>
 <script>
   deleteCommentModal('.delete', '/dashboard/comment/delete')();
+  let select = document.getElementById('manageComments');
+  let approveOption = select.querySelector('option[value=approve]');
+  select.removeChild(approveOption);
 </script>

@@ -8,9 +8,9 @@ function deleteCommentModal(className, uri) {
             if (!id) return;
       
             let confirmModal = document.getElementById('deleteCommentModal');
-            let btnConfirm = document.querySelector('#btnDeleteComment');
-            let btnCancel = document.querySelector('#btnCancelDelete');
-            let iconCancel = document.querySelector('span.close');
+            let btnConfirm = confirmModal.querySelector('#btnDeleteComment');
+            let btnCancel = confirmModal.querySelector('#btnCancelDelete');
+            let iconCancel = confirmModal.querySelector('span.close');
             let confirm = () => {
               fetch(uri, {
                 method: 'POST',

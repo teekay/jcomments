@@ -5,9 +5,8 @@
                     <div class="comments-action-select">
                         <select name="languages" id="manageComments">
                             <option value="default">Select action...</option>
-                            <option class="select-option" value="approve-selected">Approve Selected</option>
-                            <option class="select-option" value="markcomments-as-spam">Mark as Spam</option>
-                            <option class="select-option" value="delete-comments">Delete</option>
+                            <option class="select-option" value="approve">Approve</option>
+                            <option class="select-option" value="delete">Delete</option>
                         </select>
                     </div>
                 </div>
@@ -22,11 +21,61 @@
                     </select>
                 </div>
             </div>
-            <script>
-                document.getElementById('comment-action-select-all').addEventListener('click', function(ev) {
-                    let toSelect = !!ev.target.checked;
-                    Array.from(document.getElementsByClassName('comment-single-select')).forEach(e => {
-                      e.checked = toSelect;
-                    });
-                });
-            </script>
+<script>
+    document.getElementById('comment-action-select-all').addEventListener('click', function(ev) {
+        let toSelect = !!ev.target.checked;
+        Array.from(document.getElementsByClassName('comment-single-select')).forEach(e => {
+            e.checked = toSelect;
+        });
+    });
+    function groupAction(modalId, url) {
+        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        let ids = Array.from(document.getElementsByClassName('comment-single-select')).filter(e => e.checked).map(e => e.value);
+        if (!ids.length) {
+            console.log("Nothing is selected :(");
+            return;
+        }
+
+        let confirmModal = document.getElementById(modalId);
+        let btnConfirm = confirmModal.querySelector('.confirm');
+        let cancelControls = Array.from(confirmModal.querySelectorAll('.close'));
+        let confirm = () => {
+        fetch(url, {
+            method: 'POST',
+            body: JSON.stringify({ ids }),
+            headers: {
+            'CSRF-Token': token,
+            'content-type': 'application/json'
+            }
+        }).then(response => {
+            if (response.status === 201) {
+            document.location = document.location;
+            return;
+            }
+            // TODO show error
+            console.error(response.status);
+            confirmModal.style.display = 'none';
+        });
+        };
+        let cancel = () => {
+            btnConfirm.removeEventListener('click', confirm);
+            cancelControls.forEach(el => el.removeEventListener('click', cancel));
+            confirmModal.style.display = 'none';
+        }
+
+        btnConfirm.addEventListener('click', confirm);
+        cancelControls.forEach(el => el.addEventListener('click', cancel));
+        confirmModal.style.display = 'block';
+    }
+    document.getElementById('manageComments').addEventListener('change', function(evt) {
+
+        let select = evt.target;
+        if (select.value === "delete") {
+            select.selectedIndex = 0;
+            groupAction('deleteCommentsModal', document.location.href.indexOf('review') !== -1 ? '/dashboard/spam/deleteMany' : '/dashboard/comments/deleteMany');
+        } else if (select.value === "approve") {
+            select.selectedIndex = 0;
+            groupAction('approveCommentsModal', '/dashboard/spam/unmarkMany');
+        }
+    });
+</script>

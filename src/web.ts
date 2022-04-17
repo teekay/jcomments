@@ -53,6 +53,12 @@ async function bootstrap() {
   handlebars.registerPartial(
     'modalDeleteComment',
     readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comment.hbs'), 'utf8'))
+  handlebars.registerPartial(
+    'modalDeleteComments',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comments.hbs'), 'utf8'))
+  handlebars.registerPartial(
+    'modalApproveComments',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/approve-comments.hbs'), 'utf8'))
 
   const defaultSessionLifetime = 60 * 24 * 30 // 30 days
   const cfgSessionLifetime = _.defaultTo(+(process.env['SESSION_LIFETIME'] ?? defaultSessionLifetime), defaultSessionLifetime)

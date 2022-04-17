@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { Account } from '../shared/accounts/account.interface'
+import { Account, AccountEmailDto } from '../shared/accounts/account.interface'
 import { AccountParam } from '../shared/accounts/account.param'
 import { AccountService } from '../shared/accounts/account.service'
 import { AkismetService } from '../shared/comments/akismet.service'
@@ -99,8 +99,9 @@ export class AccountController {
 
   @Post('email/change')
   @UseGuards(AuthenticatedGuard)
-  async changeEmail(@Req() req, @Res() res: Response, @Body() form: { email: string }): Promise<void> {
+  async changeEmail(@Req() req, @Res() res: Response, @Body() form: AccountEmailDto): Promise<void> {
     const account = _.get(req, 'user') as Account
+
     try {
       await this.accountService.changeEmail(account, form.email)
       const accountWithNewEmail = await this.accountService.findById(account.id)
@@ -128,17 +129,19 @@ export class AccountController {
 
   @Post('settings/token/refresh')
   @UseGuards(AuthenticatedGuard)
-  async refreshToken(@Req() req: Request, @Res() res: Response): Promise<void> {
+  async refreshToken(@Req() req: Request, @Res() res: Response): Promise<Response> {
     const account = _.get(req, 'user') as Account
     const token = await this.accountService.token(account)
     if (!token) {
-      this.logger.error('No token created')
-      res.status(400).end()
-      return
+      this.logger.error('No token found, none revoked')
+      return res.status(400).json({error: 'Could not reissue API token'})      
     }
+
     await this.tokenService.revoke(token)
     await this.tokenService.create(account)
-    return res.redirect('/account/settings')
+    return res.status(201).json({
+        token: (await this.accountService.token(account))?.token
+    })
   }
 
   @Post('settings/akismet/verify')

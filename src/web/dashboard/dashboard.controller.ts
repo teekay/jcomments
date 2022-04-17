@@ -16,7 +16,7 @@ export class DashboardController {
   constructor(private readonly commentService: CommentService,
     private readonly logger: Logger) {}
 
-  @Get()
+  @Get('approved')
   @UseGuards(AuthenticatedGuard)
   async dashboard(@Req() req, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'user') as Account
@@ -85,6 +85,23 @@ export class DashboardController {
     return res.status(201).end()
   }
   
+  @Post('comments/deleteMany')
+  @UseGuards(AuthenticatedGuard)
+  async deleteComments(@Req() req: Request, @Res() res: Response,
+    @Body() body: { ids: string[]}): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    for (const id of body.ids) {
+        const comment = await this.commentService.findById(account, id)
+        if (!comment) {
+        // this includes situations when the comment would belong to a different account
+        this.logger.warn(`Comment ${id} not found for account ${account.id}`)
+        continue
+      }
+      await this.commentService.deleteSingle(comment)
+    }
+    return res.status(201).end()
+  }
+
   @Post('spam/delete')
   @UseGuards(AuthenticatedGuard)
   async deleteSpamComment(@Req() req: Request, @Res() res: Response,
@@ -101,7 +118,7 @@ export class DashboardController {
     return res.status(201).end()
   }
   
-  @Post('spam/deleteAll')
+  @Post('spam/deleteMany')
   @UseGuards(AuthenticatedGuard)
   async deleteSpamComments(@Req() req: Request, @Res() res: Response,
     @Body() body: { ids: string[]}): Promise<void> {
@@ -120,7 +137,7 @@ export class DashboardController {
   
   @Post('spam/unmark')
   @UseGuards(AuthenticatedGuard)
-  async notSpam(@Req() req: Request, @Res() res: Response,
+  async unmarkSingle(@Req() req: Request, @Res() res: Response,
     @Body() id: Identifiable): Promise<void> {
     const account = _.get(req, 'user') as Account
     const comment = await this.commentService.findSpamById(account, id.id)
@@ -129,6 +146,23 @@ export class DashboardController {
       return res.status(404).end()
     }
     await this.commentService.markCommentNotSpam(comment)
+    return res.status(201).end()
+  }
+  
+  @Post('spam/unmarkMany')
+  @UseGuards(AuthenticatedGuard)
+  async unmarkMany(@Req() req: Request, @Res() res: Response,
+    @Body() body: { ids: string[]}): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    for (const id of body.ids) {
+        const comment = await this.commentService.findSpamById(account, id)
+        if (!comment) {
+          // this includes situations when the comment would belong to a different account
+          this.logger.warn(`Comment ${id} not found for account ${account.id}`)
+          continue
+        }
+        await this.commentService.markCommentNotSpam(comment)    
+    }
     return res.status(201).end()
   }
   
