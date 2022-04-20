@@ -16,7 +16,7 @@ export class DashboardController {
   constructor(private readonly commentService: CommentService,
     private readonly logger: Logger) {}
 
-  @Get('approved')
+  @Get()
   @UseGuards(AuthenticatedGuard)
   async dashboard(@Req() req, @Res() res: Response): Promise<void> {
     const account = _.get(req, 'user') as Account
