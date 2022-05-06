@@ -16,7 +16,7 @@
     "build:sass": "node-sass assets/scss -o public/css  --output-style compressed",
     "prebuild": "yarn generate",
     "build": "tsc -p tsconfig.json",
-    "postbuild": "copyfiles ./src/**/*.hbs public/* build",
+    "postbuild": "copyfiles ./src/**/*.hbs ./public/**/* \"./public/assets/**/*\" build",
     "clean": "rm -rf build && rm -rf generated",
     "ts-node": "ts-node",
     "prettier-format": "prettier --config .prettierrc src/**/*.ts tests/**/*.ts --write",
