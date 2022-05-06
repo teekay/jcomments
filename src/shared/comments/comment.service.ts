@@ -4,7 +4,7 @@ import { AccountService } from '../accounts/account.service'
 import { AkismetService } from './akismet.service'
 import { Client } from 'pg'
 import { Comment, CommentBase, CommentWithId } from './comment.interface'
-import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount, ICommentsForUrlSinceDateResult, ICommentsForUrlResult, deleteAllComments, deleteAllSpam, flagCommentForUrlWithTimestamp } from './comments.queries'
+import { commentsForAccount, commentCountForAccount, commentsForUrl, commentsForUrlSinceDate, ICommentsForAccountResult, postCommentForUrl, commentsForAccountPaged, findByIdForAccount, flagCommentForUrl, reviewCountForAccount, reviewsForAccountPaged, deleteSingleComment, deleteSingleSpam, postCommentForUrlWithTimestamp, findSpamByIdForAccount, ICommentsForUrlSinceDateResult, ICommentsForUrlResult, deleteAllComments, deleteAllSpam, flagCommentForUrlWithTimestamp, ICommentsForAccountPagedParams } from './comments.queries'
 import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from "nestjs-pino";
 import { v4 as uuidv4 } from 'uuid'
@@ -76,19 +76,19 @@ export class CommentService {
       return sorted.map(this.recordToClass)
   }
 
-  async commentsForAccountPaged(account: Account, batchSize?: number, page?: number): Promise<CommentWithId[]> {
+  async commentsForAccountPaged(account: Account, sort: SortOrder, batchSize?: number, page?: number): Promise<CommentWithId[]> {
     const limit = batchSize ?? 10
     const offset = ((page ?? 1) - 1) * limit
-    const params = { accountId: account.id, limit: `${limit}`, offset: `${offset}` }
+    const params: ICommentsForAccountPagedParams = { accountId: account.id, limit: `${limit}`, offset: `${offset}`, asc: sort === SortOrder.Asc }
     const pagedComments = await commentsForAccountPaged.run(params, this.client)
-    this.logger.debug(interpretedQuery(commentsForAccountPaged, params))
+    this.logger.debug(interpretedQuery(commentsForAccountPaged, {...params, asc: params.asc?.toString() }))
     return pagedComments.map(this.recordToClass)
   }
 
-  async reviewsForAccountPaged(account: Account, batchSize?: number, page?: number): Promise<CommentWithId[]> {
+  async reviewsForAccountPaged(account: Account, sort: SortOrder, batchSize?: number, page?: number): Promise<CommentWithId[]> {
     const limit = batchSize ?? 10
     const offset = ((page ?? 1) - 1) * limit
-    const pagedComments = await reviewsForAccountPaged.run({ accountId: account.id, limit: `${limit}`, offset: `${offset}` }, this.client)
+    const pagedComments = await reviewsForAccountPaged.run({ accountId: account.id, limit: `${limit}`, offset: `${offset}`, asc: sort === SortOrder.Asc }, this.client)
     return pagedComments.map(this.recordToClass)
   }
 

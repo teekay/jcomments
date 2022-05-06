@@ -12,12 +12,9 @@
                 </div>
                 <div class="sort-comments">
                     <select name="languages" id="sortComments">
-                        <option value="default">Sort By...</option>
-                        <option class="select-option" value="date-newewst-first">Date – Newest First</option>
-                        <option class="select-option" value="date-oldest-first">Date – Oldest First</option>
-                        <option class="select-option" value="commented-article">Commented Article</option>
-                        <option class="select-option" value="author">Author</option>
-                        <option class="select-option" value="author-website">Author's Website</option>
+                        <option value="">Sort By...</option>
+                        <option class="select-option" value="desc">Newest first (default)</option>
+                        <option class="select-option" value="asc">Oldest first</option>
                     </select>
                 </div>
             </div>
@@ -78,4 +75,20 @@
             groupAction('approveCommentsModal', '/dashboard/spam/unmarkMany');
         }
     });
+
+    document.getElementById('sortComments').addEventListener('change', function(ev) {
+        let el = ev.target;
+        let sortOrder = el.options[el.selectedIndex].value;
+        if (sortOrder !== '') {
+            let location = document.location.href;
+            let redirectTo = `${location.includes('/review') ? '/dashboard/review/' : '/dashboard/'}?sort=${sortOrder}`;
+            document.location = redirectTo;
+        }
+    });
+
+    let params = new URLSearchParams(document.location.search);
+    let sortOption = Array.from(document.getElementById('sortComments').options).find(opt => opt.value === params.get('sort'));
+    if (sortOption) {
+        sortOption.selected = true;
+    }
 </script>

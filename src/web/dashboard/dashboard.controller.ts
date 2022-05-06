@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { Account } from '../../shared/accounts/account.interface'
 import { AuthenticatedGuard } from '../../shared/auth/authenticated.guard'
 import { Body, Controller, Get, Post, Req, Res, UseFilters, UseGuards } from '@nestjs/common'
-import { CommentService } from '../../shared/comments/comment.service'
+import { CommentService, SortOrder } from '../../shared/comments/comment.service'
 import { Identifiable } from './identifiable.param'
 import { Logger } from "nestjs-pino";
 import moment from 'moment'
@@ -22,10 +22,11 @@ export class DashboardController {
     const account = _.get(req, 'user') as Account
     const page = +(req.query['page'] ?? 1)
     const size = +(req.query['size'] ?? 10)
+    const sort  = req.query['sort'] === 'asc' ? SortOrder.Asc : SortOrder.Desc
     const commentCount = await this.commentService.commentCountForAccount(account)
     const reviewCount = await this.commentService.reviewCountForAccount(account)
     const pages = _.range(1, Math.ceil(commentCount / size) + 1)
-    const comments = (await this.commentService.commentsForAccountPaged(account, size, page)).map(c => {
+    const comments = (await this.commentService.commentsForAccountPaged(account, sort, size, page)).map(c => {
       return {
         ...c,
         relativePostedAt: moment(c.postedAt).fromNow()
@@ -50,10 +51,11 @@ export class DashboardController {
     const account = _.get(req, 'user') as Account
     const page = +(req.query['page'] ?? 1)
     const size = +(req.query['size'] ?? 10)
+    const sort  = req.query['sort'] === 'asc' ? SortOrder.Asc : SortOrder.Desc
     const commentCount = await this.commentService.commentCountForAccount(account)
     const reviewCount = await this.commentService.reviewCountForAccount(account)
     const pages = _.range(1, Math.ceil(reviewCount / size) + 1)
-    const comments = (await this.commentService.reviewsForAccountPaged(account, size, page)).map(c => {
+    const comments = (await this.commentService.reviewsForAccountPaged(account, sort, size, page)).map(c => {
       return {
         ...c,
         relativePostedAt: moment(c.postedAt).fromNow()

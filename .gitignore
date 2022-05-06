@@ -84,6 +84,8 @@ dist
 build
 
 .env
+.env.azure
+.env.local
 config.json
 
 uploads/*
@@ -93,3 +95,5 @@ uploads/*
 generated
 
 local.settings.json
+local.settings.json.azure
+local.settings.json.local
