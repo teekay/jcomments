@@ -135,7 +135,7 @@ export class CliService {
 
   migrate = async (): Promise<void> => {
     try {
-      await migrate({ client: this.client }, `${__dirname}/../../sql/migrations`)
+      await migrate({ client: this.client }, `${process.cwd()}/sql/migrations`)
       console.log('Migrated')
     } catch (oops) {
       console.warn('Migration failed')
