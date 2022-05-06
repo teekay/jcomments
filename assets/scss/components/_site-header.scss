@@ -1,0 +1,97 @@
+//////////////////////////////////////////////////////////////////
+
+// these rules are specific to the site header. Note some variation where the main container has a class of `.dashboard` as shown on `index.html`, `sign-in.html`, and `sign-up.html`
+
+//////////////////////////////////////////////////////////////////
+
+
+
+.site-header {
+    background-color: var(--whitespace);
+    border: 1px solid var(--outline);
+    padding: var(--gap-small);
+    .site-navigation {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr;
+        box-sizing: border-box;
+        max-width: 1600px;
+        margin: auto;
+
+        .openbtn {
+            grid-column: 1;
+            grid-row: 1;
+            margin: auto 0 auto auto;
+            padding: var(--gap-small) 0 var(--gap-small) var(--gap-small);
+            display: flex;
+            img {
+                margin: auto;
+            }
+        }
+
+        .user {
+            grid-column: 1;
+            grid-row: 1;
+            padding: var(--gap-small);
+            display: flex;
+            z-index: -1;
+            img {
+                margin: auto;
+            }
+        }
+    }
+    @media only screen and (min-width: #{$breakpoint-1} ) {
+        min-height: 90px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 var(--gap-small);
+
+        .site-navigation {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            align-items: center;
+            width: 100%;
+            padding: 0 var(--gap-small);
+            .openbtn {
+                grid-column: 1;
+                margin: auto;
+                padding: var(--gap-small)
+            }
+
+            .user {
+                grid-column: 11 / span 2;
+                cursor: pointer;
+                margin: auto;
+                z-index: 1;
+                display: flex;
+                align-items: center;
+                column-gap: var(--gap-xs);
+                font-size: var(--font-size-medium);
+                color: var(--dark-purple);
+            }
+        }
+    }
+    &.dashboard {
+        background-color: var(--brand-medium);
+        border: none;
+        .site-navigation .user {
+            color: var(--whitespace);
+        }
+    }
+}
+
+/////////////////////////////
+// logo settings for internal pages
+/////////////////////////////
+.site-header.internal .site-icon {
+    grid-column: 1;
+    grid-row: 1;
+    width: var(--icon-medium);
+    height: var(--icon-medium);
+    margin: auto 0;
+    @media only screen and (min-width: #{$breakpoint-1} ) {
+        grid-column: 2;
+        margin: auto auto auto 0;
+    }
+}

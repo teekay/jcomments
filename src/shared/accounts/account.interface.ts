@@ -1,3 +1,5 @@
+import { IsEmail, IsNotEmpty } from "class-validator"
+
 export interface User {
   id: string
 }
@@ -10,4 +12,10 @@ export interface Account extends User {
   email: string
   password: string
   createdAt: Date
+}
+
+export class AccountEmailDto {
+  @IsNotEmpty()
+  @IsEmail()
+  email!: string;
 }

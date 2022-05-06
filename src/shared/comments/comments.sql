@@ -23,7 +23,7 @@ SELECT * FROM comments WHERE account_id=:accountId AND id=:id;
 SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC;
 
 /* @name CommentsForAccountPaged */
-SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset;
+SELECT * FROM comments WHERE account_id=:accountId ORDER BY (CASE WHEN :asc = true THEN created_at END) ASC, created_at DESC LIMIT :limit OFFSET :offset;
 
 /* @name FindSpamByIdForAccount */
 SELECT * FROM reviews WHERE account_id=:accountId AND id=:id;
@@ -32,7 +32,7 @@ SELECT * FROM reviews WHERE account_id=:accountId AND id=:id;
 SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC;
 
 /* @name ReviewsForAccountPaged */
-SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC LIMIT :limit OFFSET :offset;
+SELECT * FROM reviews WHERE account_id=:accountId ORDER BY (CASE WHEN :asc = true THEN created_at END) ASC, created_at DESC LIMIT :limit OFFSET :offset;
 
 /* @name CommentsForUrl */
 SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at ASC;

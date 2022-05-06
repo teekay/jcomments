@@ -1,27 +1,36 @@
-<div class="container">
-  <h1>JamComments</h1>
-  <p class="lead">Hello there! Wanna sign in?</p>
-  <div class="row mb-5">
-    <div class="col">
-      <form method="POST" action="/auth/login">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <div class="mb-3">
-          <label for="username" class="form-label">User name</label>
-          <input type="text" class="form-control" name="username" id="username" aria-describedby="usernameHelp" required>
-          <div id="usernameHelp" class="form-text">This is your nickname, not your email</div>
-        </div>
-        <div class="mb-3">
-          <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" id="password" name="password" required>
-        </div>
-        <button type="submit" class="btn btn-primary me-3">Sign in</button>
-        <a href="/auth/forgot-password">Forgot password?</a>
-      </form>
-      {{#if loginError}}
-      <div class="alert alert-warning mt-2" role="alert">{{ loginError }}</div>
-      {{/if}}
-    </div>
-    <div class="col"></div>
-  </div>
-  <p>Don't have an account yet? <a href="/account/signup">Sign up instead</a></p>
-</div>
+    <main id="main" class="dashboard sign-up">
+        <!-- begin hero component -->
+        <section class="hero container">
+            <header class="section-header">
+                <img class="header-image" src="/assets/images/icons/JamComments-header.svg" alt="">
+                <h1 class="section-title heading-font">Welcome to <span>JamComments</span></h1>
+                <h2 class="section-title heading-font">Wanna sign in?</h2>
+            </header>
+        </section>
+        <!-- end hero component -->
+        <!-- begin sign up form -->
+        <section class="settings container sign-up">
+            <div class="settings-column">
+                <div id="sign-up" class="card settings-tab">
+                    <form action="/auth/login" method="post">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                        <label class="admin-setting-description" for="username"><small>This is your nickname, not your
+                                email</small></label>
+                        <input type="password" id="password" name="password" placeholder="Create a password"
+                            minlength="8" required>
+                        <label class="admin-setting-description" for="password"><small><a
+                                    href="/auth/forgot-password">Forgot
+                                    password?</a></small></label>
+                        <button class="btn" type="submit">Sign in</button>
+                    </form>
+                    {{#if loginError}}
+                    <div class="alert alert-warning mt-2" role="alert">{{ loginError }}</div>
+                    {{/if}}
+                    <p class="heading-font admin-setting-description">Don't have an account yet? <a
+                            href="/account/signup">Sign up instead</a></p>
+                </div>
+            </div>
+        </section>
+        <!-- end sign up form -->
+    </main>

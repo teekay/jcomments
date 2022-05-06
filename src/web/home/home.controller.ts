@@ -1,10 +1,11 @@
-import { Controller, Get, Render } from '@nestjs/common'
+import { Controller, Get, Res } from '@nestjs/common'
+import { Response } from 'express'
 
 @Controller('')
 export class HomeController {
   @Get()
-  @Render('./home/views/index')
-  home() {
-    // nothing to do here
+  home(@Res() res: Response): void {
+    // redirect to either log in or dashboard
+    res.redirect('/dashboard/')
   }
 }

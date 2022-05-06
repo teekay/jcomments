@@ -19,9 +19,6 @@ export class AuthExceptionFilter implements ExceptionFilter {
 export class SessionExpiredFilter implements ExceptionFilter {
   catch(_ex: ForbiddenException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const request = ctx.getRequest<Request>();
-    const flash = _.get(request, 'flash')
-    flash.call(request, 'login-error', 'Your session has expired. Please sign in again.')
     const response = ctx.getResponse<Response>();
     response.redirect('/auth/login');
   }

@@ -1,0 +1,36 @@
+@font-face {
+    font-display: block;
+    font-family: "Qanelas";
+    src: url(/assets/webfonts/Qanelas/Qanelas-Medium.ttf);
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-display: block;
+    font-family: "Qanelas";
+    src: url(/assets/webfonts/Qanelas/Qanelas-Regular.ttf);
+    font-style: normal;
+    font-weight: normal;
+}
+@font-face {
+    font-display: block;
+    font-family: "Poppins";
+    src: url(/assets/webfonts/Poppins/Poppins-Light.ttf);
+    font-style: normal;
+    font-weight: 300;
+}
+@font-face {
+    font-display: block;
+    font-family: "Poppins";
+    src: url(/assets/webfonts/Poppins/Poppins-Regular.ttf);
+    font-style: normal;
+    font-weight: normal;
+}
+
+body {
+    font-family: var(--font-family-body);
+    font-size: var(--font-size-medium);
+    font-weight: var(--font-weight-light);
+    line-height: var(--line-height-medium);
+    color: var(--dark-purple);
+}

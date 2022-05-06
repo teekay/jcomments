@@ -1,0 +1,41 @@
+    <!-- begin light background site-header component -->
+    <header class="site-header internal manage-comments">
+        <nav class="site-navigation">
+            <span class="openbtn" onclick="openSiteMenu()"><img src="/assets/images/icons/nav-menu-trigger-dark.svg"
+                    alt="Site Navigation Expand Menu"></span>
+            <a class="site-icon" href="/dashboard/"><img class="logo" width="60" height="60"
+                    src="/assets/images/icons/JamComments-header-icon-logo.svg" alt="JamComments Logo"></a>
+            <span class="user"><img class="icon icon-small" src="/assets/images/icons/user-outline-alt.svg"
+                    alt="Site Navigation Expand Menu"><a href="/account/settings/">Hi, {{ account.username }}</a></span>
+            <menu id="siteMenu" class="site-menu menu-collapsed">
+                <img class="site-logo" src="/assets/images/icons/jamComments-logo-cloud.svg" alt="JamComments Logo">
+                <span class="closebtn" onclick="openSiteMenu()"><img
+                        src="/assets/images/icons/nav-menu-trigger-close.svg"
+                        alt="Site Navigation Collapse Menu"></span>
+                <ul>
+                    <li class="menu-item"><a class="menu-link" href="/dashboard/"><img class="icon icon-small"
+                                src="/assets/images/icons/dashboard.svg" alt="Visit the Dashboard">Dashboard</a></li>
+                    <li class="menu-item sub-menu"><a class="menu-link" href="/comments-awaiting-review.html"><img
+                                class="icon icon-small" src="/assets/images/icons/messages.svg"
+                                alt="View your comments">Comments</a>
+                        <ul class="sub-menu-items">
+                            <li class="menu-item"><a class="menu-link" href="/dashboard/review/"><img
+                                        class="icon icon-small" src="/assets/images/icons/review-approval-needed.svg"
+                                        alt="Review your comments">Awaiting Review <span
+                                        class="review-count">{{ reviewCount }}</span></a>
+                            </li>
+                            <li class="menu-item"><a class="menu-link" href="/dashboard/"><img
+                                        class="icon icon-small" src="/assets/images/icons/review-approved.svg"
+                                        alt="View approved comments">Approved<span class="review-count">{{ commentCount }}</span></a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="menu-item"><a class="menu-link" href="/account/settings/"><img class="icon icon-small"
+                                src="/assets/images/icons/gear-setting.svg" alt="Visit your settings">Settings</a></li>
+                    <li class="menu-item"><a class="menu-link" href="/auth/logout"><img class="icon icon-small"
+                                src="/assets/images/icons/gear-setting.svg" alt="Visit your settings">Sign out</a></li>
+                </ul>
+            </menu>
+        </nav>
+    </header>
+    <!-- end light background site-header component -->

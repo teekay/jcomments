@@ -1,0 +1,113 @@
+//////////////////////////////////////////////////////////////////
+
+// these rules are specific to comments that are awaiting review as shown on `comments-awaiting-review.html`
+
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
+.manage-comments {
+    .comments-actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        row-gap: var(--gap-xs);
+        align-items: center;
+        background: #f1f5f8;
+        padding: var(--gap-xs);
+        border-radius: var(--border-radius-md);
+
+        .select-comments-action,
+        .sort-comments {
+            display: flex;
+            align-items: center;
+            gap: var(--gap-xs);
+            color: var(--black);
+            font-size: var(--font-size-small);
+            margin-left: 0;
+            margin-right: auto;
+        }
+    }
+
+    .card.approved,
+    .card.awaiting-review {
+        display: grid;
+        grid-template-columns: 24px 1fr 60px;
+        column-gap: var(--gap-xs);
+        align-items: center;
+        padding: var(--gap-xs) var(--gap-xs);
+        font-size: var(--font-size-small);
+        color: var(--light-purple);
+
+        input {
+            grid-column: 1;
+            margin-top: 5px;
+            margin-bottom: auto;
+        }
+
+        .manage-comment {
+            grid-column: 3;
+            grid-row: 1 / span 3;
+            display: grid;
+            grid-template-columns: var(--gap-medium);
+            gap: var(--gap-xs);
+            align-items: center;
+            align-content: center;
+            margin: auto;
+        }
+        .comment-info {
+            grid-column: 2;
+
+            .commenter-name {
+                color: var(--brand);
+            }
+            .commenter-url a {
+                color: var(--dark-purple);
+            }
+
+            .commenter-comment {
+                font-size: var(--font-size-medium);
+                color: var(--black);
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+            .comment-post a {
+                color: var(--brand);
+            }
+        }
+    }
+
+    @media only screen and (min-width: #{$breakpoint-1} ) {
+        .comments-actions {
+            grid-column: 1 / span 12;
+            flex-direction: row;
+            .select-comments-action,
+            .sort-comments {
+                justify-content: space-between;
+                gap: var(--gap-small);
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        .card.approved,
+        .card.awaiting-review {
+            grid-template-columns: 24px 1fr 120px;
+
+            .manage-comment {
+                grid-template-columns: var(--gap-medium) var(--gap-medium);
+
+                .delete {
+                    grid-column: 2;
+                }
+
+                .approve {
+                    grid-column: 1;
+                }
+            }
+        }
+    }
+}

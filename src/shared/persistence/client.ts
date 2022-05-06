@@ -1,6 +1,5 @@
 import { Client, ClientConfig } from "pg";
 
-
 export const databaseProviders = [
   {
     provide: 'PG_CLIENT',
@@ -15,8 +14,13 @@ export const databaseProviders = [
         connectionTimeoutMillis: 5000
       }
       const client= new Client(dbConfig)
-      await client.connect()
-      
-      return client;
+
+      try {
+        await client.connect()
+        return client
+      } catch (oops) {
+          console.error('Problem connecting to the database')
+          throw oops
+      }
     }
   }];

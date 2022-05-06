@@ -1,293 +1,346 @@
-<div class="container">
-  <ul class="nav nav-pills mb-5">
-    <li class="nav-item">
-      <a class="nav-link" href="/dashboard/">Dashboard</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="/account/settings/">Settings</a>
-    </li>
-    <li class="nav-item pull-right">
-      <a class="nav-link" href="/auth/logout">Sign out</a>
-    </li>
-  </ul>
-
-  <h3 class="mb-5">Account settings</h3>
-
-  <ul class="nav nav-tabs mb-4">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" 
-        id="personal-tab"
-        data-bs-toggle="tab" data-bs-target="#personal" 
-        type="button" role="tab" aria-controls="personal" aria-selected="true">Personal</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" 
-        id="commenting-tab"
-        data-bs-toggle="tab" data-bs-target="#commenting" 
-        type="button" role="tab" aria-controls="home">Commenting</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" 
-        id="notifications-tab"
-        data-bs-toggle="tab" data-bs-target="#notifications" 
-        type="button" role="tab" aria-controls="home">Notifications</button>
-    </li>
-  </ul>
-
-  <div class="tab-content">
-    <section class="tab-pane fade" id="personal" aria-labelledby="personal-tab">
-      <section class="row mb-4">
-        <div class="col">
-          <p><b>Your username</b></p>
-          <p>(used for signing in)</p>
-        </div>
-        <div class="col">
-          <mark>{{ account.username }}</mark>
-        </div>
-        <div class="col"></div>
-      </section>
-      <section class="row mb-4">
-        <div class="col">
-          <p><b>Your email</b></p>
-          <p>(used to reset your password and for email notifications, never shared)</p>
-        </div>
-        <div class="col">
-          <form id="formChangeEmail"
-                method="POST"
-                action="/account/email/change"
-                class="d-none">
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <div class="input-group mb-3">
-              <input type="email" name="email"
-                     class="form-control" 
-                     placeholder="New e-mail address"
-                     aria-label="New e-mail address"/>
-              <button class="btn btn-secondary" type="submit">Change</button>
-              <button class="btn btn-outline-secondary" id="btnCancelEmailChange" type="button">Cancel</button>
+    {{> hamburgerMenu }}
+    <main id="main" class="settings">
+        <!-- begin main settings container -->
+        <section class="settings container">
+            <header class="section-header">
+                <h1 class="heading-font">Settings</h1>
+            </header>
+            <!-- begin main settings tab navigation -->
+            <div class="tab settings-tabs">
+                <button id="btnTabPersonal" class="btn tablinks body-font active"
+                    onclick="openSetting(event, 'PERSONAL')">PERSONAL</button>
+                <button id="btnTabCommenting" class="btn tablinks body-font" onclick="openSetting(event, 'COMMENTING')">COMMENTING</button>
+                <button id="btnTabNotifications" class="btn tablinks body-font"
+                    onclick="openSetting(event, 'NOTIFICATIONS')">NOTIFICATIONS</button>
             </div>
-          </form>
-          <mark id="lblAccountEmail">{{ account.email }}</mark><br/>
-          <a href="#" id="btnChangeEmail">change</a>
-          {{#if changeEmailError}}
-          <div class="alert alert-warning mt-2" role="alert">{{ changeEmailError }}</div>
-          {{/if}}
-        </div>
-        <div class="col"></div>
-      </section>
+            <!-- end main settings tab navigation -->
+            <!-- begin tabbed content for Personal Settings -->
+            <div id="PERSONAL" class="settings-column tabcontent">
+                <div id="username" class="card settings-tab has-button">
+                    <div>
+                        <h2 class="admin-setting-heading heading-font">Username</h2>
+                        <span class="admin-setting-description">Used for signing in</span>
+                        <span class="admin-setting-user heading-font">{{ account.username }}</span>
+                    </div>
+                </div>
+                <div id="email" class="card settings-tab has-button">
+                    <div>
+                        <h2 class="admin-setting-heading heading-font">Email</h2>
+                        <span class="admin-setting-description">Used to reset your password and for email notifications,
+                            never shared</span>
+                        <span class="admin-setting-user heading-font">{{ account.email }}</span>
+                        {{#if changeEmailError}}
+                        <div class="alert alert-warning mt-2" role="alert">{{ changeEmailError }}</div>
+                        {{/if}}
+                    </div>
+                    <button class="btn update-user-setting update-email">
+                        <img class="icon icon-small" src="/assets/images/icons/pencil.svg" alt="Edit your email">
+                    </button>
+                    
+                    <div id="changeEmailModal" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <form id="formChangeEmail"
+                                  method="POST"
+                                  action="/account/email/change">
+                                <span class="modal-heading heading-font">Change your email</span>
+                                <p class="modal-description body-font">Changet the email for receiving notifications and password resets here.</p>
+                                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                                    <div class="input-group mb-3">
+                                    <input type="email" name="email"
+                                            placeholder="New e-mail address"
+                                            aria-label="New e-mail address"
+                                            required/>
+                                    </div>
+                                <div class="modal-buttons">
+                                    <button class="btn hollow-btn close" type="button">CANCEL</button>
+                                    <button class="btn brand-btn has-icon admin-setting-button" type="submit">CONFIRM</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div id="api-key" class="card settings-tab has-button">
+                    <div>
+                        <h2 class="admin-setting-heading heading-font">API Key</h2>
+                        <span class="admin-setting-description">Use this API key in your integration code to fetch
+                            comments from JamComments
+                            <div class="tooltip icon"><span class="tooltiptext">(TODO refer to documentation here)</span></div>
+                        </span>
+                        <span class="admin-setting-user heading-font"><span id="tokenContents">{{ truncate token.token 16 '...' }}</span> <a id="btnCopyToken" href="#"><img src="/assets/images/icons/cil-copy.svg" width="16"></a></span>
+                    </div>
+                    <button class="btn brand-btn has-icon admin-setting-button refresh-token">GET A NEW TOKEN </button>
+                    <!-- begin newToken Modal content -->
+                    <div id="newTokenModal" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <span id="closeNewToken" class="close closeNewToken">&times;</span>
+                            <span class="modal-heading heading-font">Are you sure?</span>
+                            <p class="modal-description body-font">If you proceed, copy the new key and rebuild your
+                                website immediately. All API calls using the old key will fail from now on.</p>
+                            <div class="modal-buttons">
+                                <button id="cancelNewToken" class="btn hollow-btn close" type="button">CANCEL</button>
+                                <button id="confirmNewToken" type="button"
+                                    class="btn brand-btn has-icon admin-setting-button confirm">YES, GO
+                                    AHEAD</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end newToken Modal content -->
+                    <!-- begin newToken confirmed Modal content -->
+                    <div id="newTokenModalConfirmed" class="modal" style="display: none;">
+                        <div class="modal-content">
+                            <img src="/assets/images/icons/success-modal.svg" alt="">
+                            <span class="modal-heading heading-font">Success!</span>
+                            <p class="modal-description body-font">API key has been reissued.</p>
+                            <div class="modal-buttons">
+                                <button id="closeTokenModalConfirmed"
+                                    class="btn hollow-btn close closeTokenModalConfirmed">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end newToken confirmed Modal content -->
+                </div>
+                <div id="your-data" class="card settings-tab has-button">
+                    <div>
+                        <h2 class="admin-setting-heading heading-font">Your Data</h2>
+                        <span class="admin-setting-description">Download all comments</span>
+                    </div>
+                    <a href="/account/export" id="downloadComments" class="btn has-icon admin-setting-button">DOWNLOAD COMMENTS</a>
+                </div>
+                <div id="close-account" class="card settings-tab has-button">
+                    <div>
+                        <h2 class="admin-setting-heading heading-font">Close your account</h2>
+                        <span class="admin-setting-description">You can close your account anytime. Be sure to download
+                            your data before</span>
+                    </div>
+                    <button class="btn brand-btn has-icon admin-setting-button close-account">CLOSE ACCOUNT</button>
+                </div>
+                <div id="closeAccountModal" class="modal" style="display: none;">
+                    <form method="POST" action="/account/close">
+                        <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <span class="modal-heading heading-font">Are you sure?</span>
+                            <p class="modal-description body-font">This action is irreversible. All your data will be erased if you continue.</p>
+                            <div class="modal-buttons">
+                                <button class="btn hollow-btn close" type="button">CANCEL</button>
+                                <button class="btn brand-btn has-icon admin-setting-button confirmNewToken" type="submit">YES, GO
+                                    AHEAD</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
-      <h4>Api key</h4>
-      <section class="row mb-4">
-        <div class="col">
-          <p><mark id="lblApiKey">{{ truncate token.token 16 '...' }}</mark></p>
-          <p>Use this API key in your integration code to fetch comments from JamComments.</p>
-          <p>Example:</p>
-          <code>
-            <pre>
-&lt;form method="post" action="https://api.jamcomments.io/comments"&gt;
-  &lt;input type="hidden" name="token" value="{{ token.token }}"&gt;
-  ...
-&lt;/form&gt;
-            </pre>
-          </code>
-        </div>
-        <div class="col">
-
-          <form method="POST" action="/account/settings/token/refresh" id="formReiussueApiKey">
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button type="button" class="btn btn-secondary me-2"
-                    id="btnRevealApiKey">Reveal</button>
-            <button type="button" class="btn btn-danger"
-                    data-bs-toggle="modal" data-bs-target="#reissueApiKeyModal">Reissue</button>
-          </form>
-        </div>
-        <div class="col"></div>
-      </section>
-      <h4>Your data</h4>
-      <section class="row mb-4">
-        <div class="col">
-          <p><a href="/account/export">Download</a> all comments</p>
-        </div>
-      </section>
-      <h4>Close your account</h4>
-      <section class="row mb-4">
-        <div class="col">
-          <p>You can close your account anytime. Be sure to download your data before.</p>
-          <button type="button" class="btn btn-danger"
-                    data-bs-toggle="modal" data-bs-target="#closeAccountModal">Close my account</button>
-        </div>
-      </section>
-    </section>
-
-    <section class="tab-pane fade show" id="commenting" aria-labelledby="commenting-tab">
-      <form method="POST" action="/account/settings" class="mb-4">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <section class="row mb-3">
-          <label for="useAkismet" class="col form-label">Require moderation for all comments</label>
-          <div class="col form-check form-switch">
-            <input class="form-check-input" 
-              value="1"
-              type="checkbox" 
-              name="requireModeration" 
-              id="requireModeration"{{#if requireModeration}} checked{{/if}}>
-          </div>
-          <div class="col"></div>
+            </div>
+            <!-- end tabbed content for Personal Settings -->
+            <!-- begin tabbed content for comment Settings -->
+            <div id="COMMENTING" class="settings-column tabcontent">
+                <form style="padding:0" method="post" action="/account/settings">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <div id="moderation" class="card settings-tab">
+                        <div>
+                            <h2 class="admin-setting-heading heading-font">Moderation <div class="tooltip icon"><span
+                                        class="tooltiptext">Whether you want to approve all comments before they are published</span></div>
+                            </h2>
+                            <span class="admin-setting-description">Require moderation for all comments <img
+                                    class="icon icon-small toggle" src="/assets/images/icons/setting-toggle-{{#if requireModeration }}on{{else }}off{{/if}}.svg"
+                                    alt=""/>
+                                <input type="checkbox"
+                                       value="1"
+                                       class="d-none"
+                                       name="requireModeration" 
+                                       id="requireModeration"{{#if requireModeration}} checked{{/if}}/>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="anti-spam" class="card settings-tab">
+                        <div>
+                            <h2 class="admin-setting-heading heading-font">Anti-Spam <div class="tooltip icon"><span
+                                        class="tooltiptext">If you enable Akismet integration, we will check each comment to
+                                        determine if it's SPAM or not relying on the Akismet SPAM detection feature.</span>
+                                </div>
+                            </h2>
+                            <span class="admin-setting-description">Use anti-SPAM protection (Akismet) <img
+                                    class="icon icon-small toggle" src="/assets/images/icons/setting-toggle-{{#if useAkismet}}on{{else}}off{{/if}}.svg"
+                                    alt=""/>
+                                    <input type="checkbox" 
+                                           value="1"
+                                           class="d-none"                                     
+                                           name="useAkismet" 
+                                           id="useAkismet"{{#if useAkismet}} checked{{/if}}>
+                            </span>
+                            <input type="text" id="apiKey" name="apiKey" placeholder="Akismet API Key" value="{{ akismetKey }}">
+                            <input type="text" id="blogUrl" name="blogUrl" placeholder="Blog URL (required by Akismet)" value="{{ blogUrl }}">
+                            <button class="btn" type="submit">SAVE</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- end tabbed content for comment Settings -->
+            <!-- begin tabbed content for comment notifications -->
+            <div id="NOTIFICATIONS" class="settings-column tabcontent">
+                <form method="POST" action="/account/email/settings" style="padding:0">
+                    <input type="hidden" name="_csrf" value="{{csrfToken}}">
+                    <div id="notify-new-comments" class="card settings-tab">
+                        <h2 class="admin-setting-heading heading-font">Notify me about new comments:</h2>
+                        <div class="notify-settings">
+                            <div class="notify-setting">
+                                <span class="admin-setting-description">As soon as they come in</span>
+                                <img class="icon icon-small toggle" src="/assets/images/icons/setting-toggle-{{#if notifyOnComments}}on{{else}}off{{/if}}.svg"
+                                    alt=""/>
+                                <input type="checkbox"
+                                       class="d-none"
+                                       id="notifyOnComments"
+                                       name="notifyOnComments"{{# if notifyOnComments }} checked{{/if}}>
+                            </div>
+                            <div class="notify-setting">
+                                <span class="admin-setting-description">Send me a daily digest</span>
+                                <img class="icon icon-small toggle" src="/assets/images/icons/setting-toggle-{{#if sendCommentsDigest}}on{{else}}off{{/if}}.svg" alt=""/>
+                                <input class="d-none"
+                                       type="checkbox"
+                                       id="sendCommentsDigest"
+                                       name="sendCommentsDigest"{{# if sendCommentsDigest }} checked{{/if}}>
+                            </div>
+                            <button class="btn" type="submit">SAVE</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- emd tabbed content for comment notifications -->
         </section>
-        <p class="feature-help mb-5">All comments will go to the moderation queue if you enable this option. You will have to approve them one-by-one
-          to make them available to your website's visitors.
-        </p>
-        <section class="row mb-3">
-          <label for="useAkismet" class="col form-label">Use anti-SPAM protection (Akismet)</label>
-          <div class="col form-check form-switch">
-            <input class="form-check-input" 
-              value="1"
-              type="checkbox" 
-              name="useAkismet" 
-              id="useAkismet"{{#if useAkismet}} checked{{/if}}>
-          </div>
-          <div class="col"></div>
-        </section>
-        <section class="row mb-3">
-          <label for="akismetKey" class="form-label">Akismet API key</label>
-          <div class="col input-group">
-            <input class="form-control"
-              type="text"
-              name="akismetKey"
-              id="akismetKey"
-              value="{{ akismetKey }}"/>
-            {{#if blogUrl }}
-            <button id="checkAkismetKey" 
-              type="button"
-              class="btn btn-dark">Check</button>
-            {{/if}}
-          </div>
-        <div class="col">
-          <span id="akismetKeyCheckResult"></span>
-        </div>
-        </section>
-        <section class="row mb-3">
-          <label for="blogUrl" class="form-label">Blog URL (required by Akismet)</label>
-          <div class="col">
-            <input class="form-control"
-              type="text"
-              name="blogUrl"
-              id="blogUrl"
-              placeholder="https://example.com"
-              value="{{ blogUrl }}"/>
-          </div>
-          <div class="col"></div>
-        </section>
-        <p class="feature-help">If you enable Akismet integration, we will check each comment to determine if it's SPAM or not relying on the Akismet SPAM detection feature.</p>
-        <button type="submit" class="btn btn-primary">Save my settings</button>
-      </form>
-    </section>
+        <!-- end main settings container -->
+    </main> 
 
-    <section class="tab-pane fade show" id="notifications" aria-labelledby="notifications-tab">
-      <h4 class="mb-3">Notifications</h4>
-      <form method="POST" action="/account/email/settings" class="mb-4">
-        <input type="hidden" name="_csrf" value="{{csrfToken}}">
-        <p>Notify me about new comments:</p>
-        <div class="form-check form-switch mb-3">
-          <input class="form-check-input" type="checkbox" id="notifyOnComments" name="notifyOnComments"{{# if notifyOnComments }} checked{{/if}}>
-          <label class="form-check-label" for="notifyOnComments">As soon as they come in</label>
-        </div>
-        <div class="form-check form-switch mb-3">
-          <input class="form-check-input" type="checkbox" id="sendCommentsDigest" name="sendCommentsDigest"{{# if sendCommentsDigest }} checked{{/if}}>
-          <label class="form-check-label" for="sendCommentsDigest">Send me a daily digest</label>
-        </div>
-        <p class="mb-3">We'll send the notifications to <mark>{{ account.email }}</mark>.</p>
-        <button type="submit" class="btn btn-primary">Save my settings</button>
-      </form>
-    </section>
-  </div>
-
-  <div class="modal" tabindex="-1" id="reissueApiKeyModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Really get a new token?</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to get a new token?</p>
-          <p>If you proceed, copy the new key and rebuild your website immediately. All API calls using the old key will fail from now on.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelDelete">Cancel</button>
-          <button type="button" class="btn btn-primary" id="btnReissueApiKey">Yes, go ahead</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <div class="modal" tabindex="-1" id="closeAccountModal">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Really close your account?</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>Are you sure you want to close your account?</p>
-          <p>This action is irreversible. All your data will be erased if you continue.</p>
-        </div>
-        <div class="modal-footer">
-          <form method="POST" action="/account/close">
-            <input type="hidden" name="_csrf" value="{{csrfToken}}">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelDelete">Cancel</button>
-            <button type="submit" class="btn btn-primary">Yes, do it already</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-</div>
 <script>
-  document.querySelector('#btnChangeEmail').addEventListener('click', function() {
-    document.querySelector('#btnChangeEmail').classList.add('d-none');
-    document.querySelector('#lblAccountEmail').classList.add('d-none');
-    document.querySelector('#formChangeEmail').classList.remove('d-none');
-  });
 
-  document.querySelector('#btnCancelEmailChange').addEventListener('click', function() {
-    document.querySelector('#btnChangeEmail').classList.remove('d-none');
-    document.querySelector('#lblAccountEmail').classList.remove('d-none');
-    document.querySelector('#formChangeEmail').classList.add('d-none');
-  });
+    function copyToken(evt) {
+        evt.preventDefault();
+        let container = evt.target.parentElement;
+        let input = document.createElement('input');
+        input.type = 'text';
+        input.value = '{{ token.token }}';
+        container.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        container.removeChild(input);
+    }
+    document.getElementById('btnCopyToken').addEventListener('click', copyToken);
 
-  document.querySelector('#btnReissueApiKey').addEventListener('click', function() {
-    document.querySelector('#formReiussueApiKey').submit();
-  });
-  
-  function revealApiKey(ev) {
-    let btn = document.querySelector('#btnRevealApiKey');
-    document.querySelector('#lblApiKey').innerHTML = '{{ token.token }}';
-    btn.removeEventListener('click', revealApiKey);
-    btn.addEventListener('click', hideApiKey);
-    ev.target.innerHTML = 'Hide';
-  }
+    function modalForForm(id) {
+        return function openEmailChangeModal(openEvt) {
+            let container = document.getElementById(id);
+            let closeLinks = Array.from(container.querySelectorAll('.close'));
+            container.style.display = 'block';
+            function closeModal(evt) {
+                container.style.display = 'none';
+                closeLinks.forEach(el => el.removeEventListener('click', closeModal));
+            }
+            closeLinks.forEach(el => el.addEventListener('click', closeModal));
+        }
+    }
 
-  function hideApiKey(ev) {
-    let btn = document.querySelector('#btnRevealApiKey');
-    document.querySelector('#lblApiKey').innerHTML = '{{ token.token }}'.substring(0, 16) + '...';
-    btn.removeEventListener('click', hideApiKey);
-    btn.addEventListener('click', revealApiKey);
-    ev.target.innerHTML = 'Reveal';
-  }
+    function reissueApiKeyModal() {
+        let container = document.getElementById('newTokenModal');
+        let reissueApiKeyModalConfirmed = document.getElementById('newTokenModalConfirmed');
+        let closeLinks = Array.from(container.querySelectorAll('.close'));
+        container.style.display = 'block';
 
-  document.querySelector('#btnRevealApiKey').addEventListener('click', revealApiKey);
-  
+        function closeModal(evt) {
+            container.style.display = 'none';
+            closeLinks.forEach(el => el.removeEventListener('click', closeModal));
+        }
+       
+        function reissueApiKey(evt) {
+            let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch('/account/settings/token/refresh', {
+                method: 'POST',
+                headers: {
+                    'CSRF-Token': token,
+                    'content-type': 'application/json'
+                }
+                }).then(response => {
+                if (response.status === 201) {
+                    container.querySelector('.confirm').removeEventListener('click', reissueApiKey);
+                    closeLinks.forEach(el => el.removeEventListener('click', closeModal));
+                    container.style.display = 'none';
+                    reissueApiKeyModalConfirmed.style.display = 'block';
+                    response.json().then(body => {
+                        document.getElementById('tokenContents').innerHTML = body.token?.substring(0, 16) + '...';
+                    });
+                    
+                    return;
+                }
+                console.error(response.status);
+                // TODO show error message
+            });
+        }
+
+        container.querySelector('.confirm').addEventListener('click', reissueApiKey);
+        closeLinks.forEach(el => el.addEventListener('click', closeModal));
+    }
+
+    document.querySelector('.update-email').addEventListener('click', modalForForm('changeEmailModal'));
+    document.querySelector('.close-account').addEventListener('click', modalForForm('closeAccountModal'));
+    document.querySelector('.refresh-token').addEventListener('click', reissueApiKeyModal);
+    document.getElementById('closeTokenModalConfirmed').addEventListener('click', function(evt) {
+        document.getElementById('newTokenModalConfirmed').style.display = 'none';
+    })
+
+    function openSetting(evt, settingName) {
+        // Get all elements with class="tabcontent" and hide them
+        let tabcontent = Array.from(document.getElementsByClassName("tabcontent"));
+        tabcontent.forEach(tab => {
+            tab.style.display = "none";
+            tab.style.opacity = "0";
+        });
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        let tablinks = Array.from(document.getElementsByClassName("tablinks"));
+        tablinks.forEach(link => {
+            link.classList.remove("active");
+        });
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        let tabHeader = document.getElementById(settingName);
+        tabHeader.style.display = "flex";
+        tabHeader.style.opacity = "1";
+        evt.currentTarget.classList.add("active");
+    }
+
+    function toggleSetting(evt) {
+        let on = '-on';
+        let off = '-off';
+        let icon = evt.target;
+        let input = icon.parentElement.querySelector('input[type=checkbox]');
+        input.click();
+        let [from, to] = input.checked ? [off, on] : [on, off];
+        icon.src = icon.src.replace(from, to);
+    }
+    Array.from(document.querySelectorAll('.toggle')).forEach(ev => ev.addEventListener('click', toggleSetting));
+    document.getElementById('useAkismet').addEventListener('change', function(evt) {
+        let isOn = evt.target.checked;
+        let inputApiKey = document.getElementById('apiKey');
+        let inputBlogUrl = document.getElementById('blogUrl');
+        if (isOn) {
+            inputApiKey.setAttribute('required', 'required');
+            inputBlogUrl.setAttribute('required', 'required');
+        } else {
+            inputApiKey.removeAttribute('required');
+            inputBlogUrl.removeAttribute('required');
+        }
+    });
+
   // remember tabs
-  document.querySelectorAll('button[data-bs-toggle=tab]')
+  document.querySelectorAll('button.tablinks')
     .forEach(b => 
       b.addEventListener('click', ev => 
         localStorage.setItem('lastSettingsTab', ev.target.id)));
 
-  (function() {
+(function() {
     let lastTab = localStorage.getItem('lastSettingsTab');
-    let btn = document.querySelector(lastTab ? `#${lastTab}` : '#personal-tab');
+    let btn = document.querySelector(lastTab ? `#${lastTab}` : '#btnTabPersonal');
     btn.click();
-  })()
+})()
 </script>
 
 {{#if blogUrl }}

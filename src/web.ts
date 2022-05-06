@@ -20,6 +20,7 @@ import { QueuedMailer } from './shared/emails/queued-mailer'
 import session from 'express-session'
 import { ValidationPipe } from '@nestjs/common'
 import { WebModule } from './web/web.module'
+import { readFileSync } from 'fs'
 
 dotenv()
 
@@ -40,6 +41,24 @@ async function bootstrap() {
   app.setViewEngine('hbs')
   helpers({handlebars})
   handlebars.registerHelper('dateFormat', dateFormat)
+  handlebars.registerPartial(
+    'hamburgerMenu',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/hamburger-menu.hbs'), 'utf8'))
+  handlebars.registerPartial(
+    'commentsActions',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/comments-actions.hbs'), 'utf8'))
+  handlebars.registerPartial(
+    'commentsSearch',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/comments-search.hbs'), 'utf8'))
+  handlebars.registerPartial(
+    'modalDeleteComment',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comment.hbs'), 'utf8'))
+  handlebars.registerPartial(
+    'modalDeleteComments',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comments.hbs'), 'utf8'))
+  handlebars.registerPartial(
+    'modalApproveComments',
+    readFileSync(join(__dirname, '..', 'src/shared/partials/approve-comments.hbs'), 'utf8'))
 
   const defaultSessionLifetime = 60 * 24 * 30 // 30 days
   const cfgSessionLifetime = _.defaultTo(+(process.env['SESSION_LIFETIME'] ?? defaultSessionLifetime), defaultSessionLifetime)
