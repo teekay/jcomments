@@ -152,13 +152,15 @@ export class CliService {
       postDate.setDate(postDate.getDate() - i)
       const commenter = randUser()
       const comment: JsonDump = {
-        page_url: `https://example.com/blog/${randSlug()}`,
-        page_title: randCatchPhrase(),
+        postUrl: `https://example.com/blog/${randSlug()}`,
+        postTitle: randCatchPhrase(),
         text: randQuote(),
-        author: `${commenter.firstName} ${commenter.lastName}`,
-        email: commenter.email,
-        website: randUrl(),
-        posted_at: postDate.toISOString(),
+        author: {
+            email: commenter.email,
+            website: randUrl(),
+            name: `${commenter.firstName} ${commenter.lastName}`,
+        },
+        postedAt: postDate.toISOString(),
       }
       return comment
     })

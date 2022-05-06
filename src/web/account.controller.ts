@@ -161,13 +161,13 @@ export class AccountController {
   @Post('import')
   @UseGuards(AuthenticatedGuard)
   @UseInterceptors(
-    FileInterceptor('importjson', { limits: { fileSize: +(process.env['UPLOAD_MAX_SIZE_BYTES'] ?? 1024 * 10) } })
+    FileInterceptor('importjson')
   )
   async import(@Req() req, @Res() res: Response, @UploadedFile() file): Promise<void> {
     const account = _.get(req, 'user') as Account
     try {
       const json = JSON.parse(file.buffer.toString())
-      this.commentService.import(account, json)
+      await this.commentService.import(account, json)
     } catch (parseError) {
       this.logger.warn(parseError)
       req.flash('import-error', 'There was an error parsing the JSON')

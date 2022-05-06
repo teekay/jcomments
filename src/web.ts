@@ -1,6 +1,5 @@
 import _ from 'lodash'
 import { AccountCloser } from './shared/accounts/account.closer'
-import bodyParser from 'body-parser'
 import { ConfigService } from './shared/config/config.service'
 import connectPgSimple from 'connect-pg-simple'
 import cookieParser from 'cookie-parser'
@@ -12,15 +11,16 @@ import flash = require('connect-flash')
 import handlebars from 'handlebars'
 import helpers from 'handlebars-helpers'
 import { join } from 'path'
+import { json, raw, text, urlencoded } from 'express'
 import { Logger } from 'nestjs-pino'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { NestFactory } from '@nestjs/core'
 import passport from 'passport'
 import { QueuedMailer } from './shared/emails/queued-mailer'
+import { readFileSync } from 'fs'
 import session from 'express-session'
 import { ValidationPipe } from '@nestjs/common'
 import { WebModule } from './web/web.module'
-import { readFileSync } from 'fs'
 
 dotenv()
 
@@ -84,8 +84,14 @@ async function bootstrap() {
 
   app.use(passport.initialize())
   app.use(passport.session())
-  app.use(bodyParser.json())
-  app.use(bodyParser.urlencoded({ extended: true }))
+
+  const bodyLimit = +(process.env.UPLOAD_MAX_SIZE_BYTES ?? 1024 * 1024 * 5) // 5MB default
+  logger.debug(`Request body limit is ${bodyLimit} bytes`)
+  app.use(json({ limit: bodyLimit}))
+  app.use(urlencoded({ limit: bodyLimit, extended: true }))
+  app.use(raw({ limit: bodyLimit }))
+  app.use(text({ limit: bodyLimit }))
+  
   app.use(cookieParser())
   app.use(flash())
   app.use(csurf({ cookie: true }))

@@ -10,6 +10,7 @@ import { Logger } from "nestjs-pino";
 import { v4 as uuidv4 } from 'uuid'
 import moment from 'moment'
 import { interpretedQuery } from '../logging/logged-query'
+import { AuthorDto } from './author.interface'
 
 @Injectable()
 export class CommentService {
@@ -136,13 +137,13 @@ export class CommentService {
       await postCommentForUrlWithTimestamp.run({
         id: uuidv4(),
         accountId: account.id,
-        createdAt: moment(comment.posted_at).utc(true).toDate(),
-        url: comment.page_url,
-        pageTitle: comment.page_title ?? null,
+        createdAt: moment(comment.postedAt).utc(true).toDate(),
+        url: comment.postUrl,
+        pageTitle: comment.postTitle ?? null,
         text: comment.text,
-        name: comment.author,
-        email: comment.email,
-        website: comment.website
+        name: comment.author.name,
+        email: comment.author.email,
+        website: comment.author.website
       }, this.client)
     }
     await this.client.query("COMMIT;")
@@ -183,13 +184,11 @@ export class CommentsQuery {
 }
 
 export interface JsonDump {
-  posted_at: string
-  page_url: string
-  page_title?: string | null
-  author: string
+  postedAt: string
+  postUrl: string
+  postTitle?: string | null
   text: string
-  email?: string
-  website?: string
+  author: AuthorDto
 }
 
 export enum SortOrder {
