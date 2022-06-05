@@ -11,14 +11,13 @@
         "location": {
             "type": "string"
         },
-        "environment": {
+        "prefix": {
             "type": "string"
         }
     },
     "variables": {
-        "prefix": "[concat('jamcomments-', parameters('environment'))]",  
-        "componentName": "[concat(variables('prefix'), '-svcbus')]",
-        "keyVaultName": "[concat(variables('prefix'), '-kv')]"
+        "componentName": "[concat(parameters('prefix'), '-svcbus')]",
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"
 
     },
     "resources": [
