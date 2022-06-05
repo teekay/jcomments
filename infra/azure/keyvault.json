@@ -2,151 +2,37 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vaults_jamcomments_staging_kv_name": {
-            "defaultValue": "jamcomments-staging-kv",
-            "type": "String"
+        "sku": {
+            "type": "object",
+            "metadata": {
+                "description": "keyvault sku"
+            }
+        },
+        "location": {
+            "type": "string"
+        },
+        "environment": {
+            "type": "string"
         }
     },
-    "variables": {},
+    "variables": {
+        "prefix": "[concat('jamcomments-', parameters('environment'))]",  
+        "componentName": "[concat(variables('prefix'), '-kv')]"
+    },
     "resources": [
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2021-11-01-preview",
-            "name": "[parameters('vaults_jamcomments_staging_kv_name')]",
-            "location": "eastus",
+            "name": "[variables('componentName')]",
+            "location": "[parameters('location')]",
             "properties": {
-                "sku": {
-                    "family": "A",
-                    "name": "Standard"
-                },
-                "tenantId": "9091203f-b96c-4d42-b3e6-2a86b61fb632",
-                "accessPolicies": [
-                    {
-                        "tenantId": "9091203f-b96c-4d42-b3e6-2a86b61fb632",
-                        "objectId": "96075eb4-dd71-4bc1-9a52-5c88cf686241",
-                        "permissions": {
-                            "keys": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "GetRotationPolicy",
-                                "SetRotationPolicy",
-                                "Rotate"
-                            ],
-                            "secrets": [
-                                "Get",
-                                "List",
-                                "Set",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore"
-                            ],
-                            "certificates": [
-                                "Get",
-                                "List",
-                                "Update",
-                                "Create",
-                                "Import",
-                                "Delete",
-                                "Recover",
-                                "Backup",
-                                "Restore",
-                                "ManageContacts",
-                                "ManageIssuers",
-                                "GetIssuers",
-                                "ListIssuers",
-                                "SetIssuers",
-                                "DeleteIssuers"
-                            ]
-                        }
-                    }
-                ],
+                "sku": "[parameters('sku')]",
+                "tenantId": "[subscription().tenantId]",
+                "accessPolicies": [],
                 "enabledForDeployment": false,
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": true,
-                "enableSoftDelete": true,
-                "softDeleteRetentionInDays": 90,
-                "enableRbacAuthorization": false,
-                "vaultUri": "[concat('https://', parameters('vaults_jamcomments_staging_kv_name'), '.vault.azure.net/')]",
-                "provisioningState": "Succeeded",
-                "publicNetworkAccess": "Enabled"
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(parameters('vaults_jamcomments_staging_kv_name'), '/mailgunApiKey')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_jamcomments_staging_kv_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(parameters('vaults_jamcomments_staging_kv_name'), '/mailgunDomain')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_jamcomments_staging_kv_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(parameters('vaults_jamcomments_staging_kv_name'), '/mailgunSender')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_jamcomments_staging_kv_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(parameters('vaults_jamcomments_staging_kv_name'), '/pgAdminPassword')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_jamcomments_staging_kv_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
-            }
-        },
-        {
-            "type": "Microsoft.KeyVault/vaults/secrets",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(parameters('vaults_jamcomments_staging_kv_name'), '/pgAdminUsername')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_jamcomments_staging_kv_name'))]"
-            ],
-            "properties": {
-                "attributes": {
-                    "enabled": true
-                }
+                "enableSoftDelete": true
             }
         }
     ]

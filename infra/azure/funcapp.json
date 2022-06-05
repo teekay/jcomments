@@ -2,38 +2,84 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "sites_jamcomments_staging_fapp_name": {
-            "defaultValue": "jamcomments-staging-fapp",
-            "type": "String"
+        "location": {
+            "type": "string"
         },
-        "serverfarms_ASP_jamcomments_staging_fapp_9766_externalid": {
-            "defaultValue": "/subscriptions/f140d100-9e21-41f3-84e5-0e3c15410b28/resourceGroups/jamcomments-staging/providers/Microsoft.Web/serverfarms/ASP-jamcomments-staging-fapp-9766",
-            "type": "String"
+        "environment": {
+            "type": "string"
+        },
+        "fullDeployment": {
+            "type": "bool"
+        },
+        "servicePlanSku": {
+            "type": "object",
+            "metadata": {
+                "description": "sku of Microsoft.Web/serverfarms"
+            }
+        },
+        "servicePlanProperties": {
+            "type": "object",
+            "metadata": {
+                "description": "properties of Microsoft.Web/serverfarms"
+            }
         }
     },
-    "variables": {},
+    "variables": {
+        "prefix": "[concat('jamcomments-', parameters('environment'))]",  
+        "componentName": "[concat(variables('prefix'), '-fapp')]",
+        "servicePlanName": "[concat(variables('prefix'), '-fasp')]",
+        "keyVaultName": "[concat(variables('prefix'), '-kv')]",
+        "appSettings": {
+            "APPINSIGHTS_INSTRUMENTATIONKEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=appInsightsInstrumentationKey)')]",
+            "AzureWebJobsStorage": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=storageAccountConnectionString-', 'jamcomments-fapp', ')')]",
+            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=storageAccountConnectionString-', 'jamcomments-fapp', ')')]",
+            "FUNCTIONS_EXTENSION_VERSION": "~4",
+            "FUNCTIONS_WORKER_RUNTIME": "node",
+            "MAILGUN_API_KEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunApiKey)')]",
+            "MAILGUN_DOMAIN": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunDomain)')]",
+            "MAILGUN_SENDER": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunSender)')]",
+            "PGDATABASE": "jamcomments",
+            "PGSSLMODE": "require",
+            "PGHOST": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgHost)')]",
+            "PGUSER": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminUsername)')]",
+            "PGPASSWORD": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminPassword)')]",
+            "SERVICEBUS_CONNECTION": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=serviceBusPrimaryConnectionString)')]",
+            "WEBSITE_CONTENTSHARE": "[variables('componentName')]",
+            "WEBSITE_MOUNT_ENABLED": 1
+        }
+    },
     "resources": [
         {
+            "type": "Microsoft.Web/serverfarms",
+            "name": "[variables('servicePlanName')]",
+            "apiVersion": "2020-09-01",
+            "location": "[parameters('location')]",
+            "kind": "linux",
+            "properties": "[parameters('servicePlanProperties')]",
+            "sku": "[parameters('servicePlanSku')]"
+        },
+        {
+            "condition": "[parameters('fullDeployment')]",
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-03-01",
-            "name": "[parameters('sites_jamcomments_staging_fapp_name')]",
-            "location": "East US",
+            "name": "[variables('componentName')]",
+            "location": "[parameters('location')]",
             "kind": "functionapp,linux",
             "properties": {
                 "enabled": true,
                 "hostNameSslStates": [
                     {
-                        "name": "[concat(parameters('sites_jamcomments_staging_fapp_name'), '.azurewebsites.net')]",
+                        "name": "[concat(variables('componentName'), '.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Standard"
                     },
                     {
-                        "name": "[concat(parameters('sites_jamcomments_staging_fapp_name'), '.scm.azurewebsites.net')]",
+                        "name": "[concat(variables('componentName'), '.scm.azurewebsites.net')]",
                         "sslState": "Disabled",
                         "hostType": "Repository"
                     }
                 ],
-                "serverFarmId": "[parameters('serverfarms_ASP_jamcomments_staging_fapp_9766_externalid')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
                 "reserved": true,
                 "isXenon": false,
                 "hyperV": false,
@@ -58,15 +104,66 @@
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
                 "keyVaultReferenceIdentity": "SystemAssigned"
-            }
+            },
+            "resources": [
+                {
+                    "condition": "[parameters('fullDeployment')]",
+                    "type": "config",
+                    "name": "appSettings",
+                    "apiVersion": "2020-09-01",
+                    "dependsOn": [
+                        "[concat(variables('prefix'), '-keyVaultAccessPolicy')]",
+                        "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
+                    ],
+                    "properties": "[variables('appSettings')]"
+                }
+            ]
         },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[concat(variables('prefix'), '-keyVaultAccessPolicy')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                "contentVersion": "1.0.0.0",
+                "resources": [
+                    {
+                        "type": "Microsoft.KeyVault/vaults/accessPolicies",
+                        "name": "[concat(variables('keyVaultName'), '/add')]",
+                        "apiVersion": "2019-09-01",
+                        "properties": {
+                            "accessPolicies": [
+                            {
+                                "tenantId": "[reference(resourceId('Microsoft.Web/sites', variables('componentName')), '2018-02-01', 'Full').identity.tenantId]",
+                                "objectId": "[reference(resourceId('Microsoft.Web/sites', variables('componentName')), '2018-02-01', 'Full').identity.principalId]",
+                                "permissions": {
+                                "keys": [
+                                    "get"
+                                ],
+                                "secrets": [
+                                    "get"
+                                ]
+                                }
+                            }
+                            ]
+                        }
+                    }
+                ]
+                }
+            }
+        },        
         {
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2021-03-01",
-            "name": "[concat(parameters('sites_jamcomments_staging_fapp_name'), '/ftp')]",
+            "name": "[concat(variables('componentName'), '/ftp')]",
             "location": "East US",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_jamcomments_staging_fapp_name'))]"
+                "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
             ],
             "properties": {
                 "allow": true
@@ -75,10 +172,10 @@
         {
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2021-03-01",
-            "name": "[concat(parameters('sites_jamcomments_staging_fapp_name'), '/scm')]",
+            "name": "[concat(variables('componentName'), '/scm')]",
             "location": "East US",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_jamcomments_staging_fapp_name'))]"
+                "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
             ],
             "properties": {
                 "allow": true
@@ -87,10 +184,10 @@
         {
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2021-03-01",
-            "name": "[concat(parameters('sites_jamcomments_staging_fapp_name'), '/web')]",
+            "name": "[concat(variables('componentName'), '/web')]",
             "location": "East US",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_jamcomments_staging_fapp_name'))]"
+                "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
             ],
             "properties": {
                 "numberOfWorkers": 1,
@@ -166,10 +263,10 @@
         {
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2021-03-01",
-            "name": "[concat(parameters('sites_jamcomments_staging_fapp_name'), '/', parameters('sites_jamcomments_staging_fapp_name'), '.azurewebsites.net')]",
+            "name": "[concat(variables('componentName'), '/', variables('componentName'), '.azurewebsites.net')]",
             "location": "East US",
             "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', parameters('sites_jamcomments_staging_fapp_name'))]"
+                "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
             ],
             "properties": {
                 "siteName": "jamcomments-staging-fapp",

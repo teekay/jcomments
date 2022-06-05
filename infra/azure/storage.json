@@ -2,22 +2,33 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "storageAccounts_jcstagingstgacc_name": {
-            "defaultValue": "jcstagingstgacc",
-            "type": "String"
+        "location": {
+            "type": "string"
+        },
+        "environment": {
+            "type": "string"
+        },
+        "sku": {
+            "type": "object",
+            "metadata": {
+                "description": "sku property of Microsoft.Storage/storageAccounts"
+            }
         }
     },
-    "variables": {},
+    "variables": {
+        "prefix": "[concat('jamcomments-', parameters('environment'))]",  
+        "simplePrefix": "[concat('jc', parameters('environment'))]",
+        "componentName": "[concat(variables('simplePrefix'), 'stgacc')]",
+        "keyVaultName": "[concat(variables('prefix'), '-kv')]"
+
+    },
     "resources": [
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-08-01",
-            "name": "[parameters('storageAccounts_jcstagingstgacc_name')]",
-            "location": "eastus",
-            "sku": {
-                "name": "Standard_RAGRS",
-                "tier": "Standard"
-            },
+            "name": "[variables('componentName')]",
+            "location": "[parameters('location')]",
+            "sku": "[parameters('sku')]",
             "kind": "StorageV2",
             "properties": {
                 "defaultToOAuthAuthentication": false,
@@ -52,14 +63,11 @@
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices",
             "apiVersion": "2021-08-01",
-            "name": "[concat(parameters('storageAccounts_jcstagingstgacc_name'), '/default')]",
+            "name": "[concat(variables('componentName'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_jcstagingstgacc_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('componentName'))]"
             ],
-            "sku": {
-                "name": "Standard_RAGRS",
-                "tier": "Standard"
-            },
+            "sku": "[parameters('sku')]",
             "properties": {
                 "changeFeed": {
                     "enabled": false
@@ -75,59 +83,33 @@
                     "corsRules": []
                 },
                 "deleteRetentionPolicy": {
-                    "enabled": true,
-                    "days": 7
+                    "enabled": false
                 },
                 "isVersioningEnabled": false
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/fileServices",
-            "apiVersion": "2021-08-01",
-            "name": "[concat(parameters('storageAccounts_jcstagingstgacc_name'), '/default')]",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[concat(variables('prefix'), '-keyVaultSecrets')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_jcstagingstgacc_name'))]"
-            ],
-            "sku": {
-                "name": "Standard_RAGRS",
-                "tier": "Standard"
-            },
-            "properties": {
-                "protocolSettings": {
-                    "smb": {}
-                },
-                "cors": {
-                    "corsRules": []
-                },
-                "shareDeleteRetentionPolicy": {
-                    "enabled": true,
-                    "days": 7
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/queueServices",
-            "apiVersion": "2021-08-01",
-            "name": "[concat(parameters('storageAccounts_jcstagingstgacc_name'), '/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_jcstagingstgacc_name'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('componentName'))]"
             ],
             "properties": {
-                "cors": {
-                    "corsRules": []
-                }
-            }
-        },
-        {
-            "type": "Microsoft.Storage/storageAccounts/tableServices",
-            "apiVersion": "2021-08-01",
-            "name": "[concat(parameters('storageAccounts_jcstagingstgacc_name'), '/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_jcstagingstgacc_name'))]"
-            ],
-            "properties": {
-                "cors": {
-                    "corsRules": []
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "apiVersion": "2019-09-01",
+                            "name": "[concat(variables('keyVaultName'), '/storageAccountConnectionString-jamcomments-fapp')]",
+                            "properties": {
+                                "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('componentName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('componentName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            }
+                        }
+                    ]
                 }
             }
         }
