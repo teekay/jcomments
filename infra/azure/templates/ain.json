@@ -5,14 +5,13 @@
         "location": {
             "type": "string"
         },
-        "environment": {
+        "prefix": {
             "type": "string"
         }
     },
     "variables": {
-        "prefix": "[concat('jamcomments-', parameters('environment'))]",  
-        "componentName": "[concat(variables('prefix'), '-ain')]",
-        "keyVaultName": "[concat(variables('prefix'), '-kv')]"
+        "componentName": "[concat(parameters('prefix'), '-ain')]",
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"
 
     },
     "resources": [

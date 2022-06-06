@@ -17,15 +17,14 @@
         "databases": {
             "type": "array"
         },
-        "environment": {
+        "prefix": {
             "type": "string"
         }
     },
     "variables": {
-        "prefix": "[concat('jamcomments-', parameters('environment'))]",  
-        "componentName": "[concat(variables('prefix'), '-pg')]",
+        "componentName": "[concat(parameters('prefix'), '-pg')]",
         "administratorLogin": "jcstgadmin",
-        "keyVaultName": "[concat(variables('prefix'), '-kv')]"
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"
     },
     "resources": [
         {
@@ -56,6 +55,18 @@
                     "startHour": 0,
                     "startMinute": 0
                 }
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(variables('componentName'), '/AllowAllAzureServicesAndResourcesWithinAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', variables('componentName'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
             }
         },
         {
