@@ -49,11 +49,13 @@ jobs:
     outputs:
       environment: ${{ steps.setupEnv.outputs.environment }}
       githubEnvironment: ${{ steps.setupEnv.outputs.githubEnvironment }}
-      name: jamcomments-${{ steps.setupEnv.outputs.environment }}-eus
+      name: jamcomments-${{ steps.setupEnv.outputs.environment }}-eus-fapp
 
   build-and-deploy:
     environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
     concurrency: ${{ needs.setupEnv.outputs.name }}
+    needs:
+      - setupEnv
     env:
       environment: ${{ needs.setupEnv.outputs.environment }}
     runs-on: ubuntu-latest
@@ -74,4 +76,27 @@ jobs:
         yarn build
         yarn test
 
+    - name: Azure Login
+      timeout-minutes: 5
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Create infrastructure
+      run:  infra/azure/scripts/create-funcapp.sh
+      env:
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    - name: 'Deploy to Azure Functions'
+    - uses: montudor/action-zip@v1
+      run: |
+        zip -r functionapp.zip . -x@.funcignore -x .funcignore
+        az functionapp deployment source config-zip -g jamcomments-${{ steps.setupEnv.outputs.environment }}-eus-rgp -n jamcomments-${{ steps.setupEnv.outputs.environment }}-eus-fapp --src functionapp.zip
+
+    - name: Azure Logout
+      if: ${{ always() }}
+      run: |
+        az logout
+        az cache purge
+        az account clear
 
