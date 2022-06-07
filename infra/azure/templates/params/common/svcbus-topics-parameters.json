@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "topics": {
+        "value": [
+          "comment-events"
+        ]
+      },
+      "subscriptions": {
+        "value": [
+          {
+            "subscriptionName": "CommentPosted",
+            "topicName": "comment-events"
+          }
+        ]
+      },
+      "subscriptionRules": {
+          "value": []
+      },
+      "topicProperties": {
+        "value": {
+          "maxSizeInMegabytes": 1024,
+          "requiresDuplicateDetection": true,
+          "enablePartitioning": false
+        }
+      },
+      "subscriptionProperties": {
+        "value": {
+          "deadLetteringOnMessageExpiration": false,
+          "deadLetteringOnFilterEvaluationExceptions": false,
+          "maxDeliveryCount": 10,
+          "enableBatchedOperations": true
+        }
+      }
+    }
+  }
+  

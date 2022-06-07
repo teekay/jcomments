@@ -25,77 +25,53 @@
         }
     },
     "variables": {
-        "componentName": "[concat(parameters('prefix'), '-fapp')]",
-        "servicePlanName": "[concat(parameters('prefix'), '-fasp')]",
-        "keyVaultName": "[concat(parameters('prefix'), '-kv')]",
-        "appSettings": {
-            "APPINSIGHTS_INSTRUMENTATIONKEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=appInsightsInstrumentationKey)')]",
-            "AzureWebJobsStorage": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=storageAccountConnectionString-', 'jamcomments-fapp', ')')]",
-            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=storageAccountConnectionString-', 'jamcomments-fapp', ')')]",
-            "FUNCTIONS_EXTENSION_VERSION": "~4",
-            "FUNCTIONS_WORKER_RUNTIME": "node",
-            "MAILGUN_API_KEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunApiKey)')]",
-            "MAILGUN_DOMAIN": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunDomain)')]",
-            "MAILGUN_SENDER": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunSender)')]",
-            "PGDATABASE": "jamcomments",
-            "PGSSLMODE": "require",
-            "PGHOST": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgHost)')]",
-            "PGUSER": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminUsername)')]",
-            "PGPASSWORD": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminPassword)')]",
-            "SERVICEBUS_CONNECTION": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=serviceBusPrimaryConnectionString)')]",
-            "WEBSITE_CONTENTSHARE": "[variables('componentName')]",
-            "WEBSITE_MOUNT_ENABLED": 1
-        }
+        "componentName": "[concat(parameters('prefix'), '-webapp')]",
+        "servicePlanName": "[concat(parameters('prefix'), '-webasp')]",
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"        
     },
     "resources": [
         {
             "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2021-03-01",
             "name": "[variables('servicePlanName')]",
-            "apiVersion": "2020-09-01",
             "location": "[parameters('location')]",
             "kind": "linux",
-            "properties": "[parameters('servicePlanProperties')]",
-            "sku": "[parameters('servicePlanSku')]"
+            "sku": "[parameters('servicePlanSku')]",
+            "properties": "[parameters('servicePlanProperties')]"
         },
         {
             "condition": "[parameters('fullDeployment')]",
-            "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', variables('servicePlanName'))]"
-            ],
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-03-01",
             "name": "[variables('componentName')]",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', variables('servicePlanName'))]"
+            ],
             "location": "[parameters('location')]",
-            "kind": "functionapp,linux",
+            "kind": "app,linux",
             "identity": {
                 "type": "SystemAssigned"
             },
             "properties": {
                 "enabled": true,
+                "keyVaultReferenceIdentity": "SystemAssigned",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
                 "siteConfig": {
                     "numberOfWorkers": 1,
-                    "linuxFxVersion": "Node|14",
+                    "linuxFxVersion": "NODE|14-lts",
                     "alwaysOn": false,
-                    "functionAppScaleLimit": 200,
+                    "functionAppScaleLimit": 0,
                     "minimumElasticInstanceCount": 0
                 },
                 "clientAffinityEnabled": false,
-                "keyVaultReferenceIdentity": "SystemAssigned"
-            },
-            "resources": [
-                {
-                    "condition": "[parameters('fullDeployment')]",
-                    "type": "config",
-                    "name": "appSettings",
-                    "apiVersion": "2020-09-01",
-                    "dependsOn": [
-                        "[concat(parameters('prefix'), '-keyVaultAccessPolicy')]",
-                        "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
-                    ],
-                    "properties": "[variables('appSettings')]"
-                }
-            ]
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "redundancyMode": "None"
+            }
         },
         {
             "type": "Microsoft.Resources/deployments",

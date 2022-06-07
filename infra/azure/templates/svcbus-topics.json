@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "prefix": {
+        "type": "string"
+      },
+      "topics": {
+        "type": "array"
+      },
+      "topicProperties": {
+        "type": "object"
+      },
+      "subscriptions": {
+        "type": "array"
+      },
+      "subscriptionProperties": {
+        "type": "object"
+      },
+      "subscriptionRules": {
+        "type": "array"
+      }
+    },
+    "variables": {
+      "serviceBusNamespaceName": "[concat(parameters('prefix'), '-svcbus')]"
+    },
+  
+    "resources": [
+      {
+        "copy": {
+          "name": "topicCopy",
+          "count": "[length(parameters('topics'))]"
+        },
+        "type": "Microsoft.ServiceBus/namespaces/topics",
+        "apiVersion": "2017-04-01",
+        "name": "[concat(variables('serviceBusNamespaceName'), '/', parameters('topics')[copyIndex()])]",
+        "properties": "[parameters('topicProperties')]"
+      },
+  
+      {
+        "copy": {
+          "name": "subscriptionCopy",
+          "count": "[length(parameters('subscriptions'))]"
+        },
+        "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions",
+        "apiVersion": "2017-04-01",
+        "name": "[concat(variables('serviceBusNamespaceName'), '/', parameters('subscriptions')[copyIndex()].topicName, '/', parameters('subscriptions')[copyIndex()].subscriptionName)]",
+        "dependsOn": [
+          "[resourceId('Microsoft.ServiceBus/namespaces/topics', variables('serviceBusNamespaceName'), parameters('subscriptions')[copyIndex()].topicName)]"
+        ],
+        "properties": "[parameters('subscriptionProperties')]"
+      },
+  
+      {
+        "copy": {
+          "name": "subscriptionRuleCopy",
+          "count": "[length(parameters('subscriptionRules'))]"
+        },
+        "type": "Microsoft.ServiceBus/namespaces/topics/subscriptions/rules",
+        "apiVersion": "2017-04-01",
+        "name": "[concat(variables('serviceBusNamespaceName'), '/', parameters('subscriptionRules')[copyIndex()].topicName, '/', parameters('subscriptionRules')[copyIndex()].subscriptionName, '/', parameters('subscriptionRules')[copyIndex()].subscriptionRuleName)]",
+        "dependsOn": [
+          "[resourceId('Microsoft.ServiceBus/namespaces/topics/subscriptions', variables('serviceBusNamespaceName'), parameters('subscriptionRules')[copyIndex()].topicName, parameters('subscriptionRules')[copyIndex()].subscriptionName)]"
+        ],
+        "properties": "[parameters('subscriptionRules')[copyIndex()].properties]"
+      }
+    ]
+  }
+  
