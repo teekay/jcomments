@@ -1,0 +1,122 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "locationSymbol": {
+            "type": "string"
+        },
+        "prefix": {
+            "type": "string"
+        },
+        "environment": {
+            "type": "string"
+        },
+        "sku": {
+            "type": "object",
+            "metadata": {
+                "description": "sku property of Microsoft.Storage/storageAccounts"
+            }
+        }
+    },
+    "variables": {
+        "simplePrefix": "[concat('jc', parameters('environment'), parameters('locationSymbol'))]",
+        "componentName": "[concat(variables('simplePrefix'), 'stgacc')]",
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"
+
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-08-01",
+            "name": "[variables('componentName')]",
+            "location": "[parameters('location')]",
+            "sku": "[parameters('sku')]",
+            "kind": "StorageV2",
+            "properties": {
+                "defaultToOAuthAuthentication": false,
+                "allowCrossTenantReplication": true,
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": true,
+                "allowSharedKeyAccess": true,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "requireInfrastructureEncryption": false,
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-08-01",
+            "name": "[concat(variables('componentName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('componentName'))]"
+            ],
+            "sku": "[parameters('sku')]",
+            "properties": {
+                "changeFeed": {
+                    "enabled": false
+                },
+                "restorePolicy": {
+                    "enabled": false
+                },
+                "containerDeleteRetentionPolicy": {
+                    "enabled": true,
+                    "days": 7
+                },
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                },
+                "isVersioningEnabled": false
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-10-01",
+            "name": "[concat(parameters('prefix'), '-keyVaultSecrets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('componentName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/secrets",
+                            "apiVersion": "2019-09-01",
+                            "name": "[concat(variables('keyVaultName'), '/storageAccountConnectionString-jamcomments-fapp')]",
+                            "properties": {
+                                "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('componentName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('componentName')), '2019-06-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                            }
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

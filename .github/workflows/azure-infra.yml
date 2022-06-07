@@ -1,0 +1,76 @@
+name: Jamcomments infrastructure
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Name of environment to deploy (staging, prod)'
+        required: true
+        default: 'staging'
+  push:
+    branches:
+      - dev
+      - master
+    paths:
+      - 'infra/azure/**'
+      - '.github/workflows/azure-infra.yml'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  setupEnv:
+    name: Set up environments
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          persist-credentials: false
+      - name: setup environment variables
+        id: setupEnv
+        run: |
+          echo "Setup environment and secrets"
+          if [ "${{ github.event.inputs.environment }}" = "staging" ] || [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            echo "::set-output name=environment::staging"
+            echo "::set-output name=githubEnvironment::Development"
+          elif [ "${{ github.event.inputs.environment }}" = "prod" ] || [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            echo "::set-output name=environment::prod"
+            echo "::set-output name=githubEnvironment::Production"
+          fi
+    outputs:
+      environment: ${{ steps.setupEnv.outputs.environment }}
+      githubEnvironment: ${{ steps.setupEnv.outputs.githubEnvironment }}
+      name: jamcomments-${{ steps.setupEnv.outputs.environment }}-eus
+
+  createinfra:
+    environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
+    concurrency: ${{ needs.setupEnv.outputs.name }}
+    env:
+      environment: ${{ needs.setupEnv.outputs.environment }}
+    name: Create infrastructure for ${{ needs.setupEnv.outputs.name }}
+    runs-on: ubuntu-latest
+    needs: setupEnv
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          persist-credentials: false
+      - name: Azure Login
+        timeout-minutes: 5
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets[AZURE_CREDENTIALS] }}
+      - name: Create infrastructure
+        run:  infra/azure/scripts/createInfra.sh
+        env:
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      - name: Azure Logout
+        if: ${{ always() }}
+        run: |
+          az logout
+          az cache purge
+          az account clear

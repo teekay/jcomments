@@ -4,6 +4,10 @@ The admin app can run as a Web app on the App Service PaaS. If you are operating
 
 The comments API can run on Azure Functions. The Consumption tier is totally fine for self-hosting scenarios. The cold start is a reality, so the first request is going to take a few seconds to complete.
 
+The `infra/azure` folder has a complete set of templates and scripts for deployment to Azure. Together with Github pipelines, you can have a completely automatic CI/CD pipeline.
+
+Alternative, you can set up the infrastructure yourself and follow the steps below to deploy the apps.
+
 ## ZIP deploy
 
 Deploy function app:

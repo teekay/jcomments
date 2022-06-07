@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "servicePlanSku": {
+        "value": {
+            "name": "Y1",
+            "tier": "Dynamic",
+            "size": "Y1",
+            "family": "Y",
+            "capacity": 0
+        }
+      },
+      "servicePlanProperties": {
+        "value": {
+            "perSiteScaling": false,
+            "elasticScaleEnabled": false,
+            "maximumElasticWorkerCount": 1,
+            "isSpot": false,
+            "reserved": true,
+            "isXenon": false,
+            "hyperV": false,
+            "targetWorkerCount": 0,
+            "targetWorkerSizeId": 0,
+            "zoneRedundant": false
+        }
+      }
+    }
+}
+  

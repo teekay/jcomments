@@ -1,0 +1,55 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "prefix": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "componentName": "[concat(parameters('prefix'), '-ain')]",
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"
+
+    },
+    "resources": [
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2020-02-02",
+            "name": "[variables('componentName')]",
+            "location": "[parameters('location')]",
+            "kind": "web",
+            "properties": {
+                "Application_Type": "web",
+                "RetentionInDays": 90,
+                "IngestionMode": "ApplicationInsights",
+                "publicNetworkAccessForIngestion": "Enabled",
+                "publicNetworkAccessForQuery": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('keyVaultName'), '/appInsightsInstrumentationKey')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', variables('componentName'))]"
+            ],
+            "properties": {
+                "value": "[reference(resourceId('Microsoft.Insights/components', variables('componentName')), '2015-05-01').InstrumentationKey]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('keyVaultName'), '/appInsightsConnectionString')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', variables('componentName'))]"
+            ],
+            "properties": {
+                "value": "[concat('InstrumentationKey=', reference(resourceId('Microsoft.Insights/components', variables('componentName')), '2015-05-01').InstrumentationKey)]"
+            }
+        }
+    ]
+}

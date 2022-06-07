@@ -1,0 +1,38 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sku": {
+            "type": "object",
+            "metadata": {
+                "description": "keyvault sku"
+            }
+        },
+        "location": {
+            "type": "string"
+        },
+        "prefix": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "componentName": "[concat(parameters('prefix'), '-kv')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.KeyVault/vaults",
+            "apiVersion": "2021-11-01-preview",
+            "name": "[variables('componentName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "sku": "[parameters('sku')]",
+                "tenantId": "[subscription().tenantId]",
+                "accessPolicies": [],
+                "enabledForDeployment": false,
+                "enabledForDiskEncryption": false,
+                "enabledForTemplateDeployment": true,
+                "enableSoftDelete": true
+            }
+        }
+    ]
+}

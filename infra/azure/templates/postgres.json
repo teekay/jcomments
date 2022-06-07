@@ -1,0 +1,113 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string"
+        },
+        "sku": {
+            "type": "object"
+        },
+        "storageSizeGB": {
+            "type": "int"
+        },
+        "administratorLoginPassword": {
+            "type": "securestring"
+        },
+        "databases": {
+            "type": "array"
+        },
+        "prefix": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "componentName": "[concat(parameters('prefix'), '-pg')]",
+        "administratorLogin": "jcstgadmin",
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers",
+            "apiVersion": "2021-06-01",
+            "name": "[variables('componentName')]",
+            "location": "[parameters('location')]",
+            "sku":"[parameters('sku')]",
+            "properties": {
+                "version": "13",
+                "administratorLogin": "[variables('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "availabilityZone": "1",
+                "storage": {
+                    "storageSizeGB": "[parameters('storageSizeGB')]"
+                },
+                "backup": {
+                    "backupRetentionDays": 7,
+                    "geoRedundantBackup": "Disabled"
+                },
+                "network": {},
+                "highAvailability": {
+                    "mode": "Disabled"
+                },
+                "maintenanceWindow": {
+                    "customWindow": "Disabled",
+                    "dayOfWeek": 0,
+                    "startHour": 0,
+                    "startMinute": 0
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules",
+            "apiVersion": "2021-06-01",
+            "name": "[concat(variables('componentName'), '/AllowAllAzureServicesAndResourcesWithinAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', variables('componentName'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "copy": {
+                "name": "databasecopy",
+                "count": "[length(parameters('databases'))]"
+            },
+            "type": "Microsoft.DBforPostgreSQL/flexibleServers/databases",
+            "apiversion": "2021-06-01",
+            "name": "[concat(variables('componentName'), '/', parameters('databases')[copyIndex()].name)]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', variables('componentName'))]"
+            ],
+            "properties": {
+                "charset": "UTF8",
+                "collation": "en_US.utf8"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('keyVaultName'), '/pgHost')]",
+            "properties": {
+                "value": "[concat(variables('componentName'), '.postgres.database.azure.com')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('keyVaultName'), '/pgAdminUsername')]",
+            "properties": {
+                "value": "[variables('administratorLogin')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('keyVaultName'), '/pgAdminPassword')]",
+            "properties": {
+                "value": "[parameters('administratorLoginPassword')]"
+            }
+        }
+     ]
+}
