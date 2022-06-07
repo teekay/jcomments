@@ -63,9 +63,9 @@ jobs:
         timeout-minutes: 5
         uses: azure/login@v1
         with:
-          creds: ${{ secrets[AZURE_CREDENTIALS] }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Create infrastructure
-        run:  infra/azure/scripts/createInfra.sh
+        run:  infra/azure/scripts/create-infra.sh
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       - name: Azure Logout
