@@ -30,14 +30,42 @@ env:
   fullDeployment: ${{ github.event.inputs.fullDeployment || 'false' }}
 
 jobs:
-  build-and-deploy:
+  setupEnv:
+    name: Set up environments
     runs-on: ubuntu-latest
-    environment:
-      name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          persist-credentials: false
+      - name: setup environment variables
+        id: setupEnv
+        run: |
+          echo "Setup environment and secrets"
+          if [ "${{ github.event.inputs.environment }}" = "staging" ] || [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            echo "::set-output name=environment::staging"
+            echo "::set-output name=githubEnvironment::Development"
+          elif [ "${{ github.event.inputs.environment }}" = "prod" ] || [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            echo "::set-output name=environment::prod"
+            echo "::set-output name=githubEnvironment::Production"
+          fi
+    outputs:
+      environment: ${{ steps.setupEnv.outputs.environment }}
+      githubEnvironment: ${{ steps.setupEnv.outputs.githubEnvironment }}
+      name: jamcomments-${{ steps.setupEnv.outputs.environment }}-eus-fapp
+
+  build-and-deploy:
+    name: Build app and deploy to Azure
+    runs-on: ubuntu-latest
+    environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
+    needs:
+      - setupEnv
+    env:
+      environment: ${{ needs.setupEnv.outputs.environment }}
+
     steps:
     - uses: actions/checkout@v3
-
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
