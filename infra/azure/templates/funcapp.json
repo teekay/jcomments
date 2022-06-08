@@ -31,7 +31,6 @@
         "appSettings": {
             "APPINSIGHTS_INSTRUMENTATIONKEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=appInsightsInstrumentationKey)')]",
             "AzureWebJobsStorage": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=storageAccountConnectionString-jamcomments-fapp', ')')]",
-            "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=storageAccountConnectionString-jamcomments-fapp', ')')]",
             "FUNCTIONS_EXTENSION_VERSION": "~4",
             "FUNCTIONS_WORKER_RUNTIME": "node",
             "MAILGUN_API_KEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunApiKey)')]",
