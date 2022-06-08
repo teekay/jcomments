@@ -75,7 +75,7 @@
             "name": "[concat(variables('componentName'), '/azure.extensions')]",
             "dependsOn": [
                 "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers', variables('componentName'))]",
-                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers/firewallRules', concat(variables('componentName'), '/AllowAllAzureServicesAndResourcesWithinAzureIps'))]"
+                "[resourceId('Microsoft.DBforPostgreSQL/flexibleServers/firewallRules', variables('componentName'), 'AllowAllAzureServicesAndResourcesWithinAzureIps')]"
             ],
             "properties": {
                 "value": "PGCRYPTO",
