@@ -42,8 +42,7 @@
             "PGHOST": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgHost)')]",
             "PGUSER": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminUsername)')]",
             "PGPASSWORD": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminPassword)')]",
-            "SERVICEBUS_CONNECTION": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=serviceBusPrimaryConnectionString)')]",
-            "WEBSITE_MOUNT_ENABLED": 1
+            "SERVICEBUS_CONNECTION": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=serviceBusPrimaryConnectionString)')]"
         }
     },
     "resources": [
