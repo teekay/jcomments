@@ -92,9 +92,7 @@ jobs:
       uses: montudor/action-zip@v1
 
     - name: 'Deploy to Azure Functions'
-      run: |
-        zip -q -r functionapp.zip . -x@.funcignore -x .funcignore
-        az functionapp deployment source config-zip -g jamcomments-${{ needs.setupEnv.outputs.environment }}-eus-rgp -n jamcomments-${{ needs.setupEnv.outputs.environment }}-eus-fapp --src functionapp.zip
+      run: infra/azure/scripts/deploy-funcapp.sh
 
     - name: Azure Logout
       if: ${{ always() }}
