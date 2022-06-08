@@ -27,7 +27,28 @@
     "variables": {
         "componentName": "[concat(parameters('prefix'), '-webapp')]",
         "servicePlanName": "[concat(parameters('prefix'), '-webasp')]",
-        "keyVaultName": "[concat(parameters('prefix'), '-kv')]"        
+        "keyVaultName": "[concat(parameters('prefix'), '-kv')]",
+        "appSettings": {
+            "APPINSIGHTS_INSTRUMENTATIONKEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=appInsightsInstrumentationKey)')]",
+            "ApplicationInsightsAgent_EXTENSION_VERSION": "~3",
+            "HOST": "[concat(parameters('prefix'), '-admin.azurewebsites.net')]",
+            "IS_SECURE": true,
+            "MAILGUN_API_KEY": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunApiKey)')]",
+            "MAILGUN_DOMAIN": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunDomain)')]",
+            "MAILGUN_SENDER": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=mailgunSender)')]",
+            "NODE_ENVIRONMENT": "production",
+            "PGDATABASE": "jamcomments",
+            "PGSSLMODE": "require",
+            "PGHOST": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgHost)')]",
+            "PGUSER": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminUsername)')]",
+            "PGPASSWORD": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=pgAdminPassword)')]",
+            "SERVICEBUS_CONNECTION": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=serviceBusPrimaryConnectionString)')]",
+            "SESSION_LIFETIME": 2880,
+            "SESSION_SECRET": "[concat('@Microsoft.KeyVault(VaultName=', variables('keyVaultName'), ';SecretName=webappSessionSecret)')]",
+            "UPLOAD_MAX_SIZE_BYTES": 30720000,
+            "WEBSITE_RUN_FROM_PACKAGE": "1",
+            "TODO": "put the mailgun and session secrets to KV somehow in the infra steps?"
+        }
     },
     "resources": [
         {
@@ -71,7 +92,20 @@
                 "dailyMemoryTimeQuota": 0,
                 "httpsOnly": false,
                 "redundancyMode": "None"
-            }
+            },
+            "resources": [
+                {
+                    "condition": "[parameters('fullDeployment')]",
+                    "type": "config",
+                    "name": "appSettings",
+                    "apiVersion": "2020-09-01",
+                    "dependsOn": [
+                        "[concat(parameters('prefix'), '-keyVaultAccessPolicy')]",
+                        "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
+                    ],
+                    "properties": "[variables('appSettings')]"
+                }
+            ]
         },
         {
             "type": "Microsoft.Resources/deployments",

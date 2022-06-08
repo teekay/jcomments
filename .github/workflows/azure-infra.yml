@@ -12,7 +12,7 @@ on:
       - dev
       - master
     paths:
-      - 'infra/azure/**'
+      - 'infra/azure/platform/**'
       - '.github/workflows/azure-infra.yml'
 
 defaults:
@@ -68,7 +68,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Create infrastructure
-        run:  infra/azure/scripts/create-infra.sh
+        run:  infra/azure/platform/scripts/create-infra.sh
         env:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       - name: Azure Logout

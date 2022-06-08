@@ -28,7 +28,7 @@ case "$environment" in
    exit 1
 esac
 
-templates="infra/azure/templates"
+templates="infra/azure/apps/api/templates"
 commonParams="$templates/params/common"
 envParams="$templates/params/$paramFolder"
 

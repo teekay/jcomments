@@ -15,6 +15,15 @@ on:
     branches:
       - dev
       - master
+    paths:
+      - 'infra/azure/apps/api/**'
+      - '.github/workflows/azure-jam-comments-api.yml'
+      - 'AzureCommentsApiGet/**'
+      - 'AzureCommentsApiPost/**'
+      - 'AzureCommentsApiNotify/**'
+      - 'sql/**'
+      - 'src/**'
+      - 'test/**'
 
 env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
@@ -84,7 +93,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Create infrastructure
-      run:  infra/azure/scripts/create-funcapp.sh
+      run:  infra/azure/apps/api/scripts/create-funcapp.sh
       env:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
@@ -92,7 +101,7 @@ jobs:
       uses: montudor/action-zip@v1
 
     - name: 'Deploy to Azure Functions'
-      run: infra/azure/scripts/deploy-funcapp.sh
+      run: infra/azure/apps/api/scripts/deploy-funcapp.sh
 
     - name: Azure Logout
       if: ${{ always() }}
