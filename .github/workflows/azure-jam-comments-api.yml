@@ -52,6 +52,7 @@ jobs:
       name: jamcomments-${{ steps.setupEnv.outputs.environment }}-eus-fapp
 
   build-and-deploy:
+    name: Build app and deploy to Azure
     environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
     concurrency: ${{ needs.setupEnv.outputs.name }}
     needs:
