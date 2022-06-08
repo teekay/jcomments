@@ -13,6 +13,15 @@
         },
         "prefix": {
             "type": "string"
+        },
+        "mailgunApiKey": {
+            "type": "string"
+        },
+        "mailgunSender": {
+            "type": "string"
+        },
+        "mailgunDomain": {
+            "type": "string"
         }
     },
     "variables": {
@@ -32,6 +41,30 @@
                 "enabledForDiskEncryption": false,
                 "enabledForTemplateDeployment": true,
                 "enableSoftDelete": true
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('componentName'), '/mailgunApiKey')]",
+            "properties": {
+                "value": "[parameters('mailgunApiKey')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('componentName'), '/mailgunSender')]",
+            "properties": {
+                "value": "[parameters('mailgunSender')]"
+            }
+        },
+        {
+            "type": "Microsoft.KeyVault/vaults/secrets",
+            "apiVersion": "2019-09-01",
+            "name": "[concat(variables('componentName'), '/mailgunDomain')]",
+            "properties": {
+                "value": "[parameters('mailgunDomain')]"
             }
         }
     ]

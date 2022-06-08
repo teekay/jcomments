@@ -2,7 +2,10 @@
 
 set -e
 
-: "${environment:?variable not set or empty}"
+: "${environment:?environment not set or empty}"
+: "${mailgunApiKey:?mailgunApiKey not set or empty}"
+: "${mailgunDomain:?mailgunDomain not set or empty}"
+: "${mailgunSender:?mailgunSender not set or empty}"
 
 if [ "$CI" == "true" ]
 then
@@ -46,7 +49,10 @@ az deployment group create \
   -p "$commonParams"/kv-parameters.json \
      "$envParams"/kv-parameters.json \
      prefix="$prefix" \
-     location="$location"
+     location="$location" \
+     mailgunSender="$mailgunSender" \
+     mailgunDomain="$mailgunDomain" \
+     mailgunApiKey="$mailgunApiKey"
 
 echo "Creating servicebus namespace"
 az deployment group create \

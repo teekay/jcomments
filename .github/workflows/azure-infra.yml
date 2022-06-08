@@ -50,6 +50,9 @@ jobs:
     concurrency: ${{ needs.setupEnv.outputs.name }}
     env:
       environment: ${{ needs.setupEnv.outputs.environment }}
+      mailgunApiKey: ${{ secrets.MAILGUN_API_KEY }}
+      mailgunDomain: ${{ secrets.MAILGUN_DOMAIN }}
+      mailgunSender: ${{ secrets.MAILGUN_SENDER }}
     name: Create infrastructure for ${{ needs.setupEnv.outputs.name }}
     runs-on: ubuntu-latest
     needs: setupEnv
