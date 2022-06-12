@@ -15,7 +15,7 @@
             "type": "string"
         },
         "mailgunApiKey": {
-            "type": "string"
+            "type": "securestring"
         },
         "mailgunSender": {
             "type": "string"
