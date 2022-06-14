@@ -36,7 +36,7 @@ templates="infra/azure/platform/templates"
 commonParams="$templates/params/common"
 envParams="$templates/params/$paramFolder"
 
-prefix="jamcomments-$environment-$locationSymbol"
+prefix="jcomm-$environment-$locationSymbol"
 rgp="$prefix-rgp"
 
 echo "Creating resource group $rgp"

@@ -5,7 +5,7 @@ set -e
 : "${environment:?variable not set or empty}"
 
 echo "Get the storage connection string"
-AZURE_STORAGE_CONNECTION_STRING=$(az storage account show-connection-string -g "jamcomments-${environment}-eus-rgp" -n "jc${environment}eusstgacc" --query "connectionString" -o tsv)
+AZURE_STORAGE_CONNECTION_STRING=$(az storage account show-connection-string -g "jcomm-${environment}-eus-rgp" -n "jc${environment}eusstgacc" --query "connectionString" -o tsv)
 
 container=jamcomments-funcapp-releases
 timestamp=$(date +"%Y%M%d%H%M%N")
@@ -29,4 +29,4 @@ sas=$(az storage blob generate-sas -c "$container" -n "$blobName" --permissions 
 packageUrl="${blobUrl}?${sas}"
 
 echo "Set the app settings to run from package URL"
-az webapp config appsettings set -n "jamcomments-${environment}-eus-fapp" -g "jamcomments-${environment}-eus-rgp" --settings "WEBSITE_RUN_FROM_PACKAGE=$packageUrl"
+az webapp config appsettings set -n "jcomm-${environment}-eus-fapp" -g "jcomm-${environment}-eus-rgp" --settings "WEBSITE_RUN_FROM_PACKAGE=$packageUrl"
