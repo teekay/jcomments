@@ -35,7 +35,7 @@ envParams="$templates/params/$paramFolder"
 location="East US"
 locationSymbol="eus"
 
-prefix="jamcomments-$environment-$locationSymbol"
+prefix="jcomm-$environment-$locationSymbol"
 rgp="$prefix-rgp"
 
 echo "Creating resource group $rgp"

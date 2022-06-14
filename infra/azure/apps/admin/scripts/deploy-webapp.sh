@@ -10,4 +10,4 @@ blobName="webapp${timestamp}.zip"
 zip -q -r "$blobName" . -x@.appserviceignore -x .funcignore
 
 echo "Perform a ZIP deployment"
-az webapp deployment source config-zip --resource-group "jamcomments-${environment}-eus-rgp" --name "jamcomments-${environment}-eus-webapp" --src "$blobName"
+az webapp deployment source config-zip --resource-group "jcomm-${environment}-eus-rgp" --name "jcomm-${environment}-eus-webapp" --src "$blobName"
