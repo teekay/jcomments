@@ -24,7 +24,8 @@
     "lint-fix": "eslint \"./src/**/*.ts\" \"./tests/**/*.ts\" --fix",
     "prestart": "node ./build/src/cli.js db:migrate",
     "start": "node ./build/src/web.js",
-    "watch": "tsc -p tsconfig.json -w"
+    "watch": "tsc -p tsconfig.json -w",
+    "func": "func start --verbose"
   },
   "repository": "git+https://github.com/teekay/JamComments.git",
   "keywords": [],
@@ -76,6 +77,7 @@
     "pino-colada": "^2.1.0",
     "pino-pretty": "^5.0.1",
     "postgres-migrations": "^5.1.1",
+    "qs": "^6.10.5",
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "6.6.7",

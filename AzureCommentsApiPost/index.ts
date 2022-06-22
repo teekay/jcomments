@@ -6,6 +6,7 @@ import _ from 'lodash'
 import moment from "moment";
 import { HttpStatus } from "@nestjs/common";
 import { isPostCommentRequest } from '../generated/PostCommentRequest.guard'
+import { parse } from 'qs'
 
 const commentsApi: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.')
@@ -13,8 +14,11 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
     const app = await bootstrap()
     const commentService = app.get(CommentService)
     const tokenService = app.get(TokenService)
-    const apiKey = req.headers['authorization']?.split(': ').pop()?.split(' ').pop() ?? _.get(req.body, 'token') ?? _.get(req.query, 'token')
+    const body = bodyPerContentType(req)
+    const apiKey = req.headers['authorization']?.split(': ').pop()?.split(' ').pop() ?? _.get(body, 'token') ?? _.get(req.query, 'token')
     if (!apiKey) {
+        console.warn('Missing API key :(')
+        console.info(body)
         context.res = {
             status: 400
         }
@@ -22,14 +26,18 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
     }
     const token = await tokenService.findById(apiKey)
     if (!token) {
+        console.warn(`Bad token ${token}`)
         context.res = {
             status: 401
         }
         return
     }
     const { account } = token
-    const comment = req.body
+
+
+    const comment = {... body }
     if (!isPostCommentRequest(comment)) {
+        console.warn(`Bad payload: ${comment}`)
         context.res = {
             status: 400
         }
@@ -43,7 +51,13 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
   
       if (req.headers['content-type'] !== 'application/json') {
         // assuming the request comes from the web page -> redirect back
-        context.res = { location: comment.postUrl }
+        console.info(`redirecting to ${comment.postUrl}`)
+        context.res = { 
+          status: 302,
+          headers: {
+            Location: comment.postUrl
+          }
+        }
       } else {
         context.res = { 
           status: HttpStatus.CREATED
@@ -57,5 +71,17 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
   
       // TODO email notification as another Azure function triggered by ServiceBus
 };
+
+function bodyPerContentType(req: HttpRequest) {
+  const contentType = req.headers['content-type'];
+  switch(contentType) {
+    case 'application/x-www-form-urlencoded':
+      return parse(req.rawBody)
+    case 'application/json':
+      return req.body
+    default:
+      throw new Error(`Unhandled content type ${contentType}`)
+  }
+}
 
 export default commentsApi
