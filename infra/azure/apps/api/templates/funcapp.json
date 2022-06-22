@@ -95,6 +95,24 @@
             ]
         },
         {
+            "condition": "[parameters('fullDeployment')]",
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2021-03-01",
+            "name": "[concat(variables('componentName'), '/web')]",
+            "location": "East US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', variables('componentName'))]"
+            ],
+            "properties": {
+                "cors": {
+                    "allowedOrigins": [
+                        "*"
+                    ],
+                    "supportCredentials": false
+                }
+            }
+        },
+        {
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2020-10-01",
             "name": "[concat(parameters('prefix'), '-keyVaultAccessPolicy')]",
