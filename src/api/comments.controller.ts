@@ -18,7 +18,7 @@ export class CommentsController {
     private readonly accountService: AccountService,
     private readonly commentsService: CommentService,
     private readonly contentFilteringService: ContentFilteringService,
-    private readonly logger: Logger,
+    private readonly logger: Logger
   ) {}
 
   @Get()

@@ -156,9 +156,9 @@ export class CliService {
         postTitle: randCatchPhrase(),
         text: randQuote(),
         author: {
-            email: commenter.email,
-            website: randUrl(),
-            name: `${commenter.firstName} ${commenter.lastName}`,
+          email: commenter.email,
+          website: randUrl(),
+          name: `${commenter.firstName} ${commenter.lastName}`,
         },
         postedAt: postDate.toISOString(),
       }

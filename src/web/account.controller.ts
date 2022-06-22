@@ -134,13 +134,13 @@ export class AccountController {
     const token = await this.accountService.token(account)
     if (!token) {
       this.logger.error('No token found, none revoked')
-      return res.status(400).json({error: 'Could not reissue API token'})      
+      return res.status(400).json({ error: 'Could not reissue API token' })
     }
 
     await this.tokenService.revoke(token)
     await this.tokenService.create(account)
     return res.status(201).json({
-        token: (await this.accountService.token(account))?.token
+      token: (await this.accountService.token(account))?.token,
     })
   }
 
@@ -160,9 +160,7 @@ export class AccountController {
 
   @Post('import')
   @UseGuards(AuthenticatedGuard)
-  @UseInterceptors(
-    FileInterceptor('importjson')
-  )
+  @UseInterceptors(FileInterceptor('importjson'))
   async import(@Req() req, @Res() res: Response, @UploadedFile() file): Promise<void> {
     const account = _.get(req, 'user') as Account
     try {
