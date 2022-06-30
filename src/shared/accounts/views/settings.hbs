@@ -169,7 +169,7 @@
                                            name="useAkismet" 
                                            id="useAkismet"{{#if useAkismet}} checked{{/if}}>
                             </span>
-                            <input type="text" id="apiKey" name="apiKey" placeholder="Akismet API Key" value="{{ akismetKey }}">
+                            <input type="text" id="akismetKey" name="akismetKey" placeholder="Akismet API Key" value="{{ akismetKey }}">
                             <input type="text" id="blogUrl" name="blogUrl" placeholder="Blog URL (required by Akismet)" value="{{ blogUrl }}">
                             <button class="btn" type="submit">SAVE</button>
                         </div>
@@ -319,7 +319,7 @@
     Array.from(document.querySelectorAll('.toggle')).forEach(ev => ev.addEventListener('click', toggleSetting));
     document.getElementById('useAkismet').addEventListener('change', function(evt) {
         let isOn = evt.target.checked;
-        let inputApiKey = document.getElementById('apiKey');
+        let inputApiKey = document.getElementById('akismetKey');
         let inputBlogUrl = document.getElementById('blogUrl');
         if (isOn) {
             inputApiKey.setAttribute('required', 'required');

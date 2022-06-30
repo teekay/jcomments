@@ -93,6 +93,7 @@ export class AccountController {
   @UseGuards(AuthenticatedGuard)
   async updateSettings(@Req() req: Request, @Res() res: Response, @Body() settingsParam: SettingsParam): Promise<void> {
     const account = _.get(req, 'user') as Account
+    this.logger.debug('Payload: %s', 'AccountController::updateSettings', JSON.stringify(settingsParam))
     await this.accountService.updateSettings(account, settingsParam)
     return res.redirect('/account/settings')
   }
