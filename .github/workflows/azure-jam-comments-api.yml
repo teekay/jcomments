@@ -101,6 +101,7 @@ jobs:
   deploy-to-azure:
     if: (github.ref == 'refs/heads/dev') || (github.ref == 'refs/heads/main') || (github.event.inputs.stage != null)
     name: Build app and deploy to Azure
+    runs-on: ubuntu-latest
     environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
     concurrency: ${{ needs.setupEnv.outputs.name }}
     needs:
