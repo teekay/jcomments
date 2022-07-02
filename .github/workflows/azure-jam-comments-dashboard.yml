@@ -23,6 +23,16 @@ on:
       - 'sql/**'
       - 'src/**'
       - 'test/**'
+  pull_request:
+    types: [opened, synchronize]
+    paths:
+      - 'infra/azure/apps/admin/**'
+      - '.github/workflows/azure-jam-comments-dashboard.yml'
+      - 'assets/**'
+      - 'public/**'
+      - 'sql/**'
+      - 'src/**'
+      - 'test/**'
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
