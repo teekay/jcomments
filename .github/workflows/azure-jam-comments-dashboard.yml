@@ -91,7 +91,7 @@ jobs:
         yarn test
 
   deploy-to-azure:
-    if: (github.ref == 'refs/heads/dev') || (github.ref == 'refs/heads/main') || (github.event.inputs.stage != null)
+    if: (github.ref == 'refs/heads/dev') || (github.ref == 'refs/heads/master') || (github.event.inputs.environment != null)
     name: Build app and deploy to Azure
     runs-on: ubuntu-latest
     environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
