@@ -96,6 +96,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
     concurrency: ${{ needs.setupEnv.outputs.name }}
+    env:
+      environment: ${{ needs.setupEnv.outputs.environment }}
     needs:
       - setupEnv
       - build-and-test
