@@ -108,6 +108,8 @@ jobs:
     needs:
       - setupEnv
       - build-and-test
+    env:
+      environment: ${{ needs.setupEnv.outputs.environment }}
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@master
