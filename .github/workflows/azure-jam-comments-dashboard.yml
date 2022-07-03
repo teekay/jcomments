@@ -97,6 +97,7 @@ jobs:
     environment: ${{ needs.setupEnv.outputs.githubEnvironment }}
     concurrency: ${{ needs.setupEnv.outputs.name }}
     needs:
+      - setupEnv
       - build-and-test
     steps:
     - name: 'Checkout GitHub Action'
