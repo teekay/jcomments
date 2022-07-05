@@ -7,7 +7,7 @@ set -e
 echo "Zip the app"
 timestamp=$(date +"%Y%M%d%H%M%N")
 blobName="webapp${timestamp}.zip"
-zip -q -r "$blobName" . -x@.appserviceignore -x .funcignore
+zip -q -r "$blobName" . -x@.appserviceignore -x .appserviceignore
 
 echo "Perform a ZIP deployment"
 az webapp deployment source config-zip --resource-group "jcomm-${environment}-eus-rgp" --name "jcomm-${environment}-eus-webapp" --src "$blobName"
