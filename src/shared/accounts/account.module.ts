@@ -4,11 +4,10 @@ import { CommentsModule } from '../comments/comments.module'
 import { forwardRef, Module } from '@nestjs/common'
 import { PassportModule } from '@nestjs/passport'
 import { PersistenceModule } from '../persistence/persistence.module'
-import { QueueModule } from '../queue/queue.module';
 import { TokenService } from './token.service'
 
 @Module({
-  imports: [forwardRef(() => CommentsModule), PersistenceModule, PassportModule, QueueModule],
+  imports: [forwardRef(() => CommentsModule), PersistenceModule, PassportModule],
   controllers: [],
   providers: [AccountService, TokenService, AkismetService],
   exports: [AccountService, TokenService, AkismetService],

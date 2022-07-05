@@ -13,7 +13,7 @@ import { Logger } from 'nestjs-pino'
 import { LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
 import PgBoss from 'pg-boss'
-import { QueueModule } from '../shared/queue/queue.module'
+import { PgBossQueueModule } from '../shared/queue/pgboss/pg-boss-queue.module'
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { QueueModule } from '../shared/queue/queue.module'
     CommentsModule,
     DashboardModule,
     PersistenceModule,
-    QueueModule,
+    PgBossQueueModule,
     LoggerModule.forRoot({
       pinoHttp: {
         level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',

@@ -9,12 +9,12 @@ import { Logger } from 'nestjs-pino'
 import moment from 'moment'
 import { Request, Response } from 'express'
 import { CommentInFormat } from '../shared/comments/formatted-comment'
-import { Queue } from '../shared/queue/queue.interface'
+import { PgBossQueue } from '../shared/queue/pgboss/pg-boss-queue'
 
 @Controller('comments')
 export class CommentsController {
   constructor(
-    @Inject(Queue) private readonly jobQueue: Queue,
+    @Inject(PgBossQueue) private readonly jobQueue: PgBossQueue,
     private readonly accountService: AccountService,
     private readonly commentsService: CommentService,
     private readonly contentFilteringService: ContentFilteringService,

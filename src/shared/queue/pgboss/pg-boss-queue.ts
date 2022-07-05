@@ -1,8 +1,8 @@
 import PgBoss from "pg-boss"
-import { CommentEventBody } from "../comments/comment.event"
-import { ConfigService } from "../config/config.service"
-import { EmailService } from "../emails/email.service"
-import { Queue } from "./queue.interface"
+import { CommentEventBody } from "../../comments/comment.event"
+import { ConfigService } from "../../config/config.service"
+import { EmailService } from "../../emails/email.service"
+import { Queue } from "../queue.interface"
 
 export class PgBossQueue implements Queue {
     constructor(

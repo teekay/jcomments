@@ -1,6 +1,6 @@
 import { ServiceBusClient, ServiceBusMessage, ServiceBusSender } from '@azure/service-bus';
-import { CommentEvent, CommentEventBody } from '../comments/comment.event';
-import { Queue } from './queue.interface';
+import { CommentEvent, CommentEventBody } from '../../comments/comment.event';
+import { Queue } from '../queue.interface';
 
 export enum Topics {
     Comments = 'comment-events'

@@ -1,26 +1,21 @@
-import { AzureServiceBusQueue } from './azure-service-bus-queue'
-import { ConfigService } from '../config/config.service'
-import { EmailService } from '../emails/email.service'
+import { ConfigService } from '../../config/config.service'
+import { EmailService } from '../../emails/email.service'
 import PgBoss from 'pg-boss'
 import { PgBossQueue } from './pg-boss-queue'
-import { Queue } from './queue.interface'
-import { ServiceBusClient } from '@azure/service-bus'
 
 let pgBoss: PgBoss | null = null
 
 export const jobQueueProviders = [
   {
-    provide: Queue,
-    useFactory: async (): Promise<Queue> => {
-      if (process.env['SERVICEBUS_CONNECTION']) {
-        return new AzureServiceBusQueue(new ServiceBusClient(process.env['SERVICEBUS_CONNECTION']))
-      }
-      return new PgBossQueue(await boss(), new ConfigService(), new EmailService())
-    }
-  },
-  {
     provide: 'PG_BOSS',
     useFactory: boss
+  },
+  {
+    provide: PgBossQueue,
+    useFactory: async (): Promise<PgBossQueue> => {
+      console.log('Creating PgBossQueue')
+      return new PgBossQueue(await boss(), new ConfigService(), new EmailService())
+    }
   }
 ]
 
