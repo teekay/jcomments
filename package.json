@@ -19,7 +19,7 @@
     "postbuild": "copyfiles ./src/**/*.hbs ./public/**/* \"./public/assets/**/*\" build",
     "clean": "rm -rf build && rm -rf generated",
     "ts-node": "ts-node",
-    "prettier-format": "prettier --config .prettierrc src/**/*.ts --write",
+    "prettier-format": "prettier --config .prettierrc \"{,!(node_modules|build)/**/}*.ts\" --write",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "eslint \"./src/**/*.ts\" --fix",
     "prestart": "node ./build/src/cli.js db:migrate",
