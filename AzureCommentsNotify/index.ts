@@ -1,6 +1,6 @@
 import { AzureFunction, Context } from '@azure/functions';
 import { isCommentEvent } from '../generated/CommentEvent.guard'
-import { bootstrap } from '../src/azure';
+import { appContext } from '../src/azure';
 import { ConfigService } from '../src/shared/config/config.service';
 import { EmailService } from '../src/shared/emails/email.service';
 import { SendMailService } from '../src/shared/emails/sendmail.service';
@@ -10,7 +10,7 @@ const commentEventHandler: AzureFunction = async function (context: Context, eve
     throw new Error(`Unexpected event body: ${JSON.stringify(eventBody)}`)
   }
 
-  const app = await bootstrap()
+  const app = await appContext()
   const sendMailService = app.get(SendMailService)
   const configService = app.get(ConfigService)
   const emailService = app.get(EmailService)
