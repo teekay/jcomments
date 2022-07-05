@@ -10,7 +10,7 @@ export class PgBossQueue implements Queue {
         private readonly configService: ConfigService,
         private readonly emailService: EmailService
     ) {
-      console.log('PgBoss instantiated')
+      console.log('PgBossQueue instantiated')
     }
 
     async publish(event: CommentEventBody): Promise<void> {

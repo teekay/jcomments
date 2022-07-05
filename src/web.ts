@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { AccountCloser } from './shared/accounts/account.closer'
+import { AccountCloser } from './web/accounts/account.closer'
 import { ConfigService } from './shared/config/config.service'
 import connectPgSimple from 'connect-pg-simple'
 import cookieParser from 'cookie-parser'

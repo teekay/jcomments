@@ -1,4 +1,3 @@
-import { AccountCloser } from './account.closer'
 import { AccountService } from './account.service'
 import { AkismetService } from '../comments/akismet.service'
 import { CommentsModule } from '../comments/comments.module'
@@ -11,8 +10,8 @@ import { TokenService } from './token.service'
 @Module({
   imports: [forwardRef(() => CommentsModule), PersistenceModule, PassportModule, QueueModule],
   controllers: [],
-  providers: [AccountService, TokenService, AkismetService, AccountCloser],
-  exports: [AccountService, TokenService, AkismetService, AccountCloser],
+  providers: [AccountService, TokenService, AkismetService],
+  exports: [AccountService, TokenService, AkismetService],
 })
 export class AccountsModule {
 }

@@ -14,6 +14,7 @@ import { Queue } from '../shared/queue/queue.interface'
 @Module({
   imports: [
     AccountsModule,
+    AccountsModule,
     ConfigModule,
     CommentsModule,
     EmailsModule,

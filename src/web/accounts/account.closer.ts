@@ -1,5 +1,5 @@
-import { AccountService } from './account.service'
-import { CommentService } from '../comments/comment.service'
+import { AccountService } from '../../shared/accounts/account.service'
+import { CommentService } from '../../shared/comments/comment.service'
 import { Inject } from '@nestjs/common'
 import { Logger } from "nestjs-pino";
 import PgBoss from 'pg-boss'

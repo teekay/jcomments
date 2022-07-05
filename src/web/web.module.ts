@@ -1,5 +1,6 @@
 import { AccountController } from './account.controller'
 import { AccountsModule } from '../shared/accounts/account.module'
+import { AccountsModule as AccountsModuleWeb } from './accounts/accounts.module'
 import { AuthModule } from '../shared/auth/auth.module'
 import { Client } from 'pg'
 import { CommentsModule } from '../shared/comments/comments.module'
@@ -17,6 +18,7 @@ import { QueueModule } from '../shared/queue/queue.module'
 @Module({
   imports: [
     AccountsModule,
+    AccountsModuleWeb,
     AuthModule,
     ConfigModule,
     EmailsModule,
