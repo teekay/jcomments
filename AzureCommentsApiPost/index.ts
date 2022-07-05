@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { AccountService } from "../src/shared/accounts/account.service";
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { bootstrap } from "../src/azure"
+import { appContext } from "../src/azure"
 import { CommentCreatedResult, CommentService } from "../src/shared/comments/comment.service"
 import { HttpStatus } from "@nestjs/common";
 import { isPostCommentRequest } from '../generated/PostCommentRequest.guard'
@@ -13,7 +13,7 @@ import { TokenService } from "../src/shared/accounts/token.service";
 const commentsApi: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('HTTP trigger function processed a request.')
 
-    const app = await bootstrap()
+    const app = await appContext()
     const commentService = app.get(CommentService)
     const accountService = app.get(AccountService)
     const tokenService = app.get(TokenService)
