@@ -23,6 +23,7 @@ export const jobQueueProviders = [
 ]
 
 async function boss(): Promise<PgBoss> {
+  console.log('Instantiating PgBoss')
   const c = {
     host: process.env.PGHOST ?? '127.0.0.1',
     port: (process.env.PGPORT ? Number(process.env.PGPORT) : undefined) ?? 5432,

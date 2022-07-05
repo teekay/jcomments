@@ -8,8 +8,8 @@ import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
 import { LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
-import PgBoss from 'pg-boss'
 import { QueueModule } from '../shared/queue/queue.module'
+import { Queue } from '../shared/queue/queue.interface'
 
 @Module({
   imports: [
@@ -32,13 +32,13 @@ import { QueueModule } from '../shared/queue/queue.module'
 export class ApiModule implements OnApplicationShutdown {
   constructor(
     @Inject('PG_CLIENT') private client: Client,
-    @Inject('PG_BOSS') private boss: PgBoss,
+    private queue: Queue,
     private readonly logger: Logger
   ) {}
 
   async onApplicationShutdown(signal?: string): Promise<void> {
     this.logger.log(`Application exiting with code ${signal}`)
-    await this.boss.stop()
+    await this.queue.stop()
     await this.client.end()
     this.logger.log('JamComments API stopped')
   }

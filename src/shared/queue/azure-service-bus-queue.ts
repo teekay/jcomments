@@ -13,6 +13,10 @@ export class AzureServiceBusQueue implements Queue {
         await this.sendMessageToServiceBusTopic(Topics.Comments, new CommentEvent(message));
     }
 
+    async stop(): Promise<void> {
+      // no-op
+    }
+
     private async sendMessageToServiceBusTopic(
         topic: string,
         message: ServiceBusMessage | ServiceBusMessage[]
