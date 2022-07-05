@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import { AzureFunction, Context, HttpRequest } from "@azure/functions"
-import { bootstrap } from "../src/azure"
+import { appContext } from "../src/azure"
 import { CommentInFormat } from "../src/shared/comments/formatted-comment";
 import { CommentService, SortOrder } from "../src/shared/comments/comment.service"
 import { ContentFilteringService } from "../src/shared/comments/content-filtering-service"
@@ -10,7 +10,7 @@ import { TokenService } from "../src/shared/accounts/token.service"
 const commentsApi: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
     context.log('JamComments - fetch comments for a URL')
 
-    const app = await bootstrap()
+    const app = await appContext()
     const commentService = app.get(CommentService)
     const tokenService = app.get(TokenService)
     const contentFilter = app.get(ContentFilteringService)
