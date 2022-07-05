@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "schedule": "0 * * * * *",
+      "name": "selfCheck",
+      "type": "timerTrigger",
+      "direction": "in",
+      "runOnStartup": false,
+      "useMonitor": false
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    }
+  ],
+  "scriptFile": "../build/AzureHealthCheck/index.js"
+}
