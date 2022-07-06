@@ -3,8 +3,6 @@ import { EmailService } from '../../emails/email.service'
 import PgBoss from 'pg-boss'
 import { PgBossQueue } from './pg-boss-queue'
 
-let pgBoss: PgBoss | null = null
-
 export const jobQueueProviders = [
   {
     provide: 'PG_BOSS',
@@ -12,21 +10,14 @@ export const jobQueueProviders = [
   },
   {
     provide: PgBossQueue,
-    useFactory: async (): Promise<PgBossQueue> => {
-      console.log('Creating PgBossQueue')
-      return new PgBossQueue(await boss(), new ConfigService(), new EmailService())
-    }
+    useFactory: async (pgBoss: PgBoss): Promise<PgBossQueue> => {
+      return new PgBossQueue(pgBoss, new ConfigService(), new EmailService())
+    },
+    inject: ['PG_BOSS']
   }
 ]
 
 async function boss(): Promise<PgBoss> {
-  if (pgBoss) {
-    console.log('Using cached boss')
-    return pgBoss
-  }
-
-  const num = Math.random()
-  console.log('Instantiating PgBoss ' + num.toString())
   const c = {
     host: process.env.PGHOST ?? '127.0.0.1',
     port: (process.env.PGPORT ? Number(process.env.PGPORT) : undefined) ?? 5432,
@@ -38,7 +29,5 @@ async function boss(): Promise<PgBoss> {
   const connectionString = `postgres://${c.user}:${encodeURIComponent(c.password)}@${c.host}:${c.port}/${c.database}${c.ssl ? '?sslmode=require' : ''}`
   const queue = new PgBoss(connectionString)
   await queue.start()
-  pgBoss = queue
-  console.log('PgBoss started')
   return queue
 }
