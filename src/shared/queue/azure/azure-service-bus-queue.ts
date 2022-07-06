@@ -1,6 +1,6 @@
 import { ServiceBusClient, ServiceBusMessage, ServiceBusSender } from '@azure/service-bus';
-import { CommentEvent, CommentEventBody } from '../comments/comment.event';
-import { Queue } from './queue.interface';
+import { CommentEvent, CommentEventBody } from '../../comments/comment.event';
+import { Queue } from '../queue.interface';
 
 export enum Topics {
     Comments = 'comment-events'
@@ -11,6 +11,10 @@ export class AzureServiceBusQueue implements Queue {
 
     public async publish(message: CommentEventBody): Promise<void> {
         await this.sendMessageToServiceBusTopic(Topics.Comments, new CommentEvent(message));
+    }
+
+    async stop(): Promise<void> {
+      // no-op
     }
 
     private async sendMessageToServiceBusTopic(

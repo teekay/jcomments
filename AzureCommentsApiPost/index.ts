@@ -1,13 +1,13 @@
 import _ from 'lodash'
 import { AccountService } from "../src/shared/accounts/account.service";
-import { AzureFunction, Context, HttpRequest } from "@azure/functions"
 import { appContext } from "../src/azure"
+import { AzureFunction, Context, HttpRequest } from "@azure/functions"
+import { AzureServiceBusQueue } from '../src/shared/queue/azure/azure-service-bus-queue';
 import { CommentCreatedResult, CommentService } from "../src/shared/comments/comment.service"
 import { HttpStatus } from "@nestjs/common";
 import { isPostCommentRequest } from '../generated/PostCommentRequest.guard'
 import moment from "moment";
 import { parse } from 'qs'
-import { Queue } from '../src/shared/queue/queue.interface';
 import { TokenService } from "../src/shared/accounts/token.service";
 
 const commentsApi: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
@@ -17,7 +17,7 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
     const commentService = app.get(CommentService)
     const accountService = app.get(AccountService)
     const tokenService = app.get(TokenService)
-    const jobQueue = app.get(Queue)
+    const jobQueue = app.get(AzureServiceBusQueue)
     const body = bodyPerContentType(req)
     const apiKey = req.headers['authorization']?.split(': ').pop()?.split(' ').pop() ?? _.get(body, 'token') ?? _.get(req.query, 'token')
     if (!apiKey) {

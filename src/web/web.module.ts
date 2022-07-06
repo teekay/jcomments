@@ -1,5 +1,6 @@
 import { AccountController } from './account.controller'
 import { AccountsModule } from '../shared/accounts/account.module'
+import { AccountsModule as AccountsModuleWeb } from './accounts/accounts.module'
 import { AuthModule } from '../shared/auth/auth.module'
 import { Client } from 'pg'
 import { CommentsModule } from '../shared/comments/comments.module'
@@ -12,11 +13,12 @@ import { Logger } from 'nestjs-pino'
 import { LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
 import PgBoss from 'pg-boss'
-import { QueueModule } from '../shared/queue/queue.module'
+import { PgBossQueueModule } from '../shared/queue/pgboss/pg-boss-queue.module'
 
 @Module({
   imports: [
     AccountsModule,
+    AccountsModuleWeb,
     AuthModule,
     ConfigModule,
     EmailsModule,
@@ -24,7 +26,7 @@ import { QueueModule } from '../shared/queue/queue.module'
     CommentsModule,
     DashboardModule,
     PersistenceModule,
-    QueueModule,
+    PgBossQueueModule,
     LoggerModule.forRoot({
       pinoHttp: {
         level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',

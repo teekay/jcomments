@@ -1,8 +1,8 @@
-import { ConfigService } from "../config/config.service"
+import { ConfigService } from "../../config/config.service"
 import { Inject } from "@nestjs/common"
 //import { Logger } from 'nestjs-pino'
 import PgBoss from "pg-boss"
-import { SendMailService } from "./sendmail.service"
+import { SendMailService } from "../../infra/sendmail.service"
 
 export class QueuedMailer {
   constructor(

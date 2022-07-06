@@ -1,25 +1,21 @@
-import { AccountsModule } from '../shared/accounts/account.module'
+import { AzureAccountsModule } from './accounts.module'
+import { AzureCommentsModule } from './comments.module'
+import { AzureQueueModule } from '../shared/queue/azure/azure-queue.module'
+import { AzureServiceBusQueue } from '../shared/queue/azure/azure-service-bus-queue'
 import { Client } from 'pg'
-import { CommentsController } from './comments.controller'
-import { CommentsModule } from '../shared/comments/comments.module'
 import { ConfigModule } from '../shared/config/config.module'
-import { EmailsModule } from '../shared/emails/emails.module'
 import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
 import { LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
-import { PgBossQueueModule } from '../shared/queue/pgboss/pg-boss-queue.module'
-import { PgBossQueue } from '../shared/queue/pgboss/pg-boss-queue'
 
 @Module({
   imports: [
-    AccountsModule,
-    AccountsModule,
+    AzureAccountsModule,
     ConfigModule,
-    CommentsModule,
-    EmailsModule,
+    AzureCommentsModule,
     PersistenceModule,
-    PgBossQueueModule,
+    AzureQueueModule,
     LoggerModule.forRoot({
       pinoHttp: {
         prettyPrint: true,
@@ -27,16 +23,16 @@ import { PgBossQueue } from '../shared/queue/pgboss/pg-boss-queue'
         prettifier: require('pino-colada'),
       },
     }),
-  ],
-  controllers: [CommentsController],
+  ]
 })
-export class ApiModule implements OnApplicationShutdown {
+export class AzureApiModule implements OnApplicationShutdown {
   constructor(
     @Inject('PG_CLIENT') private client: Client,
-    private queue: PgBossQueue,
+    private queue: AzureServiceBusQueue,
     private readonly logger: Logger
   ) {}
 
+  // TODO this is probably not being called by Azure Functions
   async onApplicationShutdown(signal?: string): Promise<void> {
     this.logger.log(`Application exiting with code ${signal}`)
     await this.queue.stop()

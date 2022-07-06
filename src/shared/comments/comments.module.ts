@@ -6,10 +6,10 @@ import { EmailsModule } from '../emails/emails.module';
 import { forwardRef, MiddlewareConsumer, Module, NestModule } from '@nestjs/common'
 import { LoginMiddleware } from '../../api/login.middleware';
 import { PersistenceModule } from '../persistence/persistence.module'
-import { QueueModule } from '../queue/queue.module';
+import { PgBossQueueModule } from '../queue/pgboss/pg-boss-queue.module';
 
 @Module({
-  imports: [ConfigModule, EmailsModule, PersistenceModule, QueueModule, forwardRef(() => AccountsModule)],
+  imports: [ConfigModule, EmailsModule, PersistenceModule, PgBossQueueModule, forwardRef(() => AccountsModule)],
   controllers: [],
   providers: [CommentService, ContentFilteringService],
   exports: [CommentService, ContentFilteringService]
