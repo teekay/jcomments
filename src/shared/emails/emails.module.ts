@@ -1,7 +1,7 @@
-import { ConfigModule } from '../config/config.module';
-import { EmailService } from './email.service';
-import { Module } from '@nestjs/common';
-import { SendMailService } from '../infra/sendmail.service';
+import { ConfigModule } from '../config/config.module'
+import { EmailService } from './email.service'
+import { Module } from '@nestjs/common'
+import { SendMailService } from '../infra/sendmail.service'
 
 @Module({
   imports: [ConfigModule],

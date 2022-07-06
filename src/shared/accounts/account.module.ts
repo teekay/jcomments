@@ -12,5 +12,4 @@ import { TokenService } from './token.service'
   providers: [AccountService, TokenService, AkismetService],
   exports: [AccountService, TokenService, AkismetService],
 })
-export class AccountsModule {
-}
+export class AccountsModule {}

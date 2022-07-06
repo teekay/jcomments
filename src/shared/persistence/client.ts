@@ -1,4 +1,4 @@
-import { Client, ClientConfig } from "pg";
+import { Client, ClientConfig } from 'pg'
 
 export const databaseProviders = [
   {
@@ -11,16 +11,17 @@ export const databaseProviders = [
         database: process.env.PGDATABASE ?? 'postgres',
         port: (process.env.PGPORT ? Number(process.env.PGPORT) : undefined) ?? 5432,
         ssl: process.env.PGSSLMODE === 'require',
-        connectionTimeoutMillis: 5000
+        connectionTimeoutMillis: 5000,
       }
-      const client= new Client(dbConfig)
+      const client = new Client(dbConfig)
 
       try {
         await client.connect()
         return client
       } catch (oops) {
-          console.error('Problem connecting to the database')
-          throw oops
+        console.error('Problem connecting to the database')
+        throw oops
       }
-    }
-  }];
+    },
+  },
+]

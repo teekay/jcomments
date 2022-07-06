@@ -12,5 +12,4 @@ import { TokenService } from '../shared/accounts/token.service'
   providers: [AccountService, TokenService, AkismetService],
   exports: [AccountService, TokenService, AkismetService],
 })
-export class AzureAccountsModule {
-}
+export class AzureAccountsModule {}

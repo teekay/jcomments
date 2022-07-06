@@ -2,7 +2,7 @@ import { AzureApiModule } from './azure-api.module'
 import { INestApplicationContext, Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 
-let application: INestApplicationContext;
+let application: INestApplicationContext
 
 async function bootstrap(): Promise<INestApplicationContext> {
   const app = await NestFactory.createApplicationContext(AzureApiModule)

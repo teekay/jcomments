@@ -39,47 +39,56 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'src/web'))
   app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'public' }))
   app.setViewEngine('hbs')
-  helpers({handlebars})
+  helpers({ handlebars })
   handlebars.registerHelper('dateFormat', dateFormat)
   handlebars.registerPartial(
     'hamburgerMenu',
-    readFileSync(join(__dirname, '..', 'src/shared/partials/hamburger-menu.hbs'), 'utf8'))
+    readFileSync(join(__dirname, '..', 'src/shared/partials/hamburger-menu.hbs'), 'utf8')
+  )
   handlebars.registerPartial(
     'commentsActions',
-    readFileSync(join(__dirname, '..', 'src/shared/partials/comments-actions.hbs'), 'utf8'))
+    readFileSync(join(__dirname, '..', 'src/shared/partials/comments-actions.hbs'), 'utf8')
+  )
   handlebars.registerPartial(
     'commentsSearch',
-    readFileSync(join(__dirname, '..', 'src/shared/partials/comments-search.hbs'), 'utf8'))
+    readFileSync(join(__dirname, '..', 'src/shared/partials/comments-search.hbs'), 'utf8')
+  )
   handlebars.registerPartial(
     'modalDeleteComment',
-    readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comment.hbs'), 'utf8'))
+    readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comment.hbs'), 'utf8')
+  )
   handlebars.registerPartial(
     'modalDeleteComments',
-    readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comments.hbs'), 'utf8'))
+    readFileSync(join(__dirname, '..', 'src/shared/partials/delete-comments.hbs'), 'utf8')
+  )
   handlebars.registerPartial(
     'modalApproveComments',
-    readFileSync(join(__dirname, '..', 'src/shared/partials/approve-comments.hbs'), 'utf8'))
+    readFileSync(join(__dirname, '..', 'src/shared/partials/approve-comments.hbs'), 'utf8')
+  )
 
   const defaultSessionLifetime = 60 * 24 * 30 // 30 days
-  const cfgSessionLifetime = _.defaultTo(+(process.env['SESSION_LIFETIME'] ?? defaultSessionLifetime), defaultSessionLifetime)
+  const cfgSessionLifetime = _.defaultTo(
+    +(process.env['SESSION_LIFETIME'] ?? defaultSessionLifetime),
+    defaultSessionLifetime
+  )
   const sessionLifetime = cfgSessionLifetime * 60 * 1000
-  
+
   app.use(
     session({
       name: 'JamComments',
-      store: new (connectPgSimple(session))({tableName: 'sessions'}), // connection string created implicitly from env vars, see https://node-postgres.com/features/connecting
+      store: new (connectPgSimple(session))({ tableName: 'sessions' }), // connection string created implicitly from env vars, see https://node-postgres.com/features/connecting
       cookie: {
         maxAge: sessionLifetime,
         sameSite: true,
         httpOnly: true,
-        secure: isInProduction
+        secure: isInProduction,
       },
       proxy: true,
       secret: process.env['SESSION_SECRET'] ?? 'lorem ipsum',
       resave: false,
       rolling: true,
       saveUninitialized: false,
-    }),
+    })
   )
 
   app.use(passport.initialize())
@@ -87,17 +96,17 @@ async function bootstrap() {
 
   const bodyLimit = +(process.env.UPLOAD_MAX_SIZE_BYTES ?? 1024 * 1024 * 5) // 5MB default
   logger.debug(`Request body limit is ${bodyLimit} bytes`)
-  app.use(json({ limit: bodyLimit}))
+  app.use(json({ limit: bodyLimit }))
   app.use(urlencoded({ limit: bodyLimit, extended: true }))
   app.use(raw({ limit: bodyLimit }))
   app.use(text({ limit: bodyLimit }))
-  
+
   app.use(cookieParser())
   app.use(flash())
   app.use(csurf({ cookie: true }))
 
   // Starts listening for shutdown hooks
-  app.enableShutdownHooks();
+  app.enableShutdownHooks()
 
   // CSRF error handler
   app.use(function (err, _req, res, next) {
