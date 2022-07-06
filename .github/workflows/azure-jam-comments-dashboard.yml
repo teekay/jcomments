@@ -65,7 +65,7 @@ jobs:
     outputs:
       environment: ${{ steps.setupEnv.outputs.environment }}
       githubEnvironment: ${{ steps.setupEnv.outputs.githubEnvironment }}
-      name: jamcomments-${{ steps.setupEnv.outputs.environment }}-eus-fapp
+      name: jamcomments-${{ steps.setupEnv.outputs.environment }}-eus-webapp
 
   build-and-test:
     name: Build app and test
