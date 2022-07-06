@@ -3,7 +3,7 @@ import { config as dotenv } from 'dotenv'
 import flash = require('connect-flash')
 import { Logger } from 'nestjs-pino'
 import { NestFactory } from '@nestjs/core'
-import { QueuedMailer } from './shared/emails/queued-mailer'
+import { QueuedMailer } from './shared/queue/pgboss/queued-mailer'
 import { ValidationPipe } from '@nestjs/common'
 
 dotenv()

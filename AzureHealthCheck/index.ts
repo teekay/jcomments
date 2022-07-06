@@ -3,7 +3,7 @@ import { appContext } from "../src/azure"
 import { Client } from "pg"
 
 const healthCheck: AzureFunction = async (context: Context, timer: Timer) => {
-  context.log(`Performing health check. Last executed ${timer.scheduleStatus}`)
+  context.log(`Performing health check. Is timer late? ${timer.isPastDue}`)
   try {
     const app = await appContext()
     const db: Client = await app.get('PG_CLIENT')

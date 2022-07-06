@@ -6,7 +6,7 @@ import { ConfigService } from '../config/config.service'
 import { EmailService } from '../emails/email.service'
 import { Inject, Injectable } from '@nestjs/common'
 import moment from 'moment'
-import { SendMailService } from '../emails/sendmail.service'
+import { SendMailService } from '../infra/sendmail.service'
 import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
