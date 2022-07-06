@@ -16,6 +16,6 @@ export function OnlyPlainText(validationOptions?: ValidationOptions) {
           return typeof value === 'string' && value === escape(value)
         },
       },
-    });
-  };
+    })
+  }
 }

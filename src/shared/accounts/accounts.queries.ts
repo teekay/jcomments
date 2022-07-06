@@ -1,25 +1,64 @@
 /** Types generated for queries found in "src/shared/accounts/accounts.sql" */
-import { PreparedQuery } from '@pgtyped/query';
+import { PreparedQuery } from '@pgtyped/query'
 
 /** 'Signup' parameters type */
 export interface ISignupParams {
-  createdAt: Date | null | void;
-  email: string | null | void;
-  id: string | null | void;
-  password: string | null | void;
-  username: string | null | void;
+  createdAt: Date | null | void
+  email: string | null | void
+  id: string | null | void
+  password: string | null | void
+  username: string | null | void
 }
 
 /** 'Signup' return type */
-export type ISignupResult = void;
+export type ISignupResult = void
 
 /** 'Signup' query type */
 export interface ISignupQuery {
-  params: ISignupParams;
-  result: ISignupResult;
+  params: ISignupParams
+  result: ISignupResult
 }
 
-const signupIR: any = {"name":"Signup","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":92,"b":93,"line":2,"col":73}]}},{"name":"username","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":97,"b":104,"line":2,"col":78}]}},{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":108,"b":112,"line":2,"col":89}]}},{"name":"password","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":123,"b":130,"line":2,"col":104}]}},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":151,"b":159,"line":2,"col":132}]}}],"usedParamSet":{"id":true,"username":true,"email":true,"password":true,"createdAt":true},"statement":{"body":"INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt)","loc":{"a":19,"b":160,"line":2,"col":0}}};
+const signupIR: any = {
+  name: 'Signup',
+  params: [
+    {
+      name: 'id',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 92, b: 93, line: 2, col: 73 }] },
+    },
+    {
+      name: 'username',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 97, b: 104, line: 2, col: 78 }] },
+    },
+    {
+      name: 'email',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 108, b: 112, line: 2, col: 89 }] },
+    },
+    {
+      name: 'password',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 123, b: 130, line: 2, col: 104 }] },
+    },
+    {
+      name: 'createdAt',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 151, b: 159, line: 2, col: 132 }] },
+    },
+  ],
+  usedParamSet: { id: true, username: true, email: true, password: true, createdAt: true },
+  statement: {
+    body: "INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt)",
+    loc: { a: 19, b: 160, line: 2, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -27,25 +66,45 @@ const signupIR: any = {"name":"Signup","params":[{"name":"id","required":false,"
  * INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt)
  * ```
  */
-export const signup = new PreparedQuery<ISignupParams,ISignupResult>(signupIR);
-
+export const signup = new PreparedQuery<ISignupParams, ISignupResult>(signupIR)
 
 /** 'InitialAccountSettings' parameters type */
 export interface IInitialAccountSettingsParams {
-  accountId: string | null | void;
-  id: string | null | void;
+  accountId: string | null | void
+  id: string | null | void
 }
 
 /** 'InitialAccountSettings' return type */
-export type IInitialAccountSettingsResult = void;
+export type IInitialAccountSettingsResult = void
 
 /** 'InitialAccountSettings' query type */
 export interface IInitialAccountSettingsQuery {
-  params: IInitialAccountSettingsParams;
-  result: IInitialAccountSettingsResult;
+  params: IInitialAccountSettingsParams
+  result: IInitialAccountSettingsResult
 }
 
-const initialAccountSettingsIR: any = {"name":"initialAccountSettings","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":252,"b":253,"line":5,"col":53}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":257,"b":265,"line":5,"col":58}]}}],"usedParamSet":{"id":true,"accountId":true},"statement":{"body":"INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId)","loc":{"a":199,"b":266,"line":5,"col":0}}};
+const initialAccountSettingsIR: any = {
+  name: 'initialAccountSettings',
+  params: [
+    {
+      name: 'id',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 252, b: 253, line: 5, col: 53 }] },
+    },
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 257, b: 265, line: 5, col: 58 }] },
+    },
+  ],
+  usedParamSet: { id: true, accountId: true },
+  statement: {
+    body: 'INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId)',
+    loc: { a: 199, b: 266, line: 5, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -53,25 +112,47 @@ const initialAccountSettingsIR: any = {"name":"initialAccountSettings","params":
  * INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId)
  * ```
  */
-export const initialAccountSettings = new PreparedQuery<IInitialAccountSettingsParams,IInitialAccountSettingsResult>(initialAccountSettingsIR);
-
+export const initialAccountSettings = new PreparedQuery<IInitialAccountSettingsParams, IInitialAccountSettingsResult>(
+  initialAccountSettingsIR
+)
 
 /** 'InitialAccountEmailSettings' parameters type */
 export interface IInitialAccountEmailSettingsParams {
-  accountId: string | null | void;
-  id: string | null | void;
+  accountId: string | null | void
+  id: string | null | void
 }
 
 /** 'InitialAccountEmailSettings' return type */
-export type IInitialAccountEmailSettingsResult = void;
+export type IInitialAccountEmailSettingsResult = void
 
 /** 'InitialAccountEmailSettings' query type */
 export interface IInitialAccountEmailSettingsQuery {
-  params: IInitialAccountEmailSettingsParams;
-  result: IInitialAccountEmailSettingsResult;
+  params: IInitialAccountEmailSettingsParams
+  result: IInitialAccountEmailSettingsResult
 }
 
-const initialAccountEmailSettingsIR: any = {"name":"initialAccountEmailSettings","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":369,"b":370,"line":8,"col":59}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":374,"b":382,"line":8,"col":64}]}}],"usedParamSet":{"id":true,"accountId":true},"statement":{"body":"INSERT INTO account_email_settings(id, account_id) VALUES(:id, :accountId)","loc":{"a":310,"b":383,"line":8,"col":0}}};
+const initialAccountEmailSettingsIR: any = {
+  name: 'initialAccountEmailSettings',
+  params: [
+    {
+      name: 'id',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 369, b: 370, line: 8, col: 59 }] },
+    },
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 374, b: 382, line: 8, col: 64 }] },
+    },
+  ],
+  usedParamSet: { id: true, accountId: true },
+  statement: {
+    body: 'INSERT INTO account_email_settings(id, account_id) VALUES(:id, :accountId)',
+    loc: { a: 310, b: 383, line: 8, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -79,31 +160,54 @@ const initialAccountEmailSettingsIR: any = {"name":"initialAccountEmailSettings"
  * INSERT INTO account_email_settings(id, account_id) VALUES(:id, :accountId)
  * ```
  */
-export const initialAccountEmailSettings = new PreparedQuery<IInitialAccountEmailSettingsParams,IInitialAccountEmailSettingsResult>(initialAccountEmailSettingsIR);
-
+export const initialAccountEmailSettings = new PreparedQuery<
+  IInitialAccountEmailSettingsParams,
+  IInitialAccountEmailSettingsResult
+>(initialAccountEmailSettingsIR)
 
 /** 'Login' parameters type */
 export interface ILoginParams {
-  password: string | null | void;
-  username: string | null | void;
+  password: string | null | void
+  username: string | null | void
 }
 
 /** 'Login' return type */
 export interface ILoginResult {
-  created_at: Date;
-  email: string;
-  id: string;
-  password: Buffer;
-  username: string;
+  created_at: Date
+  email: string
+  id: string
+  password: Buffer
+  username: string
 }
 
 /** 'Login' query type */
 export interface ILoginQuery {
-  params: ILoginParams;
-  result: ILoginResult;
+  params: ILoginParams
+  result: ILoginResult
 }
 
-const loginIR: any = {"name":"Login","params":[{"name":"username","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":444,"b":451,"line":11,"col":39}]}},{"name":"password","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":474,"b":481,"line":11,"col":69}]}}],"usedParamSet":{"username":true,"password":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')","loc":{"a":405,"b":498,"line":11,"col":0}}};
+const loginIR: any = {
+  name: 'Login',
+  params: [
+    {
+      name: 'username',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 444, b: 451, line: 11, col: 39 }] },
+    },
+    {
+      name: 'password',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 474, b: 481, line: 11, col: 69 }] },
+    },
+  ],
+  usedParamSet: { username: true, password: true },
+  statement: {
+    body: "SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')",
+    loc: { a: 405, b: 498, line: 11, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -111,30 +215,41 @@ const loginIR: any = {"name":"Login","params":[{"name":"username","required":fal
  * SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')
  * ```
  */
-export const login = new PreparedQuery<ILoginParams,ILoginResult>(loginIR);
-
+export const login = new PreparedQuery<ILoginParams, ILoginResult>(loginIR)
 
 /** 'FindById' parameters type */
 export interface IFindByIdParams {
-  id: string | null | void;
+  id: string | null | void
 }
 
 /** 'FindById' return type */
 export interface IFindByIdResult {
-  created_at: Date;
-  email: string;
-  id: string;
-  password: Buffer;
-  username: string;
+  created_at: Date
+  email: string
+  id: string
+  password: Buffer
+  username: string
 }
 
 /** 'FindById' query type */
 export interface IFindByIdQuery {
-  params: IFindByIdParams;
-  result: IFindByIdResult;
+  params: IFindByIdParams
+  result: IFindByIdResult
 }
 
-const findByIdIR: any = {"name":"findById","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":556,"b":557,"line":14,"col":33}]}}],"usedParamSet":{"id":true},"statement":{"body":"SELECT * FROM accounts WHERE id=:id","loc":{"a":523,"b":557,"line":14,"col":0}}};
+const findByIdIR: any = {
+  name: 'findById',
+  params: [
+    {
+      name: 'id',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 556, b: 557, line: 14, col: 33 }] },
+    },
+  ],
+  usedParamSet: { id: true },
+  statement: { body: 'SELECT * FROM accounts WHERE id=:id', loc: { a: 523, b: 557, line: 14, col: 0 } },
+}
 
 /**
  * Query generated from SQL:
@@ -142,30 +257,41 @@ const findByIdIR: any = {"name":"findById","params":[{"name":"id","required":fal
  * SELECT * FROM accounts WHERE id=:id
  * ```
  */
-export const findById = new PreparedQuery<IFindByIdParams,IFindByIdResult>(findByIdIR);
-
+export const findById = new PreparedQuery<IFindByIdParams, IFindByIdResult>(findByIdIR)
 
 /** 'FindByUsername' parameters type */
 export interface IFindByUsernameParams {
-  username: string | null | void;
+  username: string | null | void
 }
 
 /** 'FindByUsername' return type */
 export interface IFindByUsernameResult {
-  created_at: Date;
-  email: string;
-  id: string;
-  password: Buffer;
-  username: string;
+  created_at: Date
+  email: string
+  id: string
+  password: Buffer
+  username: string
 }
 
 /** 'FindByUsername' query type */
 export interface IFindByUsernameQuery {
-  params: IFindByUsernameParams;
-  result: IFindByUsernameResult;
+  params: IFindByUsernameParams
+  result: IFindByUsernameResult
 }
 
-const findByUsernameIR: any = {"name":"findByUsername","params":[{"name":"username","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":627,"b":634,"line":17,"col":39}]}}],"usedParamSet":{"username":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username","loc":{"a":588,"b":634,"line":17,"col":0}}};
+const findByUsernameIR: any = {
+  name: 'findByUsername',
+  params: [
+    {
+      name: 'username',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 627, b: 634, line: 17, col: 39 }] },
+    },
+  ],
+  usedParamSet: { username: true },
+  statement: { body: 'SELECT * FROM accounts WHERE username=:username', loc: { a: 588, b: 634, line: 17, col: 0 } },
+}
 
 /**
  * Query generated from SQL:
@@ -173,30 +299,41 @@ const findByUsernameIR: any = {"name":"findByUsername","params":[{"name":"userna
  * SELECT * FROM accounts WHERE username=:username
  * ```
  */
-export const findByUsername = new PreparedQuery<IFindByUsernameParams,IFindByUsernameResult>(findByUsernameIR);
-
+export const findByUsername = new PreparedQuery<IFindByUsernameParams, IFindByUsernameResult>(findByUsernameIR)
 
 /** 'FindByEmail' parameters type */
 export interface IFindByEmailParams {
-  email: string | null | void;
+  email: string | null | void
 }
 
 /** 'FindByEmail' return type */
 export interface IFindByEmailResult {
-  created_at: Date;
-  email: string;
-  id: string;
-  password: Buffer;
-  username: string;
+  created_at: Date
+  email: string
+  id: string
+  password: Buffer
+  username: string
 }
 
 /** 'FindByEmail' query type */
 export interface IFindByEmailQuery {
-  params: IFindByEmailParams;
-  result: IFindByEmailResult;
+  params: IFindByEmailParams
+  result: IFindByEmailResult
 }
 
-const findByEmailIR: any = {"name":"findByEmail","params":[{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":698,"b":702,"line":20,"col":36}]}}],"usedParamSet":{"email":true},"statement":{"body":"SELECT * FROM accounts WHERE email=:email","loc":{"a":662,"b":702,"line":20,"col":0}}};
+const findByEmailIR: any = {
+  name: 'findByEmail',
+  params: [
+    {
+      name: 'email',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 698, b: 702, line: 20, col: 36 }] },
+    },
+  ],
+  usedParamSet: { email: true },
+  statement: { body: 'SELECT * FROM accounts WHERE email=:email', loc: { a: 662, b: 702, line: 20, col: 0 } },
+}
 
 /**
  * Query generated from SQL:
@@ -204,27 +341,59 @@ const findByEmailIR: any = {"name":"findByEmail","params":[{"name":"email","requ
  * SELECT * FROM accounts WHERE email=:email
  * ```
  */
-export const findByEmail = new PreparedQuery<IFindByEmailParams,IFindByEmailResult>(findByEmailIR);
-
+export const findByEmail = new PreparedQuery<IFindByEmailParams, IFindByEmailResult>(findByEmailIR)
 
 /** 'CreateToken' parameters type */
 export interface ICreateTokenParams {
-  accountId: string | null | void;
-  createdAt: Date | null | void;
-  id: string | null | void;
-  token: string | null | void;
+  accountId: string | null | void
+  createdAt: Date | null | void
+  id: string | null | void
+  token: string | null | void
 }
 
 /** 'CreateToken' return type */
-export type ICreateTokenResult = void;
+export type ICreateTokenResult = void
 
 /** 'CreateToken' query type */
 export interface ICreateTokenQuery {
-  params: ICreateTokenParams;
-  result: ICreateTokenResult;
+  params: ICreateTokenParams
+  result: ICreateTokenResult
 }
 
-const createTokenIR: any = {"name":"CreateToken","params":[{"name":"id","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":794,"b":795,"line":23,"col":64}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":799,"b":807,"line":23,"col":69}]}},{"name":"token","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":811,"b":815,"line":23,"col":81}]}},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":819,"b":827,"line":23,"col":89}]}}],"usedParamSet":{"id":true,"accountId":true,"token":true,"createdAt":true},"statement":{"body":"INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)","loc":{"a":730,"b":828,"line":23,"col":0}}};
+const createTokenIR: any = {
+  name: 'CreateToken',
+  params: [
+    {
+      name: 'id',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 794, b: 795, line: 23, col: 64 }] },
+    },
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 799, b: 807, line: 23, col: 69 }] },
+    },
+    {
+      name: 'token',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 811, b: 815, line: 23, col: 81 }] },
+    },
+    {
+      name: 'createdAt',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 819, b: 827, line: 23, col: 89 }] },
+    },
+  ],
+  usedParamSet: { id: true, accountId: true, token: true, createdAt: true },
+  statement: {
+    body: 'INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)',
+    loc: { a: 730, b: 828, line: 23, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -232,25 +401,45 @@ const createTokenIR: any = {"name":"CreateToken","params":[{"name":"id","require
  * INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)
  * ```
  */
-export const createToken = new PreparedQuery<ICreateTokenParams,ICreateTokenResult>(createTokenIR);
-
+export const createToken = new PreparedQuery<ICreateTokenParams, ICreateTokenResult>(createTokenIR)
 
 /** 'RevokeToken' parameters type */
 export interface IRevokeTokenParams {
-  revokedAt: Date | null | void;
-  token: string | null | void;
+  revokedAt: Date | null | void
+  token: string | null | void
 }
 
 /** 'RevokeToken' return type */
-export type IRevokeTokenResult = void;
+export type IRevokeTokenResult = void
 
 /** 'RevokeToken' query type */
 export interface IRevokeTokenQuery {
-  params: IRevokeTokenParams;
-  result: IRevokeTokenResult;
+  params: IRevokeTokenParams
+  result: IRevokeTokenResult
 }
 
-const revokeTokenIR: any = {"name":"RevokeToken","params":[{"name":"revokedAt","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":886,"b":894,"line":26,"col":30}]}},{"name":"token","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":909,"b":913,"line":26,"col":53}]}}],"usedParamSet":{"revokedAt":true,"token":true},"statement":{"body":"UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token","loc":{"a":856,"b":913,"line":26,"col":0}}};
+const revokeTokenIR: any = {
+  name: 'RevokeToken',
+  params: [
+    {
+      name: 'revokedAt',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 886, b: 894, line: 26, col: 30 }] },
+    },
+    {
+      name: 'token',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 909, b: 913, line: 26, col: 53 }] },
+    },
+  ],
+  usedParamSet: { revokedAt: true, token: true },
+  statement: {
+    body: 'UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token',
+    loc: { a: 856, b: 913, line: 26, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -258,30 +447,41 @@ const revokeTokenIR: any = {"name":"RevokeToken","params":[{"name":"revokedAt","
  * UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token
  * ```
  */
-export const revokeToken = new PreparedQuery<IRevokeTokenParams,IRevokeTokenResult>(revokeTokenIR);
-
+export const revokeToken = new PreparedQuery<IRevokeTokenParams, IRevokeTokenResult>(revokeTokenIR)
 
 /** 'FindToken' parameters type */
 export interface IFindTokenParams {
-  token: string | null | void;
+  token: string | null | void
 }
 
 /** 'FindToken' return type */
 export interface IFindTokenResult {
-  account_id: string;
-  created_at: Date;
-  id: string;
-  revoked_at: Date | null;
-  token: string;
+  account_id: string
+  created_at: Date
+  id: string
+  revoked_at: Date | null
+  token: string
 }
 
 /** 'FindToken' query type */
 export interface IFindTokenQuery {
-  params: IFindTokenParams;
-  result: IFindTokenResult;
+  params: IFindTokenParams
+  result: IFindTokenResult
 }
 
-const findTokenIR: any = {"name":"findToken","params":[{"name":"token","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":973,"b":977,"line":29,"col":34}]}}],"usedParamSet":{"token":true},"statement":{"body":"SELECT * FROM tokens WHERE token=:token","loc":{"a":939,"b":977,"line":29,"col":0}}};
+const findTokenIR: any = {
+  name: 'findToken',
+  params: [
+    {
+      name: 'token',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 973, b: 977, line: 29, col: 34 }] },
+    },
+  ],
+  usedParamSet: { token: true },
+  statement: { body: 'SELECT * FROM tokens WHERE token=:token', loc: { a: 939, b: 977, line: 29, col: 0 } },
+}
 
 /**
  * Query generated from SQL:
@@ -289,30 +489,44 @@ const findTokenIR: any = {"name":"findToken","params":[{"name":"token","required
  * SELECT * FROM tokens WHERE token=:token
  * ```
  */
-export const findToken = new PreparedQuery<IFindTokenParams,IFindTokenResult>(findTokenIR);
-
+export const findToken = new PreparedQuery<IFindTokenParams, IFindTokenResult>(findTokenIR)
 
 /** 'FindCurrentToken' parameters type */
 export interface IFindCurrentTokenParams {
-  accountId: string | null | void;
+  accountId: string | null | void
 }
 
 /** 'FindCurrentToken' return type */
 export interface IFindCurrentTokenResult {
-  account_id: string;
-  created_at: Date;
-  id: string;
-  revoked_at: Date | null;
-  token: string;
+  account_id: string
+  created_at: Date
+  id: string
+  revoked_at: Date | null
+  token: string
 }
 
 /** 'FindCurrentToken' query type */
 export interface IFindCurrentTokenQuery {
-  params: IFindCurrentTokenParams;
-  result: IFindCurrentTokenResult;
+  params: IFindCurrentTokenParams
+  result: IFindCurrentTokenResult
 }
 
-const findCurrentTokenIR: any = {"name":"findCurrentToken","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1049,"b":1057,"line":32,"col":39}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL","loc":{"a":1010,"b":1080,"line":32,"col":0}}};
+const findCurrentTokenIR: any = {
+  name: 'findCurrentToken',
+  params: [
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1049, b: 1057, line: 32, col: 39 }] },
+    },
+  ],
+  usedParamSet: { accountId: true },
+  statement: {
+    body: 'SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL',
+    loc: { a: 1010, b: 1080, line: 32, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -320,31 +534,45 @@ const findCurrentTokenIR: any = {"name":"findCurrentToken","params":[{"name":"ac
  * SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL
  * ```
  */
-export const findCurrentToken = new PreparedQuery<IFindCurrentTokenParams,IFindCurrentTokenResult>(findCurrentTokenIR);
-
+export const findCurrentToken = new PreparedQuery<IFindCurrentTokenParams, IFindCurrentTokenResult>(findCurrentTokenIR)
 
 /** 'AccountSettings' parameters type */
 export interface IAccountSettingsParams {
-  accountId: string | null | void;
+  accountId: string | null | void
 }
 
 /** 'AccountSettings' return type */
 export interface IAccountSettingsResult {
-  account_id: string;
-  akismet_key: string | null;
-  blog_url: string | null;
-  id: string;
-  require_moderation: boolean;
-  use_akismet: boolean | null;
+  account_id: string
+  akismet_key: string | null
+  blog_url: string | null
+  id: string
+  require_moderation: boolean
+  use_akismet: boolean | null
 }
 
 /** 'AccountSettings' query type */
 export interface IAccountSettingsQuery {
-  params: IAccountSettingsParams;
-  result: IAccountSettingsResult;
+  params: IAccountSettingsParams
+  result: IAccountSettingsResult
 }
 
-const accountSettingsIR: any = {"name":"accountSettings","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1161,"b":1169,"line":35,"col":49}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM account_settings WHERE account_id=:accountId","loc":{"a":1112,"b":1169,"line":35,"col":0}}};
+const accountSettingsIR: any = {
+  name: 'accountSettings',
+  params: [
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1161, b: 1169, line: 35, col: 49 }] },
+    },
+  ],
+  usedParamSet: { accountId: true },
+  statement: {
+    body: 'SELECT * FROM account_settings WHERE account_id=:accountId',
+    loc: { a: 1112, b: 1169, line: 35, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -352,29 +580,43 @@ const accountSettingsIR: any = {"name":"accountSettings","params":[{"name":"acco
  * SELECT * FROM account_settings WHERE account_id=:accountId
  * ```
  */
-export const accountSettings = new PreparedQuery<IAccountSettingsParams,IAccountSettingsResult>(accountSettingsIR);
-
+export const accountSettings = new PreparedQuery<IAccountSettingsParams, IAccountSettingsResult>(accountSettingsIR)
 
 /** 'AccountEmailSettings' parameters type */
 export interface IAccountEmailSettingsParams {
-  accountId: string | null | void;
+  accountId: string | null | void
 }
 
 /** 'AccountEmailSettings' return type */
 export interface IAccountEmailSettingsResult {
-  account_id: string;
-  id: string;
-  notify_on_comments: boolean | null;
-  send_comments_digest: boolean | null;
+  account_id: string
+  id: string
+  notify_on_comments: boolean | null
+  send_comments_digest: boolean | null
 }
 
 /** 'AccountEmailSettings' query type */
 export interface IAccountEmailSettingsQuery {
-  params: IAccountEmailSettingsParams;
-  result: IAccountEmailSettingsResult;
+  params: IAccountEmailSettingsParams
+  result: IAccountEmailSettingsResult
 }
 
-const accountEmailSettingsIR: any = {"name":"accountEmailSettings","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1261,"b":1269,"line":38,"col":55}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"SELECT * FROM account_email_settings WHERE account_id=:accountId","loc":{"a":1206,"b":1269,"line":38,"col":0}}};
+const accountEmailSettingsIR: any = {
+  name: 'accountEmailSettings',
+  params: [
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1261, b: 1269, line: 38, col: 55 }] },
+    },
+  ],
+  usedParamSet: { accountId: true },
+  statement: {
+    body: 'SELECT * FROM account_email_settings WHERE account_id=:accountId',
+    loc: { a: 1206, b: 1269, line: 38, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -382,28 +624,68 @@ const accountEmailSettingsIR: any = {"name":"accountEmailSettings","params":[{"n
  * SELECT * FROM account_email_settings WHERE account_id=:accountId
  * ```
  */
-export const accountEmailSettings = new PreparedQuery<IAccountEmailSettingsParams,IAccountEmailSettingsResult>(accountEmailSettingsIR);
-
+export const accountEmailSettings = new PreparedQuery<IAccountEmailSettingsParams, IAccountEmailSettingsResult>(
+  accountEmailSettingsIR
+)
 
 /** 'UpdateSettings' parameters type */
 export interface IUpdateSettingsParams {
-  accountId: string | null | void;
-  akismetKey: string | null | void;
-  blogUrl: string | null | void;
-  requireModeration: boolean | null | void;
-  useAkismet: boolean | null | void;
+  accountId: string | null | void
+  akismetKey: string | null | void
+  blogUrl: string | null | void
+  requireModeration: boolean | null | void
+  useAkismet: boolean | null | void
 }
 
 /** 'UpdateSettings' return type */
-export type IUpdateSettingsResult = void;
+export type IUpdateSettingsResult = void
 
 /** 'UpdateSettings' query type */
 export interface IUpdateSettingsQuery {
-  params: IUpdateSettingsParams;
-  result: IUpdateSettingsResult;
+  params: IUpdateSettingsParams
+  result: IUpdateSettingsResult
 }
 
-const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"requireModeration","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1348,"b":1364,"line":41,"col":48}]}},{"name":"blogUrl","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1377,"b":1383,"line":41,"col":77}]}},{"name":"useAkismet","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1399,"b":1408,"line":41,"col":99}]}},{"name":"akismetKey","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1424,"b":1433,"line":41,"col":124}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1453,"b":1461,"line":41,"col":153}]}}],"usedParamSet":{"requireModeration":true,"blogUrl":true,"useAkismet":true,"akismetKey":true,"accountId":true},"statement":{"body":"UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId","loc":{"a":1300,"b":1461,"line":41,"col":0}}};
+const updateSettingsIR: any = {
+  name: 'updateSettings',
+  params: [
+    {
+      name: 'requireModeration',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1348, b: 1364, line: 41, col: 48 }] },
+    },
+    {
+      name: 'blogUrl',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1377, b: 1383, line: 41, col: 77 }] },
+    },
+    {
+      name: 'useAkismet',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1399, b: 1408, line: 41, col: 99 }] },
+    },
+    {
+      name: 'akismetKey',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1424, b: 1433, line: 41, col: 124 }] },
+    },
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1453, b: 1461, line: 41, col: 153 }] },
+    },
+  ],
+  usedParamSet: { requireModeration: true, blogUrl: true, useAkismet: true, akismetKey: true, accountId: true },
+  statement: {
+    body: 'UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId',
+    loc: { a: 1300, b: 1461, line: 41, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -411,26 +693,52 @@ const updateSettingsIR: any = {"name":"updateSettings","params":[{"name":"requir
  * UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId
  * ```
  */
-export const updateSettings = new PreparedQuery<IUpdateSettingsParams,IUpdateSettingsResult>(updateSettingsIR);
-
+export const updateSettings = new PreparedQuery<IUpdateSettingsParams, IUpdateSettingsResult>(updateSettingsIR)
 
 /** 'UpdateEmailSettings' parameters type */
 export interface IUpdateEmailSettingsParams {
-  accountId: string | null | void;
-  notifyOnComments: boolean | null | void;
-  sendCommentsDigest: boolean | null | void;
+  accountId: string | null | void
+  notifyOnComments: boolean | null | void
+  sendCommentsDigest: boolean | null | void
 }
 
 /** 'UpdateEmailSettings' return type */
-export type IUpdateEmailSettingsResult = void;
+export type IUpdateEmailSettingsResult = void
 
 /** 'UpdateEmailSettings' query type */
 export interface IUpdateEmailSettingsQuery {
-  params: IUpdateEmailSettingsParams;
-  result: IUpdateEmailSettingsResult;
+  params: IUpdateEmailSettingsParams
+  result: IUpdateEmailSettingsResult
 }
 
-const updateEmailSettingsIR: any = {"name":"updateEmailSettings","params":[{"name":"notifyOnComments","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1551,"b":1566,"line":44,"col":54}]}},{"name":"sendCommentsDigest","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1591,"b":1608,"line":44,"col":94}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1628,"b":1636,"line":44,"col":131}]}}],"usedParamSet":{"notifyOnComments":true,"sendCommentsDigest":true,"accountId":true},"statement":{"body":"UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId","loc":{"a":1497,"b":1636,"line":44,"col":0}}};
+const updateEmailSettingsIR: any = {
+  name: 'updateEmailSettings',
+  params: [
+    {
+      name: 'notifyOnComments',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1551, b: 1566, line: 44, col: 54 }] },
+    },
+    {
+      name: 'sendCommentsDigest',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1591, b: 1608, line: 44, col: 94 }] },
+    },
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1628, b: 1636, line: 44, col: 131 }] },
+    },
+  ],
+  usedParamSet: { notifyOnComments: true, sendCommentsDigest: true, accountId: true },
+  statement: {
+    body: 'UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId',
+    loc: { a: 1497, b: 1636, line: 44, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -438,31 +746,53 @@ const updateEmailSettingsIR: any = {"name":"updateEmailSettings","params":[{"nam
  * UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId
  * ```
  */
-export const updateEmailSettings = new PreparedQuery<IUpdateEmailSettingsParams,IUpdateEmailSettingsResult>(updateEmailSettingsIR);
-
+export const updateEmailSettings = new PreparedQuery<IUpdateEmailSettingsParams, IUpdateEmailSettingsResult>(
+  updateEmailSettingsIR
+)
 
 /** 'FindUserByEmailOrUsername' parameters type */
 export interface IFindUserByEmailOrUsernameParams {
-  email: string | null | void;
-  username: string | null | void;
+  email: string | null | void
+  username: string | null | void
 }
 
 /** 'FindUserByEmailOrUsername' return type */
 export interface IFindUserByEmailOrUsernameResult {
-  created_at: Date;
-  email: string;
-  id: string;
-  password: Buffer;
-  username: string;
+  created_at: Date
+  email: string
+  id: string
+  password: Buffer
+  username: string
 }
 
 /** 'FindUserByEmailOrUsername' query type */
 export interface IFindUserByEmailOrUsernameQuery {
-  params: IFindUserByEmailOrUsernameParams;
-  result: IFindUserByEmailOrUsernameResult;
+  params: IFindUserByEmailOrUsernameParams
+  result: IFindUserByEmailOrUsernameResult
 }
 
-const findUserByEmailOrUsernameIR: any = {"name":"findUserByEmailOrUsername","params":[{"name":"username","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1717,"b":1724,"line":47,"col":39}]}},{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1736,"b":1740,"line":47,"col":58}]}}],"usedParamSet":{"username":true,"email":true},"statement":{"body":"SELECT * FROM accounts WHERE username=:username OR email=:email","loc":{"a":1678,"b":1740,"line":47,"col":0}}};
+const findUserByEmailOrUsernameIR: any = {
+  name: 'findUserByEmailOrUsername',
+  params: [
+    {
+      name: 'username',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1717, b: 1724, line: 47, col: 39 }] },
+    },
+    {
+      name: 'email',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1736, b: 1740, line: 47, col: 58 }] },
+    },
+  ],
+  usedParamSet: { username: true, email: true },
+  statement: {
+    body: 'SELECT * FROM accounts WHERE username=:username OR email=:email',
+    loc: { a: 1678, b: 1740, line: 47, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -470,25 +800,48 @@ const findUserByEmailOrUsernameIR: any = {"name":"findUserByEmailOrUsername","pa
  * SELECT * FROM accounts WHERE username=:username OR email=:email
  * ```
  */
-export const findUserByEmailOrUsername = new PreparedQuery<IFindUserByEmailOrUsernameParams,IFindUserByEmailOrUsernameResult>(findUserByEmailOrUsernameIR);
-
+export const findUserByEmailOrUsername = new PreparedQuery<
+  IFindUserByEmailOrUsernameParams,
+  IFindUserByEmailOrUsernameResult
+>(findUserByEmailOrUsernameIR)
 
 /** 'ChangeAccountEmail' parameters type */
 export interface IChangeAccountEmailParams {
-  accountId: string | null | void;
-  email: string | null | void;
+  accountId: string | null | void
+  email: string | null | void
 }
 
 /** 'ChangeAccountEmail' return type */
-export type IChangeAccountEmailResult = void;
+export type IChangeAccountEmailResult = void
 
 /** 'ChangeAccountEmail' query type */
 export interface IChangeAccountEmailQuery {
-  params: IChangeAccountEmailParams;
-  result: IChangeAccountEmailResult;
+  params: IChangeAccountEmailParams
+  result: IChangeAccountEmailResult
 }
 
-const changeAccountEmailIR: any = {"name":"changeAccountEmail","params":[{"name":"email","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1802,"b":1806,"line":50,"col":27}]}},{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1818,"b":1826,"line":50,"col":43}]}}],"usedParamSet":{"email":true,"accountId":true},"statement":{"body":"UPDATE accounts SET email=:email WHERE id=:accountId","loc":{"a":1775,"b":1826,"line":50,"col":0}}};
+const changeAccountEmailIR: any = {
+  name: 'changeAccountEmail',
+  params: [
+    {
+      name: 'email',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1802, b: 1806, line: 50, col: 27 }] },
+    },
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1818, b: 1826, line: 50, col: 43 }] },
+    },
+  ],
+  usedParamSet: { email: true, accountId: true },
+  statement: {
+    body: 'UPDATE accounts SET email=:email WHERE id=:accountId',
+    loc: { a: 1775, b: 1826, line: 50, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -496,24 +849,40 @@ const changeAccountEmailIR: any = {"name":"changeAccountEmail","params":[{"name"
  * UPDATE accounts SET email=:email WHERE id=:accountId
  * ```
  */
-export const changeAccountEmail = new PreparedQuery<IChangeAccountEmailParams,IChangeAccountEmailResult>(changeAccountEmailIR);
-
+export const changeAccountEmail = new PreparedQuery<IChangeAccountEmailParams, IChangeAccountEmailResult>(
+  changeAccountEmailIR
+)
 
 /** 'DeleteSettings' parameters type */
 export interface IDeleteSettingsParams {
-  accountId: string | null | void;
+  accountId: string | null | void
 }
 
 /** 'DeleteSettings' return type */
-export type IDeleteSettingsResult = void;
+export type IDeleteSettingsResult = void
 
 /** 'DeleteSettings' query type */
 export interface IDeleteSettingsQuery {
-  params: IDeleteSettingsParams;
-  result: IDeleteSettingsResult;
+  params: IDeleteSettingsParams
+  result: IDeleteSettingsResult
 }
 
-const deleteSettingsIR: any = {"name":"deleteSettings","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":1904,"b":1912,"line":53,"col":47}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM account_settings WHERE account_id=:accountId","loc":{"a":1857,"b":1912,"line":53,"col":0}}};
+const deleteSettingsIR: any = {
+  name: 'deleteSettings',
+  params: [
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 1904, b: 1912, line: 53, col: 47 }] },
+    },
+  ],
+  usedParamSet: { accountId: true },
+  statement: {
+    body: 'DELETE FROM account_settings WHERE account_id=:accountId',
+    loc: { a: 1857, b: 1912, line: 53, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -521,24 +890,38 @@ const deleteSettingsIR: any = {"name":"deleteSettings","params":[{"name":"accoun
  * DELETE FROM account_settings WHERE account_id=:accountId
  * ```
  */
-export const deleteSettings = new PreparedQuery<IDeleteSettingsParams,IDeleteSettingsResult>(deleteSettingsIR);
-
+export const deleteSettings = new PreparedQuery<IDeleteSettingsParams, IDeleteSettingsResult>(deleteSettingsIR)
 
 /** 'DeleteEmailSettings' parameters type */
 export interface IDeleteEmailSettingsParams {
-  accountId: string | null | void;
+  accountId: string | null | void
 }
 
 /** 'DeleteEmailSettings' return type */
-export type IDeleteEmailSettingsResult = void;
+export type IDeleteEmailSettingsResult = void
 
 /** 'DeleteEmailSettings' query type */
 export interface IDeleteEmailSettingsQuery {
-  params: IDeleteEmailSettingsParams;
-  result: IDeleteEmailSettingsResult;
+  params: IDeleteEmailSettingsParams
+  result: IDeleteEmailSettingsResult
 }
 
-const deleteEmailSettingsIR: any = {"name":"deleteEmailSettings","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2001,"b":2009,"line":56,"col":53}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM account_email_settings WHERE account_id=:accountId","loc":{"a":1948,"b":2009,"line":56,"col":0}}};
+const deleteEmailSettingsIR: any = {
+  name: 'deleteEmailSettings',
+  params: [
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 2001, b: 2009, line: 56, col: 53 }] },
+    },
+  ],
+  usedParamSet: { accountId: true },
+  statement: {
+    body: 'DELETE FROM account_email_settings WHERE account_id=:accountId',
+    loc: { a: 1948, b: 2009, line: 56, col: 0 },
+  },
+}
 
 /**
  * Query generated from SQL:
@@ -546,24 +929,37 @@ const deleteEmailSettingsIR: any = {"name":"deleteEmailSettings","params":[{"nam
  * DELETE FROM account_email_settings WHERE account_id=:accountId
  * ```
  */
-export const deleteEmailSettings = new PreparedQuery<IDeleteEmailSettingsParams,IDeleteEmailSettingsResult>(deleteEmailSettingsIR);
-
+export const deleteEmailSettings = new PreparedQuery<IDeleteEmailSettingsParams, IDeleteEmailSettingsResult>(
+  deleteEmailSettingsIR
+)
 
 /** 'DeleteTokens' parameters type */
 export interface IDeleteTokensParams {
-  accountId: string | null | void;
+  accountId: string | null | void
 }
 
 /** 'DeleteTokens' return type */
-export type IDeleteTokensResult = void;
+export type IDeleteTokensResult = void
 
 /** 'DeleteTokens' query type */
 export interface IDeleteTokensQuery {
-  params: IDeleteTokensParams;
-  result: IDeleteTokensResult;
+  params: IDeleteTokensParams
+  result: IDeleteTokensResult
 }
 
-const deleteTokensIR: any = {"name":"deleteTokens","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2075,"b":2083,"line":59,"col":37}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM tokens WHERE account_id=:accountId","loc":{"a":2038,"b":2083,"line":59,"col":0}}};
+const deleteTokensIR: any = {
+  name: 'deleteTokens',
+  params: [
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 2075, b: 2083, line: 59, col: 37 }] },
+    },
+  ],
+  usedParamSet: { accountId: true },
+  statement: { body: 'DELETE FROM tokens WHERE account_id=:accountId', loc: { a: 2038, b: 2083, line: 59, col: 0 } },
+}
 
 /**
  * Query generated from SQL:
@@ -571,24 +967,35 @@ const deleteTokensIR: any = {"name":"deleteTokens","params":[{"name":"accountId"
  * DELETE FROM tokens WHERE account_id=:accountId
  * ```
  */
-export const deleteTokens = new PreparedQuery<IDeleteTokensParams,IDeleteTokensResult>(deleteTokensIR);
-
+export const deleteTokens = new PreparedQuery<IDeleteTokensParams, IDeleteTokensResult>(deleteTokensIR)
 
 /** 'CloseAccount' parameters type */
 export interface ICloseAccountParams {
-  accountId: string | null | void;
+  accountId: string | null | void
 }
 
 /** 'CloseAccount' return type */
-export type ICloseAccountResult = void;
+export type ICloseAccountResult = void
 
 /** 'CloseAccount' query type */
 export interface ICloseAccountQuery {
-  params: ICloseAccountParams;
-  result: ICloseAccountResult;
+  params: ICloseAccountParams
+  result: ICloseAccountResult
 }
 
-const closeAccountIR: any = {"name":"closeAccount","params":[{"name":"accountId","required":false,"transform":{"type":"scalar"},"codeRefs":{"used":[{"a":2143,"b":2151,"line":62,"col":31}]}}],"usedParamSet":{"accountId":true},"statement":{"body":"DELETE FROM accounts WHERE id=:accountId","loc":{"a":2112,"b":2151,"line":62,"col":0}}};
+const closeAccountIR: any = {
+  name: 'closeAccount',
+  params: [
+    {
+      name: 'accountId',
+      required: false,
+      transform: { type: 'scalar' },
+      codeRefs: { used: [{ a: 2143, b: 2151, line: 62, col: 31 }] },
+    },
+  ],
+  usedParamSet: { accountId: true },
+  statement: { body: 'DELETE FROM accounts WHERE id=:accountId', loc: { a: 2112, b: 2151, line: 62, col: 0 } },
+}
 
 /**
  * Query generated from SQL:
@@ -596,6 +1003,4 @@ const closeAccountIR: any = {"name":"closeAccount","params":[{"name":"accountId"
  * DELETE FROM accounts WHERE id=:accountId
  * ```
  */
-export const closeAccount = new PreparedQuery<ICloseAccountParams,ICloseAccountResult>(closeAccountIR);
-
-
+export const closeAccount = new PreparedQuery<ICloseAccountParams, ICloseAccountResult>(closeAccountIR)

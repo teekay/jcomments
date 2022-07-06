@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class ConfigService {
@@ -11,23 +11,21 @@ export class ConfigService {
     this.Mailgun = {
       apiKey: process.env['MAILGUN_API_KEY'] ?? '',
       domain: process.env['MAILGUN_DOMAIN'] ?? '',
-      sender: process.env['MAILGUN_SENDER'] ?? ''
+      sender: process.env['MAILGUN_SENDER'] ?? '',
     }
 
-    this.isSecure = (process.env['IS_SECURE'] ?? '').toLowerCase() === 'true'
-      ? true
-      : false;
+    this.isSecure = (process.env['IS_SECURE'] ?? '').toLowerCase() === 'true' ? true : false
     this.hostName = process.env['HOST'] ?? ''
     this.port = +(process.env['WEB_PORT_PUBLIC'] ?? 80)
   }
 
   validateOrThrow(): void {
     if (this.hostName === '') {
-      throw new Error("HOST env var is not set")
+      throw new Error('HOST env var is not set')
     }
 
     if (this.Mailgun.apiKey === '' || this.Mailgun.domain === '' || this.Mailgun.sender === '') {
-      throw new Error("Mailgun env vars MAILGUN_API_KEY, MAILGUN_DOMAIN, MAILGUN_SENDER are not set")
+      throw new Error('Mailgun env vars MAILGUN_API_KEY, MAILGUN_DOMAIN, MAILGUN_SENDER are not set')
     }
   }
 
@@ -51,8 +49,8 @@ export class ConfigService {
     return {
       auth: {
         api_key: this.Mailgun.apiKey,
-        domain: this.Mailgun.domain
-      }
+        domain: this.Mailgun.domain,
+      },
     }
   }
 
@@ -70,7 +68,6 @@ interface MailgunConfig {
 export interface MailgunAuth {
   auth: {
     api_key: string
-    domain: string  
+    domain: string
   }
 }
-

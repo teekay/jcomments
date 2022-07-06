@@ -1,6 +1,6 @@
-import { AzureFunction, Context, Timer } from "@azure/functions"
-import { appContext } from "../src/azure"
-import { Client } from "pg"
+import { AzureFunction, Context, Timer } from '@azure/functions'
+import { appContext } from '../src/azure'
+import { Client } from 'pg'
 
 const healthCheck: AzureFunction = async (context: Context, timer: Timer) => {
   context.log(`Performing health check. Is timer late? ${timer.isPastDue}`)
@@ -19,7 +19,6 @@ const healthCheck: AzureFunction = async (context: Context, timer: Timer) => {
     context.log.error(`Could not instantiate the app: ${(oops as Error)?.message}`)
     throw oops
   }
-  
 }
 
 export default healthCheck
