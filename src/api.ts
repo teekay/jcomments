@@ -18,12 +18,11 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
 
   // Starts listening for shutdown hooks
-  app.enableShutdownHooks();
+  app.enableShutdownHooks()
 
   // initialize the job queue
   const queuedMailer = app.get(QueuedMailer)
   await queuedMailer.init()
-
 
   const port = +(process.env['API_PORT'] ?? 3000)
   await app.listen(port)

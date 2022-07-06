@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty } from "class-validator"
+import { IsEmail, IsNotEmpty } from 'class-validator'
 
 export interface User {
   id: string
@@ -17,5 +17,5 @@ export interface Account extends User {
 export class AccountEmailDto {
   @IsNotEmpty()
   @IsEmail()
-  email!: string;
+  email!: string
 }

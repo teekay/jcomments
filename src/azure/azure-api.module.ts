@@ -23,7 +23,7 @@ import { PersistenceModule } from '../shared/persistence/persistence.module'
         prettifier: require('pino-colada'),
       },
     }),
-  ]
+  ],
 })
 export class AzureApiModule implements OnApplicationShutdown {
   constructor(

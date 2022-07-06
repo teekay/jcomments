@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable } from '@nestjs/common'
 import { JSDOM } from 'jsdom'
 import { Converter, setFlavor } from 'showdown'
 import xss from 'xss'
@@ -9,23 +9,21 @@ export class ContentFilteringService {
   private converter: Converter
 
   constructor() {
-
-    const xssfilter = function() {
+    const xssfilter = function () {
       const ext = {
-        type: "output",
-        filter: function(text: string): string {
+        type: 'output',
+        filter: function (text: string): string {
           return xss(text, {
             css: {
-              whitelist: false
+              whitelist: false,
             },
             stripIgnoreTag: true,
-            stripIgnoreTagBody: ['script']
-          });
-        }
+            stripIgnoreTagBody: ['script'],
+          })
+        },
       }
       return [ext]
     }
-
 
     setFlavor('github')
     this.dom = new JSDOM()
@@ -33,8 +31,8 @@ export class ContentFilteringService {
       noHeaderId: true,
       tables: true,
       simpleLineBreaks: true,
-      openLinksInNewWindow: true,      
-      extensions: [xssfilter]
+      openLinksInNewWindow: true,
+      extensions: [xssfilter],
     })
   }
 
@@ -51,7 +49,7 @@ export class ContentFilteringService {
     const html = this.converter.makeHtml(whatever)
     return xss(html, {
       css: {
-        whitelist: false
+        whitelist: false,
       },
       whiteList: {}, // empty, means filter out all tags
       stripIgnoreTag: true, // filter out all HTML not in the whitelist

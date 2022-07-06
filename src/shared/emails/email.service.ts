@@ -1,6 +1,6 @@
 import { CommentDto } from '../comments/comment.interface'
 import handlebars from 'handlebars'
-import { Injectable } from "@nestjs/common";
+import { Injectable } from '@nestjs/common'
 import { readFileSync } from 'fs'
 
 @Injectable()
@@ -10,7 +10,8 @@ export class EmailService {
     const textTemplate = handlebars.compile(readFileSync(`${__dirname}/views/password-reset/text.hbs`).toString())
     return {
       subject: 'Reset your password',
-      html: htmlTemplate({ link }), text: textTemplate({ link })
+      html: htmlTemplate({ link }),
+      text: textTemplate({ link }),
     }
   }
 
@@ -19,7 +20,8 @@ export class EmailService {
     const textTemplate = handlebars.compile(readFileSync(`${__dirname}/views/comments/single/text.hbs`).toString())
     return {
       subject: 'A new comment came in to your JamComments',
-      html: htmlTemplate({ comment, link }), text: textTemplate({ comment, link })
+      html: htmlTemplate({ comment, link }),
+      text: textTemplate({ comment, link }),
     }
   }
 }

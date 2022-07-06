@@ -1,6 +1,6 @@
-import { ConfigService } from "../config/config.service"
-import { Injectable } from "@nestjs/common"
-import { Logger } from "nestjs-pino"
+import { ConfigService } from '../config/config.service'
+import { Injectable } from '@nestjs/common'
+import { Logger } from 'nestjs-pino'
 import mg from 'nodemailer-mailgun-transport'
 import nodemailer from 'nodemailer'
 
@@ -8,8 +8,7 @@ import nodemailer from 'nodemailer'
 export class SendMailService {
   private nodemailerMailgun: nodemailer.Transporter
 
-  constructor(private readonly configService: ConfigService,
-    private readonly logger: Logger) {
+  constructor(private readonly configService: ConfigService, private readonly logger: Logger) {
     this.nodemailerMailgun = nodemailer.createTransport(mg(this.configService.mailgunAuth()))
   }
 
@@ -20,12 +19,11 @@ export class SendMailService {
         to, // An array if you have multiple recipients.
         subject,
         html,
-        text  // plain-text version
-      });
-      this.logger.debug(`Mailgun response: ${JSON.stringify(info)}`)  
+        text, // plain-text version
+      })
+      this.logger.debug(`Mailgun response: ${JSON.stringify(info)}`)
     } catch (err) {
       this.logger.warn(`Mailgun error: ${err}`)
     }
   }
-
 }

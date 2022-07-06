@@ -1,9 +1,9 @@
-import { AzureFunction, Context } from '@azure/functions';
+import { AzureFunction, Context } from '@azure/functions'
 import { isCommentEvent } from '../generated/CommentEvent.guard'
-import { appContext } from '../src/azure';
-import { ConfigService } from '../src/shared/config/config.service';
-import { EmailService } from '../src/shared/emails/email.service';
-import { SendMailService } from '../src/shared/infra/sendmail.service';
+import { appContext } from '../src/azure'
+import { ConfigService } from '../src/shared/config/config.service'
+import { EmailService } from '../src/shared/emails/email.service'
+import { SendMailService } from '../src/shared/infra/sendmail.service'
 
 const commentEventHandler: AzureFunction = async function (context: Context, eventBody: unknown): Promise<void> {
   if (!isCommentEvent(eventBody)) {

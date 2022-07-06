@@ -7,21 +7,19 @@ import { Response } from 'express'
 
 @Controller('auth')
 export class AuthController {
-
-  constructor(private readonly authService: AuthService,
-    private readonly logger: Logger) {}
+  constructor(private readonly authService: AuthService, private readonly logger: Logger) {}
 
   @Get('login')
   loginForm(@Req() req, @Res() res: Response): void {
     if (req.isAuthenticated()) {
-      return res.redirect('/dashboard/');
+      return res.redirect('/dashboard/')
     }
 
-    return res.render('../shared/auth/views/login', { 
+    return res.render('../shared/auth/views/login', {
       layout: 'dashboard',
       section: 'Sign in',
       loginError: req.flash('login-error'),
-      csrfToken: req.csrfToken() 
+      csrfToken: req.csrfToken(),
     })
   }
 
@@ -40,16 +38,16 @@ export class AuthController {
 
   @Get('forgot-password')
   showForgotPassword(@Req() req, @Res() res: Response): void {
-    return res.render('../shared/auth/views/forgot-password', { 
+    return res.render('../shared/auth/views/forgot-password', {
       layout: 'dashboard',
       section: 'Forgot your password?',
-      csrfToken: req.csrfToken() 
+      csrfToken: req.csrfToken(),
     })
   }
 
   @Post('forgot-password')
   async initiatePasswordReset(@Body() forWhom: { username: string }, @Res() res: Response): Promise<void> {
-    await this.authService.initiatePasswordReset( forWhom.username )
+    await this.authService.initiatePasswordReset(forWhom.username)
     res.redirect('/auth/forgot-password/wait')
   }
 
@@ -66,7 +64,7 @@ export class AuthController {
     const isTokenOk = await this.authService.isTokenValid(params.token, new Date())
     if (!isTokenOk) {
       res.status(403).render('../shared/auth/views/reset-password-token-ko', {
-        section: 'Error resetting password'
+        section: 'Error resetting password',
       })
       return
     }
@@ -75,26 +73,26 @@ export class AuthController {
       layout: 'dashboard',
       title: 'New password',
       token: params.token,
-      csrfToken: req.csrfToken() 
+      csrfToken: req.csrfToken(),
     })
   }
 
   @Post('reset-password')
-  async changePassword(@Res() res: Response, @Body() params: { token: string, password: string }): Promise<void> {
+  async changePassword(@Res() res: Response, @Body() params: { token: string; password: string }): Promise<void> {
     const isTokenOk = await this.authService.isTokenValid(params.token, new Date())
     if (!isTokenOk) {
       res.status(403).render('../shared/auth/views/reset-password-token-ko', {
-        section: 'Error resetting password'
+        section: 'Error resetting password',
       })
       return
     }
     try {
       await this.authService.completePasswordReset(params.token, params.password)
-      return res.redirect('/auth/login')  
+      return res.redirect('/auth/login')
     } catch (oops) {
       this.logger.warn(oops)
       res.status(500).render('../shared/auth/views/reset-password-token-ko', {
-        section: 'Error resetting password'
+        section: 'Error resetting password',
       })
     }
   }

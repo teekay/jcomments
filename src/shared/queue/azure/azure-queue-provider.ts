@@ -10,6 +10,6 @@ export const jobQueueProvider = [
       }
 
       return new AzureServiceBusQueue(new ServiceBusClient(process.env['SERVICEBUS_CONNECTION']))
-    }
-  }
+    },
+  },
 ]

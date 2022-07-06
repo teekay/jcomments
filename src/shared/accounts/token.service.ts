@@ -11,10 +11,10 @@ export class TokenService {
 
   async findById(token: string): Promise<Token | undefined> {
     const tokens = await findToken.run({ token }, this.client)
-    if (tokens.length !== 1) return;
+    if (tokens.length !== 1) return
     const t = tokens[0]
     const accounts = await findById.run({ id: t.account_id }, this.client)
-    if (accounts.length !== 1) throw new Error("Reference integrity error")
+    if (accounts.length !== 1) throw new Error('Reference integrity error')
     const a = accounts[0]
     return {
       account: {
@@ -22,11 +22,11 @@ export class TokenService {
         username: a.username,
         email: a.email,
         password: a.password.toString(),
-        createdAt: a.created_at
+        createdAt: a.created_at,
       },
       token: t.token,
       createdAt: t.created_at,
-      revokedAt: t.revoked_at
+      revokedAt: t.revoked_at,
     }
   }
 
@@ -37,5 +37,4 @@ export class TokenService {
   async revoke(token: Token): Promise<void> {
     await revokeToken.run({ token: token.token, revokedAt: new Date() }, this.client)
   }
-
 }
