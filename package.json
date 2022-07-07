@@ -16,7 +16,7 @@
     "build:sass": "node-sass assets/scss -o public/css  --output-style compressed",
     "prebuild": "yarn generate",
     "build": "tsc -p tsconfig.json",
-    "postbuild": "copyfiles ./src/**/*.hbs ./public/**/* \"./public/assets/**/*\" build",
+    "postbuild": "copyfiles \"./src/**/*.hbs\" \"./public/**/*\" \"./public/assets/**/*\" build",
     "clean": "rm -rf build && rm -rf generated",
     "ts-node": "ts-node",
     "prettier-format": "prettier --config .prettierrc \"{,!(node_modules|build)/**/}*.ts\" --write",
@@ -25,7 +25,9 @@
     "prestart": "node ./build/src/cli.js db:migrate",
     "start": "node ./build/src/web.js",
     "watch": "tsc -p tsconfig.json -w",
-    "func": "func start --verbose"
+    "func": "func start --verbose",
+    "zip:app": "zip -q -r webapp.zip . -x@.appserviceignore -x .appserviceignore",
+    "zip:api": "zip -q -r funcapp.zip . -x@.funcignore -x .funcignore"
   },
   "repository": "git+https://github.com/teekay/JamComments.git",
   "keywords": [],
