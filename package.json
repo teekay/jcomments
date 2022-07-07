@@ -65,7 +65,7 @@
     "jest": "^27.0.4",
     "jsdom": "^16.6.0",
     "lodash": "^4.17.21",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.33",
     "nestjs-console": "^5.0.1",
     "nestjs-pino": "^1.4.0",
