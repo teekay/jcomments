@@ -38,8 +38,8 @@
   },
   "homepage": "https://github.com/teekay/JamComments#readme",
   "dependencies": {
-    "@azure/functions": "3.0.0",
-    "@azure/service-bus": "7.5.1",
+    "@azure/functions": "3.2.0",
+    "@azure/service-bus": "7.6.0",
     "@nestjs/common": "8.4.7",
     "@nestjs/core": "8.4.7",
     "@nestjs/passport": "8.2.2",
