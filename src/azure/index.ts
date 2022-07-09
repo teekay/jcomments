@@ -1,12 +1,13 @@
 import { AzureApiModule } from './azure-api.module'
-import { INestApplicationContext, Logger } from '@nestjs/common'
+import { INestApplicationContext } from '@nestjs/common'
+import { Logger } from 'nestjs-pino'
 import { NestFactory } from '@nestjs/core'
 
 let application: INestApplicationContext
 
 async function bootstrap(): Promise<INestApplicationContext> {
   const app = await NestFactory.createApplicationContext(AzureApiModule)
-  const logger = app.get(Logger)
+  const logger = app.get<Logger>(Logger)
   app.useLogger(logger)
   app.enableShutdownHooks()
 
