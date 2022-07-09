@@ -10,11 +10,13 @@ import { EmailsModule } from '../shared/emails/emails.module'
 import { HomeModule } from './home/home.module'
 import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
+import { loggerConfig } from '../shared/logging/logging-setup'
 import { LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
 import PgBoss from 'pg-boss'
 import { PgBossQueueModule } from '../shared/queue/pgboss/pg-boss-queue.module'
 
+//console.log(pinoColada())
 @Module({
   imports: [
     AccountsModule,
@@ -27,13 +29,7 @@ import { PgBossQueueModule } from '../shared/queue/pgboss/pg-boss-queue.module'
     DashboardModule,
     PersistenceModule,
     PgBossQueueModule,
-    LoggerModule.forRoot({
-      pinoHttp: {
-        level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
-        prettyPrint: true,
-        prettifier: require('pino-colada'),
-      },
-    }),
+    LoggerModule.forRoot(loggerConfig()),
   ],
   controllers: [AccountController],
 })

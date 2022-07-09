@@ -1,8 +1,11 @@
+import { AccountCloserPayload } from './account-closer-payload.interface'
 import { AccountService } from '../../shared/accounts/account.service'
 import { CommentService } from '../../shared/comments/comment.service'
 import { Inject } from '@nestjs/common'
+import { isAccountCloserPayload } from './account-closer-payload.interface.guard'
 import { Logger } from 'nestjs-pino'
 import PgBoss from 'pg-boss'
+import { PgBossQueues } from '../../shared/queue/pgboss/queues'
 
 export class AccountCloser {
   constructor(
@@ -13,10 +16,17 @@ export class AccountCloser {
   ) {}
 
   async init(): Promise<void> {
-    await this.pgBoss.subscribe('notify-on-account-closing', (job) => this.closeAccount(job.data))
+    await this.pgBoss.work(PgBossQueues.AccountClosing, (job) => {
+      const payload = job.data  
+      if (!isAccountCloserPayload(payload)) {
+        this.logger.error(`Unsupported payload ${JSON.stringify(payload)}`)
+        return
+      }  
+      this.closeAccount(payload)
+    })
   }
 
-  private async closeAccount(data): Promise<void> {
+  private async closeAccount(data: AccountCloserPayload): Promise<void> {
     const { accountId } = data
     const account = await this.accountService.findById(accountId)
     if (!account) {

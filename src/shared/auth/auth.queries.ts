@@ -17,26 +17,12 @@ export interface IExpirePendingTokensQuery {
 }
 
 const expirePendingTokensIR: any = {
-  name: 'expirePendingTokens',
-  params: [
-    {
-      name: 'now',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 68, b: 70, line: 2, col: 36 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 90, b: 98, line: 2, col: 58 }] },
-    },
-  ],
   usedParamSet: { now: true, accountId: true },
-  statement: {
-    body: 'UPDATE password_resets SET used_at=:now WHERE account_id=:accountId AND used_at IS NULL',
-    loc: { a: 32, b: 118, line: 2, col: 0 },
-  },
+  params: [
+    { name: 'now', required: false, transform: { type: 'scalar' }, locs: [{ a: 35, b: 38 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 57, b: 66 }] },
+  ],
+  statement: 'UPDATE password_resets SET used_at=:now WHERE account_id=:accountId AND used_at IS NULL',
 }
 
 /**
@@ -68,44 +54,16 @@ export interface ICreatePasswordResetTokenQuery {
 }
 
 const createPasswordResetTokenIR: any = {
-  name: 'createPasswordResetToken',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 244, b: 245, line: 5, col: 85 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 249, b: 257, line: 5, col: 90 }] },
-    },
-    {
-      name: 'token',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 261, b: 265, line: 5, col: 102 }] },
-    },
-    {
-      name: 'createdAt',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 269, b: 277, line: 5, col: 110 }] },
-    },
-    {
-      name: 'expiresAt',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 281, b: 289, line: 5, col: 122 }] },
-    },
-  ],
   usedParamSet: { id: true, accountId: true, token: true, createdAt: true, expiresAt: true },
-  statement: {
-    body: 'INSERT INTO password_resets (id, account_id, token, created_at, expires_at) VALUES (:id, :accountId, :token, :createdAt, :expiresAt)',
-    loc: { a: 159, b: 290, line: 5, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 84, b: 86 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 89, b: 98 }] },
+    { name: 'token', required: false, transform: { type: 'scalar' }, locs: [{ a: 101, b: 106 }] },
+    { name: 'createdAt', required: false, transform: { type: 'scalar' }, locs: [{ a: 109, b: 118 }] },
+    { name: 'expiresAt', required: false, transform: { type: 'scalar' }, locs: [{ a: 121, b: 130 }] },
+  ],
+  statement:
+    'INSERT INTO password_resets (id, account_id, token, created_at, expires_at) VALUES (:id, :accountId, :token, :createdAt, :expiresAt)',
 }
 
 /**
@@ -142,26 +100,12 @@ export interface IIsTokenUsableQuery {
 }
 
 const isTokenUsableIR: any = {
-  name: 'isTokenUsable',
-  params: [
-    {
-      name: 'token',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 363, b: 367, line: 8, col: 43 }] },
-    },
-    {
-      name: 'date',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 407, b: 410, line: 8, col: 87 }] },
-    },
-  ],
   usedParamSet: { token: true, date: true },
-  statement: {
-    body: 'SELECT * FROM password_resets WHERE token=:token AND used_at IS NULL AND expires_at > :date',
-    loc: { a: 320, b: 410, line: 8, col: 0 },
-  },
+  params: [
+    { name: 'token', required: false, transform: { type: 'scalar' }, locs: [{ a: 42, b: 47 }] },
+    { name: 'date', required: false, transform: { type: 'scalar' }, locs: [{ a: 86, b: 90 }] },
+  ],
+  statement: 'SELECT * FROM password_resets WHERE token=:token AND used_at IS NULL AND expires_at > :date',
 }
 
 /**
@@ -193,20 +137,9 @@ export interface IAccountFromTokenQuery {
 }
 
 const accountFromTokenIR: any = {
-  name: 'accountFromToken',
-  params: [
-    {
-      name: 'token',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 531, b: 535, line: 11, col: 88 }] },
-    },
-  ],
   usedParamSet: { token: true },
-  statement: {
-    body: 'SELECT a.* FROM accounts a JOIN password_resets p ON (a.id=p.account_id) WHERE p.token=:token',
-    loc: { a: 443, b: 535, line: 11, col: 0 },
-  },
+  params: [{ name: 'token', required: false, transform: { type: 'scalar' }, locs: [{ a: 87, b: 92 }] }],
+  statement: 'SELECT a.* FROM accounts a JOIN password_resets p ON (a.id=p.account_id) WHERE p.token=:token',
 }
 
 /**
@@ -233,26 +166,12 @@ export interface IChangePasswordQuery {
 }
 
 const changePasswordIR: any = {
-  name: 'changePassword',
-  params: [
-    {
-      name: 'password',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 603, b: 610, line: 14, col: 37 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 639, b: 647, line: 14, col: 73 }] },
-    },
-  ],
   usedParamSet: { password: true, accountId: true },
-  statement: {
-    body: "UPDATE accounts SET password=digest(:password::text, 'sha256') WHERE id=:accountId",
-    loc: { a: 566, b: 647, line: 14, col: 0 },
-  },
+  params: [
+    { name: 'password', required: false, transform: { type: 'scalar' }, locs: [{ a: 36, b: 44 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 72, b: 81 }] },
+  ],
+  statement: "UPDATE accounts SET password=digest(:password::text, 'sha256') WHERE id=:accountId",
 }
 
 /**

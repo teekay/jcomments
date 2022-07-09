@@ -48,7 +48,6 @@ export class AccountService {
           id: a[0].id,
           username: a[0].username,
           email: a[0].email,
-          password: a[0].password.toString(),
           createdAt: a[0].created_at,
         }
       : undefined
@@ -151,7 +150,6 @@ export class AccountService {
       id: a.id,
       username: a.username,
       email: a.email,
-      password: a.password.toString(),
       createdAt: a.created_at,
     }
   }

@@ -21,7 +21,6 @@ export class TokenService {
         id: a.id,
         username: a.username,
         email: a.email,
-        password: a.password.toString(),
         createdAt: a.created_at,
       },
       token: t.token,

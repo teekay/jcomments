@@ -8,7 +8,7 @@ import moment from 'moment'
 import { TokenService } from '../src/shared/accounts/token.service'
 
 const commentsApi: AzureFunction = async function (context: Context, req: HttpRequest): Promise<void> {
-  context.log('JamComments - fetch comments for a URL')
+  context.log('JamComments - fetch comments')
 
   const app = await appContext()
   const commentService = app.get(CommentService)

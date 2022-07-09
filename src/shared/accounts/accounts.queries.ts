@@ -20,44 +20,16 @@ export interface ISignupQuery {
 }
 
 const signupIR: any = {
-  name: 'Signup',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 92, b: 93, line: 2, col: 73 }] },
-    },
-    {
-      name: 'username',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 97, b: 104, line: 2, col: 78 }] },
-    },
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 108, b: 112, line: 2, col: 89 }] },
-    },
-    {
-      name: 'password',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 123, b: 130, line: 2, col: 104 }] },
-    },
-    {
-      name: 'createdAt',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 151, b: 159, line: 2, col: 132 }] },
-    },
-  ],
   usedParamSet: { id: true, username: true, email: true, password: true, createdAt: true },
-  statement: {
-    body: "INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt)",
-    loc: { a: 19, b: 160, line: 2, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 72, b: 74 }] },
+    { name: 'username', required: false, transform: { type: 'scalar' }, locs: [{ a: 77, b: 85 }] },
+    { name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 88, b: 93 }] },
+    { name: 'password', required: false, transform: { type: 'scalar' }, locs: [{ a: 103, b: 111 }] },
+    { name: 'createdAt', required: false, transform: { type: 'scalar' }, locs: [{ a: 131, b: 140 }] },
+  ],
+  statement:
+    "INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt)",
 }
 
 /**
@@ -84,26 +56,12 @@ export interface IInitialAccountSettingsQuery {
 }
 
 const initialAccountSettingsIR: any = {
-  name: 'initialAccountSettings',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 252, b: 253, line: 5, col: 53 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 257, b: 265, line: 5, col: 58 }] },
-    },
-  ],
   usedParamSet: { id: true, accountId: true },
-  statement: {
-    body: 'INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId)',
-    loc: { a: 199, b: 266, line: 5, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 52, b: 54 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 57, b: 66 }] },
+  ],
+  statement: 'INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId)',
 }
 
 /**
@@ -132,26 +90,12 @@ export interface IInitialAccountEmailSettingsQuery {
 }
 
 const initialAccountEmailSettingsIR: any = {
-  name: 'initialAccountEmailSettings',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 369, b: 370, line: 8, col: 59 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 374, b: 382, line: 8, col: 64 }] },
-    },
-  ],
   usedParamSet: { id: true, accountId: true },
-  statement: {
-    body: 'INSERT INTO account_email_settings(id, account_id) VALUES(:id, :accountId)',
-    loc: { a: 310, b: 383, line: 8, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 58, b: 60 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 63, b: 72 }] },
+  ],
+  statement: 'INSERT INTO account_email_settings(id, account_id) VALUES(:id, :accountId)',
 }
 
 /**
@@ -187,26 +131,12 @@ export interface ILoginQuery {
 }
 
 const loginIR: any = {
-  name: 'Login',
-  params: [
-    {
-      name: 'username',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 444, b: 451, line: 11, col: 39 }] },
-    },
-    {
-      name: 'password',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 474, b: 481, line: 11, col: 69 }] },
-    },
-  ],
   usedParamSet: { username: true, password: true },
-  statement: {
-    body: "SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')",
-    loc: { a: 405, b: 498, line: 11, col: 0 },
-  },
+  params: [
+    { name: 'username', required: false, transform: { type: 'scalar' }, locs: [{ a: 38, b: 46 }] },
+    { name: 'password', required: false, transform: { type: 'scalar' }, locs: [{ a: 68, b: 76 }] },
+  ],
+  statement: "SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')",
 }
 
 /**
@@ -238,17 +168,9 @@ export interface IFindByIdQuery {
 }
 
 const findByIdIR: any = {
-  name: 'findById',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 556, b: 557, line: 14, col: 33 }] },
-    },
-  ],
   usedParamSet: { id: true },
-  statement: { body: 'SELECT * FROM accounts WHERE id=:id', loc: { a: 523, b: 557, line: 14, col: 0 } },
+  params: [{ name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 32, b: 34 }] }],
+  statement: 'SELECT * FROM accounts WHERE id=:id',
 }
 
 /**
@@ -280,17 +202,9 @@ export interface IFindByUsernameQuery {
 }
 
 const findByUsernameIR: any = {
-  name: 'findByUsername',
-  params: [
-    {
-      name: 'username',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 627, b: 634, line: 17, col: 39 }] },
-    },
-  ],
   usedParamSet: { username: true },
-  statement: { body: 'SELECT * FROM accounts WHERE username=:username', loc: { a: 588, b: 634, line: 17, col: 0 } },
+  params: [{ name: 'username', required: false, transform: { type: 'scalar' }, locs: [{ a: 38, b: 46 }] }],
+  statement: 'SELECT * FROM accounts WHERE username=:username',
 }
 
 /**
@@ -322,17 +236,9 @@ export interface IFindByEmailQuery {
 }
 
 const findByEmailIR: any = {
-  name: 'findByEmail',
-  params: [
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 698, b: 702, line: 20, col: 36 }] },
-    },
-  ],
   usedParamSet: { email: true },
-  statement: { body: 'SELECT * FROM accounts WHERE email=:email', loc: { a: 662, b: 702, line: 20, col: 0 } },
+  params: [{ name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 35, b: 40 }] }],
+  statement: 'SELECT * FROM accounts WHERE email=:email',
 }
 
 /**
@@ -361,38 +267,14 @@ export interface ICreateTokenQuery {
 }
 
 const createTokenIR: any = {
-  name: 'CreateToken',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 794, b: 795, line: 23, col: 64 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 799, b: 807, line: 23, col: 69 }] },
-    },
-    {
-      name: 'token',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 811, b: 815, line: 23, col: 81 }] },
-    },
-    {
-      name: 'createdAt',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 819, b: 827, line: 23, col: 89 }] },
-    },
-  ],
   usedParamSet: { id: true, accountId: true, token: true, createdAt: true },
-  statement: {
-    body: 'INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)',
-    loc: { a: 730, b: 828, line: 23, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 63, b: 65 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 68, b: 77 }] },
+    { name: 'token', required: false, transform: { type: 'scalar' }, locs: [{ a: 80, b: 85 }] },
+    { name: 'createdAt', required: false, transform: { type: 'scalar' }, locs: [{ a: 88, b: 97 }] },
+  ],
+  statement: 'INSERT INTO tokens (id, account_id, token, created_at) VALUES (:id, :accountId, :token, :createdAt)',
 }
 
 /**
@@ -419,26 +301,12 @@ export interface IRevokeTokenQuery {
 }
 
 const revokeTokenIR: any = {
-  name: 'RevokeToken',
-  params: [
-    {
-      name: 'revokedAt',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 886, b: 894, line: 26, col: 30 }] },
-    },
-    {
-      name: 'token',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 909, b: 913, line: 26, col: 53 }] },
-    },
-  ],
   usedParamSet: { revokedAt: true, token: true },
-  statement: {
-    body: 'UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token',
-    loc: { a: 856, b: 913, line: 26, col: 0 },
-  },
+  params: [
+    { name: 'revokedAt', required: false, transform: { type: 'scalar' }, locs: [{ a: 29, b: 38 }] },
+    { name: 'token', required: false, transform: { type: 'scalar' }, locs: [{ a: 52, b: 57 }] },
+  ],
+  statement: 'UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token',
 }
 
 /**
@@ -470,17 +338,9 @@ export interface IFindTokenQuery {
 }
 
 const findTokenIR: any = {
-  name: 'findToken',
-  params: [
-    {
-      name: 'token',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 973, b: 977, line: 29, col: 34 }] },
-    },
-  ],
   usedParamSet: { token: true },
-  statement: { body: 'SELECT * FROM tokens WHERE token=:token', loc: { a: 939, b: 977, line: 29, col: 0 } },
+  params: [{ name: 'token', required: false, transform: { type: 'scalar' }, locs: [{ a: 33, b: 38 }] }],
+  statement: 'SELECT * FROM tokens WHERE token=:token',
 }
 
 /**
@@ -512,20 +372,9 @@ export interface IFindCurrentTokenQuery {
 }
 
 const findCurrentTokenIR: any = {
-  name: 'findCurrentToken',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1049, b: 1057, line: 32, col: 39 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL',
-    loc: { a: 1010, b: 1080, line: 32, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 38, b: 47 }] }],
+  statement: 'SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL',
 }
 
 /**
@@ -558,20 +407,9 @@ export interface IAccountSettingsQuery {
 }
 
 const accountSettingsIR: any = {
-  name: 'accountSettings',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1161, b: 1169, line: 35, col: 49 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'SELECT * FROM account_settings WHERE account_id=:accountId',
-    loc: { a: 1112, b: 1169, line: 35, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 48, b: 57 }] }],
+  statement: 'SELECT * FROM account_settings WHERE account_id=:accountId',
 }
 
 /**
@@ -602,20 +440,9 @@ export interface IAccountEmailSettingsQuery {
 }
 
 const accountEmailSettingsIR: any = {
-  name: 'accountEmailSettings',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1261, b: 1269, line: 38, col: 55 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'SELECT * FROM account_email_settings WHERE account_id=:accountId',
-    loc: { a: 1206, b: 1269, line: 38, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 54, b: 63 }] }],
+  statement: 'SELECT * FROM account_email_settings WHERE account_id=:accountId',
 }
 
 /**
@@ -647,44 +474,16 @@ export interface IUpdateSettingsQuery {
 }
 
 const updateSettingsIR: any = {
-  name: 'updateSettings',
-  params: [
-    {
-      name: 'requireModeration',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1348, b: 1364, line: 41, col: 48 }] },
-    },
-    {
-      name: 'blogUrl',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1377, b: 1383, line: 41, col: 77 }] },
-    },
-    {
-      name: 'useAkismet',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1399, b: 1408, line: 41, col: 99 }] },
-    },
-    {
-      name: 'akismetKey',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1424, b: 1433, line: 41, col: 124 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1453, b: 1461, line: 41, col: 153 }] },
-    },
-  ],
   usedParamSet: { requireModeration: true, blogUrl: true, useAkismet: true, akismetKey: true, accountId: true },
-  statement: {
-    body: 'UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId',
-    loc: { a: 1300, b: 1461, line: 41, col: 0 },
-  },
+  params: [
+    { name: 'requireModeration', required: false, transform: { type: 'scalar' }, locs: [{ a: 47, b: 64 }] },
+    { name: 'blogUrl', required: false, transform: { type: 'scalar' }, locs: [{ a: 76, b: 83 }] },
+    { name: 'useAkismet', required: false, transform: { type: 'scalar' }, locs: [{ a: 98, b: 108 }] },
+    { name: 'akismetKey', required: false, transform: { type: 'scalar' }, locs: [{ a: 123, b: 133 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 152, b: 161 }] },
+  ],
+  statement:
+    'UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId',
 }
 
 /**
@@ -712,32 +511,14 @@ export interface IUpdateEmailSettingsQuery {
 }
 
 const updateEmailSettingsIR: any = {
-  name: 'updateEmailSettings',
-  params: [
-    {
-      name: 'notifyOnComments',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1551, b: 1566, line: 44, col: 54 }] },
-    },
-    {
-      name: 'sendCommentsDigest',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1591, b: 1608, line: 44, col: 94 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1628, b: 1636, line: 44, col: 131 }] },
-    },
-  ],
   usedParamSet: { notifyOnComments: true, sendCommentsDigest: true, accountId: true },
-  statement: {
-    body: 'UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId',
-    loc: { a: 1497, b: 1636, line: 44, col: 0 },
-  },
+  params: [
+    { name: 'notifyOnComments', required: false, transform: { type: 'scalar' }, locs: [{ a: 53, b: 69 }] },
+    { name: 'sendCommentsDigest', required: false, transform: { type: 'scalar' }, locs: [{ a: 93, b: 111 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 130, b: 139 }] },
+  ],
+  statement:
+    'UPDATE account_email_settings SET notify_on_comments=:notifyOnComments, send_comments_digest=:sendCommentsDigest WHERE account_id=:accountId',
 }
 
 /**
@@ -772,26 +553,12 @@ export interface IFindUserByEmailOrUsernameQuery {
 }
 
 const findUserByEmailOrUsernameIR: any = {
-  name: 'findUserByEmailOrUsername',
-  params: [
-    {
-      name: 'username',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1717, b: 1724, line: 47, col: 39 }] },
-    },
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1736, b: 1740, line: 47, col: 58 }] },
-    },
-  ],
   usedParamSet: { username: true, email: true },
-  statement: {
-    body: 'SELECT * FROM accounts WHERE username=:username OR email=:email',
-    loc: { a: 1678, b: 1740, line: 47, col: 0 },
-  },
+  params: [
+    { name: 'username', required: false, transform: { type: 'scalar' }, locs: [{ a: 38, b: 46 }] },
+    { name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 57, b: 62 }] },
+  ],
+  statement: 'SELECT * FROM accounts WHERE username=:username OR email=:email',
 }
 
 /**
@@ -821,26 +588,12 @@ export interface IChangeAccountEmailQuery {
 }
 
 const changeAccountEmailIR: any = {
-  name: 'changeAccountEmail',
-  params: [
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1802, b: 1806, line: 50, col: 27 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1818, b: 1826, line: 50, col: 43 }] },
-    },
-  ],
   usedParamSet: { email: true, accountId: true },
-  statement: {
-    body: 'UPDATE accounts SET email=:email WHERE id=:accountId',
-    loc: { a: 1775, b: 1826, line: 50, col: 0 },
-  },
+  params: [
+    { name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 26, b: 31 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 42, b: 51 }] },
+  ],
+  statement: 'UPDATE accounts SET email=:email WHERE id=:accountId',
 }
 
 /**
@@ -868,20 +621,9 @@ export interface IDeleteSettingsQuery {
 }
 
 const deleteSettingsIR: any = {
-  name: 'deleteSettings',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1904, b: 1912, line: 53, col: 47 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'DELETE FROM account_settings WHERE account_id=:accountId',
-    loc: { a: 1857, b: 1912, line: 53, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 46, b: 55 }] }],
+  statement: 'DELETE FROM account_settings WHERE account_id=:accountId',
 }
 
 /**
@@ -907,20 +649,9 @@ export interface IDeleteEmailSettingsQuery {
 }
 
 const deleteEmailSettingsIR: any = {
-  name: 'deleteEmailSettings',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2001, b: 2009, line: 56, col: 53 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'DELETE FROM account_email_settings WHERE account_id=:accountId',
-    loc: { a: 1948, b: 2009, line: 56, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 52, b: 61 }] }],
+  statement: 'DELETE FROM account_email_settings WHERE account_id=:accountId',
 }
 
 /**
@@ -948,17 +679,9 @@ export interface IDeleteTokensQuery {
 }
 
 const deleteTokensIR: any = {
-  name: 'deleteTokens',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2075, b: 2083, line: 59, col: 37 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: { body: 'DELETE FROM tokens WHERE account_id=:accountId', loc: { a: 2038, b: 2083, line: 59, col: 0 } },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 36, b: 45 }] }],
+  statement: 'DELETE FROM tokens WHERE account_id=:accountId',
 }
 
 /**
@@ -984,17 +707,9 @@ export interface ICloseAccountQuery {
 }
 
 const closeAccountIR: any = {
-  name: 'closeAccount',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2143, b: 2151, line: 62, col: 31 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: { body: 'DELETE FROM accounts WHERE id=:accountId', loc: { a: 2112, b: 2151, line: 62, col: 0 } },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 30, b: 39 }] }],
+  statement: 'DELETE FROM accounts WHERE id=:accountId',
 }
 
 /**
