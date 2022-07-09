@@ -1,4 +1,5 @@
 import { AccountsModule } from '../accounts/account.module'
+import { AuthModule } from '../auth/auth.module'
 import { CommentService } from './comment.service'
 import { ConfigModule } from '../config/config.module'
 import { ContentFilteringService } from './content-filtering-service'
@@ -9,7 +10,7 @@ import { PersistenceModule } from '../persistence/persistence.module'
 import { PgBossQueueModule } from '../queue/pgboss/pg-boss-queue.module'
 
 @Module({
-  imports: [ConfigModule, EmailsModule, PersistenceModule, PgBossQueueModule, forwardRef(() => AccountsModule)],
+  imports: [AuthModule, ConfigModule, EmailsModule, PersistenceModule, PgBossQueueModule, forwardRef(() => AccountsModule)],
   controllers: [],
   providers: [CommentService, ContentFilteringService],
   exports: [CommentService, ContentFilteringService],

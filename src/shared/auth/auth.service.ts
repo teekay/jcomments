@@ -5,11 +5,13 @@ import {
   expirePendingTokens,
   isTokenUsable,
 } from './auth.queries'
+import { Account } from '../accounts/account.interface'
 import { AccountService } from '../accounts/account.service'
 import { Client } from 'pg'
 import { ConfigService } from '../config/config.service'
 import { EmailService } from '../emails/email.service'
 import { Inject, Injectable } from '@nestjs/common'
+import { loginFromToken } from '../../api/api.queries'
 import moment from 'moment'
 import { SendMailService } from '../infra/sendmail.service'
 import { v4 as uuidv4 } from 'uuid'
@@ -21,17 +23,37 @@ export class AuthService {
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
     private readonly sendMailService: SendMailService,
-    private usersService: AccountService
+    private usersService: AccountService,
   ) {}
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.login(username, pass)
     if (user) {
-      const { password, ...result } = user
-      return result
+      return user
     }
 
     return null
+  }
+
+  async accountFromToken(token: string): Promise<Account | null> {
+    const accounts = await loginFromToken.run(
+      {
+        token: token,
+      },
+      this.client
+    )
+    if (accounts.length !== 1) {
+      return null
+    }
+
+    const result = accounts[0]
+    return {
+      id: result.id,
+      email: result.email,
+      username: result.username,
+      createdAt: new Date(result.created_at)
+    }
+
   }
 
   async initiatePasswordReset(usernameOrEmail: string): Promise<void> {

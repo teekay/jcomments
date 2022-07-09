@@ -1,5 +1,6 @@
 import { ConfigService } from '../../config/config.service'
 import { EmailService } from '../../emails/email.service'
+import { Logger } from 'nestjs-pino'
 import PgBoss from 'pg-boss'
 import { PgBossQueue } from './pg-boss-queue'
 
@@ -10,10 +11,10 @@ export const jobQueueProviders = [
   },
   {
     provide: PgBossQueue,
-    useFactory: async (pgBoss: PgBoss): Promise<PgBossQueue> => {
-      return new PgBossQueue(pgBoss, new ConfigService(), new EmailService())
+    useFactory: async (pgBoss: PgBoss, configService: ConfigService, emailService: EmailService, logger: Logger): Promise<PgBossQueue> => {
+      return new PgBossQueue(pgBoss, configService, emailService, logger)
     },
-    inject: ['PG_BOSS'],
+    inject: ['PG_BOSS', ConfigService, EmailService, Logger],
   },
 ]
 

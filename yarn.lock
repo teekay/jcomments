@@ -984,12 +984,12 @@
   resolved "https://registry.yarnpkg.com/@opentelemetry/api/-/api-1.0.4.tgz#a167e46c10d05a07ab299fc518793b0cff8f6924"
   integrity sha512-BuJuXRSJNQ3QoKA6GWWDyuLpOUck+9hAXNMCnrloc1aWVoy6Xq6t9PUV08aBZ4Lutqq2LEHM486bpZqoViScog==
 
-"@pgtyped/cli@0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@pgtyped/cli/-/cli-0.13.0.tgz#41b5f1a9e8628e7909bb2f7b31db7dd36f3382ee"
-  integrity sha512-Rca9rZmm1bXSZPxiTaLD5uv11RQKZVNkJd00RAdeJp4++K3X2DXxHi8uKEcq3lkvClPQBvm36tQS4u0SsSLnAQ==
+"@pgtyped/cli@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@pgtyped/cli/-/cli-1.0.0.tgz#9b8dfc14e9897dd70d077be7c5d51bf235585efc"
+  integrity sha512-LN+9OrEwRh1MUDx3jvib4i6uDTv55yi8dg/AUP0UlHaGhtcamKJFAbNJuijE/Lq49gf4qlqzpWUGsAcdp8YU2w==
   dependencies:
-    "@pgtyped/query" "^0.13.0"
+    "@pgtyped/query" "^1.0.0"
     "@types/nunjucks" "^3.1.3"
     camel-case "^4.1.1"
     chalk "^4.0.0"
@@ -997,30 +997,31 @@
     debug "^4.1.1"
     fp-ts "^2.5.3"
     fs-extra "^10.0.0"
-    glob "^7.1.6"
+    glob "^8.0.0"
     io-ts "^2.1.2"
     io-ts-reporters "^1.0.0"
+    jest-worker "^26.3.0"
     nunjucks "3.2.3"
     pascal-case "^3.1.1"
     ts-parse-database-url "^1.0.3"
     yargs "^17.0.1"
 
-"@pgtyped/query@0.13.0", "@pgtyped/query@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@pgtyped/query/-/query-0.13.0.tgz#fd02928bceb28079007497a23270a6301a334f95"
-  integrity sha512-/7I/wK5FcMt/c4lXaR79W00Krmu6LshNoyT6zkI4OBmNrpFjYyuNGjx9GjobX09IMj1yQiMBhLiV7rdXCUIA1A==
+"@pgtyped/query@1.0.0", "@pgtyped/query@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@pgtyped/query/-/query-1.0.0.tgz#861904e9cd712554214733a23f8958db82864d75"
+  integrity sha512-GA1utXD8kxSUWr8scxLg34a+cRm6mHxZGY4vHL6TeppRHMeh1V630xQhl246wUJ29A+rd1ExBuB9VPlM6WvckA==
   dependencies:
-    "@pgtyped/wire" "^0.13.0"
+    "@pgtyped/wire" "^1.0.0"
     "@types/chalk" "^2.2.0"
     "@types/debug" "^4.1.4"
     antlr4ts "0.5.0-alpha.4"
     chalk "^4.1.0"
     debug "^4.1.1"
 
-"@pgtyped/wire@^0.13.0":
-  version "0.13.0"
-  resolved "https://registry.yarnpkg.com/@pgtyped/wire/-/wire-0.13.0.tgz#3c75fcc73d427ca02e9753619109440aa96bd2f4"
-  integrity sha512-jHN/0xm7JlHGRxQy7mtGQ9bPEZEvKDgwJ7P7gqTzpszdmXom94vxGWTtLnRmGByUEXIrTkAyv0Du5jpqIrM7fg==
+"@pgtyped/wire@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@pgtyped/wire/-/wire-1.0.0.tgz#bbd24eefad02cbb8252573915c5d3f6b6cffee34"
+  integrity sha512-kpvEWnoRtqcQAwLaFjeaexXg4smGVtvF+IhbWV5OpVUGsAb1cKMmOrfHjZPfpdM0FeK3Z1ePgyVWQ+h9BKXFBA==
   dependencies:
     "@types/debug" "^4.1.4"
     debug "^4.1.1"
@@ -1394,10 +1395,17 @@
   dependencies:
     "@types/express" "*"
 
-"@types/pg@8.6.0":
-  version "8.6.0"
-  resolved "https://registry.yarnpkg.com/@types/pg/-/pg-8.6.0.tgz#34233b891a127d6caaad28e177b1baec1a2958d4"
-  integrity sha512-3JXFrsl8COoqVB1+2Pqelx6soaiFVXzkT3fkuSNe7GB40ysfT0FHphZFPiqIXpMyTHSFRdLTyZzrFBrJRPAArA==
+"@types/passport@1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.9.tgz#b32fa8f7485dace77a9b58e82d0c92908f6e8387"
+  integrity sha512-9+ilzUhmZQR4JP49GdC2O4UdDE3POPLwpmaTC/iLkW7l0TZCXOo1zsTnnlXPq6rP1UsUZPfbAV4IUdiwiXyC7g==
+  dependencies:
+    "@types/express" "*"
+
+"@types/pg@8.6.5":
+  version "8.6.5"
+  resolved "https://registry.yarnpkg.com/@types/pg/-/pg-8.6.5.tgz#2dce9cb468a6a5e0f1296a59aea3ac75dd27b702"
+  integrity sha512-tOkGtAqRVkHa/PVZicq67zuujI4Oorfglsr2IbKofDwBSysnaqSx7W1mDqFqdkGE6Fbgh+PZAl0r/BWON/mozw==
   dependencies:
     "@types/node" "*"
     pg-protocol "*"
@@ -3222,13 +3230,12 @@ create-require@^1.1.0:
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"
   integrity sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==
 
-cron-parser@^3.3.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/cron-parser/-/cron-parser-3.5.0.tgz#b1a9da9514c0310aa7ef99c2f3f1d0f8c235257c"
-  integrity sha512-wyVZtbRs6qDfFd8ap457w3XVntdvqcwBGxBoTvJQH9KGVKL/fB+h2k3C8AqiVxvUQKN1Ps/Ns46CNViOpVDhfQ==
+cron-parser@^4.0.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/cron-parser/-/cron-parser-4.5.0.tgz#2c6240a0301eff1424689835ce9c8de4cde9cfbd"
+  integrity sha512-QHdeh3zLWz6YvYTFKpRb860rJlip16pEinbxXT1i2NZB/nOxBjd2RbSv54sn5UrAj9WykiSLYWWDgo8azQK0HA==
   dependencies:
-    is-nan "^1.3.2"
-    luxon "^1.26.0"
+    luxon "^2.4.0"
 
 cross-spawn@^7.0.0, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
   version "7.0.3"
@@ -5274,14 +5281,6 @@ is-lambda@^1.0.1:
   resolved "https://registry.yarnpkg.com/is-lambda/-/is-lambda-1.0.1.tgz#3d9877899e6a53efc0160504cde15f82e6f061d5"
   integrity sha1-PZh3iZ5qU+/AFgUEzeFfgubwYdU=
 
-is-nan@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/is-nan/-/is-nan-1.3.2.tgz#043a54adea31748b55b6cd4e09aadafa69bd9e1d"
-  integrity sha512-E+zBKpQ2t6MEo1VsonYmluk9NxGrbzpeeLC2xIViuO2EjU2xsXsBPwTr3Ykv9l08UYEVEdWeRZNouaZqF6RN0w==
-  dependencies:
-    call-bind "^1.0.0"
-    define-properties "^1.1.3"
-
 is-negated-glob@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-negated-glob/-/is-negated-glob-1.0.0.tgz#6910bca5da8c95e784b5751b976cf5a10fee36d2"
@@ -5951,7 +5950,7 @@ jest-watcher@^27.0.2:
     jest-util "^27.0.2"
     string-length "^4.0.1"
 
-jest-worker@^26.6.2:
+jest-worker@^26.3.0, jest-worker@^26.6.2:
   version "26.6.2"
   resolved "https://registry.yarnpkg.com/jest-worker/-/jest-worker-26.6.2.tgz#7f72cbc4d643c365e27b9fd775f9d0eaa9c7a8ed"
   integrity sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==
@@ -6379,10 +6378,10 @@ lru-queue@^0.1.0:
   dependencies:
     es5-ext "~0.10.2"
 
-luxon@^1.26.0:
-  version "1.27.0"
-  resolved "https://registry.yarnpkg.com/luxon/-/luxon-1.27.0.tgz#ae10c69113d85dab8f15f5e8390d0cbeddf4f00f"
-  integrity sha512-VKsFsPggTA0DvnxtJdiExAucKdAnwbCCNlMM5ENvHlxubqWd0xhZcdb4XgZ7QFNhaRhilXCFxHuoObP5BNA4PA==
+luxon@^2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/luxon/-/luxon-2.4.0.tgz#9435806545bb32d4234dab766ab8a3d54847a765"
+  integrity sha512-w+NAwWOUL5hO0SgwOHsMBAmZ15SoknmQXhSO0hIbJCAmPKSsGeK8MlmhYh2w6Iib38IxN2M+/ooXWLbeis7GuA==
 
 macos-release@^2.5.0:
   version "2.5.0"
@@ -7365,12 +7364,12 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-pg-boss@6.0.1:
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/pg-boss/-/pg-boss-6.0.1.tgz#e4c5ec6e796618eb163eb3611d28056d29b996aa"
-  integrity sha512-L8hxjKL6JkT2d28g41YF3FMaaKCSu8msofXOReSXRwchp7ABf0dyR33zFC2ewJJC7vqaBUiL9bStbMZBl5zgSQ==
+pg-boss@7.4.0:
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/pg-boss/-/pg-boss-7.4.0.tgz#743e3d7dec55b01cb44e7e0356534347934a7826"
+  integrity sha512-thjVCqLvFINqDJq/fS3dsH2lglZ9owqJi6waTNO/Bmdr0zDbRbrgEsAkzi50riYPaDx5EUvmpsFHipmR1XjxWA==
   dependencies:
-    cron-parser "^3.3.0"
+    cron-parser "^4.0.0"
     delay "^5.0.0"
     lodash.debounce "^4.0.8"
     p-map "^4.0.0"
@@ -7392,6 +7391,11 @@ pg-pool@^3.3.0:
   resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-3.3.0.tgz#12d5c7f65ea18a6e99ca9811bd18129071e562fc"
   integrity sha512-0O5huCql8/D6PIRFAlmccjphLYWC+JIzvUhSzXSpGaf+tjTZc4nn+Lr7mLXBbFJfvwbP0ywDv73EiaBsxn7zdg==
 
+pg-pool@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/pg-pool/-/pg-pool-3.5.1.tgz#f499ce76f9bf5097488b3b83b19861f28e4ed905"
+  integrity sha512-6iCR0wVrro6OOHFsyavV+i6KYL4lVNyYAB9RD18w66xSzN+d8b66HiwuP30Gp1SH5O9T82fckkzsRjlrhD0ioQ==
+
 pg-protocol@*, pg-protocol@^1.2.0, pg-protocol@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/pg-protocol/-/pg-protocol-1.5.0.tgz#b5dd452257314565e2d54ab3c132adc46565a6a0"
@@ -7408,7 +7412,20 @@ pg-types@^2.1.0, pg-types@^2.2.0:
     postgres-date "~1.0.4"
     postgres-interval "^1.1.0"
 
-pg@8.6.0, pg@^8.2.1, pg@^8.5.1:
+pg@8.7.3, pg@^8.6.0:
+  version "8.7.3"
+  resolved "https://registry.yarnpkg.com/pg/-/pg-8.7.3.tgz#8a5bdd664ca4fda4db7997ec634c6e5455b27c44"
+  integrity sha512-HPmH4GH4H3AOprDJOazoIcpI49XFsHCe8xlrjHkWiapdbHK+HLtbm/GQzXYAZwmPju/kzKhjaSfMACG+8cgJcw==
+  dependencies:
+    buffer-writer "2.0.0"
+    packet-reader "1.0.0"
+    pg-connection-string "^2.5.0"
+    pg-pool "^3.5.1"
+    pg-protocol "^1.5.0"
+    pg-types "^2.1.0"
+    pgpass "1.x"
+
+pg@^8.2.1, pg@^8.5.1:
   version "8.6.0"
   resolved "https://registry.yarnpkg.com/pg/-/pg-8.6.0.tgz#e222296b0b079b280cce106ea991703335487db2"
   integrity sha512-qNS9u61lqljTDFvmk/N66EeGq3n6Ujzj0FFyNMGQr6XuEv4tgNTXvJQTfJdcvGit5p5/DWPu+wj920hAJFI+QQ==
@@ -7580,12 +7597,12 @@ postgres-interval@^1.1.0:
   dependencies:
     xtend "^4.0.0"
 
-postgres-migrations@5.1.1:
-  version "5.1.1"
-  resolved "https://registry.yarnpkg.com/postgres-migrations/-/postgres-migrations-5.1.1.tgz#a1137d9942ded2c9c77be735076b2e7452b06fe4"
-  integrity sha512-G5QgHhmgOUFJtkNsYi7tYXi2vit9hzJCm+HbsAVa9mhR6tW9lwX/o/s9Rbnx574BVRvkV5+gPWxGAP9l3FyBKg==
+postgres-migrations@5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/postgres-migrations/-/postgres-migrations-5.3.0.tgz#3a8a98f25994e95f0a79de7f315d086fcfc51b94"
+  integrity sha512-gnTHWJZVWbW8T3mXIxJm1JRU853TqBVWkhgfsTJr7zqT3VexjRmJj9kNi96rVhfTezDU4FVW6pf701kLOZiKIA==
   dependencies:
-    pg "^8.5.1"
+    pg "^8.6.0"
     sql-template-strings "^2.2.2"
 
 prelude-ls@^1.2.1:

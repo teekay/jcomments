@@ -11,11 +11,12 @@ import { LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
 import { PgBossQueueModule } from '../shared/queue/pgboss/pg-boss-queue.module'
 import { PgBossQueue } from '../shared/queue/pgboss/pg-boss-queue'
+import { AuthModule } from '../shared/auth/auth.module'
 
 @Module({
   imports: [
     AccountsModule,
-    AccountsModule,
+    AuthModule,
     ConfigModule,
     CommentsModule,
     EmailsModule,
