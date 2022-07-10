@@ -108,7 +108,7 @@
 <script src="/js/delete-comment-modal.js"></script>
 <script>
   deleteCommentModal('.delete', '/dashboard/comment/delete')();
-  let select = document.getElementById('manageComments');
-  let approveOption = select.querySelector('option[value=approve]');
+  let select = document.getElementById('approve-or-delete-container');
+  let approveOption = Array.from(select.children).find(opt => opt.getAttribute('data-value') === 'approve');
   select.removeChild(approveOption);
 </script>

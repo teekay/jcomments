@@ -1,94 +1,164 @@
             <div class="comments-actions">
-                <div class="select-comments-action">
+                <div class="select select-comments-action">
+                    <form id="bulk-actions" style="display:none">
+                        <input type="hidden" name="manageComments" id="manageComments"/>
+                        <input type="hidden" name="sortComments" id="sortComments"/>
+                    </form>
                     <input type="checkbox" id="comment-action-select-all" name="comment-action">
                     <label for="comment-action">Select All</label>
-                    <div class="comments-action-select">
-                        <select name="languages" id="manageComments">
-                            <option value="default">Select action...</option>
-                            <option class="select-option" value="approve">Approve</option>
-                            <option class="select-option" value="delete">Delete</option>
-                        </select>
+                    <div class="selectWrapper">
+                        <div class="selectCustom selectAction">
+                            <div class="selectCustom-trigger" data-target="manageComments">Select action...</div>
+                            <ul class="selectCustom-options" id="approve-or-delete-container">
+                                <li class="selectCustom-option" data-value="approve">Approve</li>
+                                <li class="selectCustom-option" data-value="delete">Delete</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="sort-comments">
-                    <select name="languages" id="sortComments">
-                        <option value="">Sort By...</option>
-                        <option class="select-option" value="desc">Newest first (default)</option>
-                        <option class="select-option" value="asc">Oldest first</option>
-                    </select>
+                <div class="select sort-comments">
+                    <div class="selectWrapper">
+                        <div class="selectCustom sortBy selectAction">
+                            <div class="selectCustom-trigger" data-target="sortComments">Sort By...</div>
+                            <ul class="selectCustom-options" id="sort-comments-container">
+                                <li class="selectCustom-option" data-value="desc">Newest first (default)</li>
+                                <li class="selectCustom-option" data-value="asc">Oldest first</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
 <script>
-    document.getElementById('comment-action-select-all').addEventListener('click', function(ev) {
-        let toSelect = !!ev.target.checked;
-        Array.from(document.getElementsByClassName('comment-single-select')).forEach(e => {
-            e.checked = toSelect;
-        });
+(function() {  
+  Array.from(document.querySelectorAll(".selectAction")).forEach((elSelectCustom) => {
+    // handle fake select boxes that can be styled
+    const elSelectCustomValue = elSelectCustom.children[0];
+    const elSelectCustomOptions = elSelectCustom.children[1];
+    const defaultLabel = elSelectCustomValue.textContent;
+
+    // Listen for each custom option click
+    Array.from(elSelectCustomOptions.children).forEach(function (elOption) {
+      elOption.addEventListener("click", (e) => {
+        // Update custom select text too
+        elSelectCustomValue.textContent = e.target.textContent;
+        const command = e.target.getAttribute("data-value");
+        const targetInputId = elSelectCustomValue.getAttribute("data-target");
+        document.getElementById(targetInputId).value = command;
+        // Close select
+        elSelectCustom.classList.remove("isActive");
+      });
     });
-    function groupAction(modalId, url) {
-        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        let ids = Array.from(document.getElementsByClassName('comment-single-select')).filter(e => e.checked).map(e => e.value);
-        if (!ids.length) {
-            console.log("Nothing is selected :(");
-            return;
-        }
 
-        let confirmModal = document.getElementById(modalId);
-        let btnConfirm = confirmModal.querySelector('.confirm');
-        let cancelControls = Array.from(confirmModal.querySelectorAll('.close'));
-        let confirm = () => {
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify({ ids }),
-            headers: {
-            'CSRF-Token': token,
-            'content-type': 'application/json'
-            }
-        }).then(response => {
-            if (response.status === 201) {
-            document.location = document.location;
-            return;
-            }
-            // TODO show error
-            console.error(response.status);
-            confirmModal.style.display = 'none';
-        });
-        };
-        let cancel = () => {
-            btnConfirm.removeEventListener('click', confirm);
-            cancelControls.forEach(el => el.removeEventListener('click', cancel));
-            confirmModal.style.display = 'none';
-        }
+    // Toggle select on label click
+    elSelectCustomValue.addEventListener("click", (e) => {
+      elSelectCustomValue.textContent = defaultLabel;
+      elSelectCustom.classList.toggle("isActive");
+    });
 
-        btnConfirm.addEventListener('click', confirm);
-        cancelControls.forEach(el => el.addEventListener('click', cancel));
-        confirmModal.style.display = 'block';
+    // close the custom select when clicking outside.
+    document.addEventListener("click", (e) => {
+      const didClickedOutside = !elSelectCustom.contains(event.target);
+      if (didClickedOutside) {
+        elSelectCustom.classList.remove("isActive");
+      }
+    });
+  });
+
+
+  document.getElementById('comment-action-select-all').addEventListener('click', function(ev) {
+    let toSelect = !!ev.target.checked;
+    Array.from(document.getElementsByClassName('comment-single-select')).forEach(e => {
+      e.checked = toSelect;
+    });
+  });
+
+  function groupAction(modalId, url) {
+      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      let ids = Array.from(document.getElementsByClassName('comment-single-select')).filter(e => e.checked).map(e => e.value);
+      if (!ids.length) {
+          console.log("Nothing is selected :(");
+          return;
+      }
+
+      let confirmModal = document.getElementById(modalId);
+      let btnConfirm = confirmModal.querySelector('.confirm');
+      let cancelControls = Array.from(confirmModal.querySelectorAll('.close'));
+      let confirm = () => {
+      fetch(url, {
+          method: 'POST',
+          body: JSON.stringify({ ids }),
+          headers: {
+          'CSRF-Token': token,
+          'content-type': 'application/json'
+          }
+      }).then(response => {
+          if (response.status === 201) {
+          document.location = document.location;
+          return;
+          }
+          // TODO show error
+          console.error(response.status);
+          confirmModal.style.display = 'none';
+      });
+      };
+      let cancel = () => {
+          btnConfirm.removeEventListener('click', confirm);
+          cancelControls.forEach(el => el.removeEventListener('click', cancel));
+          confirmModal.style.display = 'none';
+      }
+
+      btnConfirm.addEventListener('click', confirm);
+      cancelControls.forEach(el => el.addEventListener('click', cancel));
+      confirmModal.style.display = 'block';
+  }
+
+  let manageCommentsInput = document.getElementById("manageComments");
+  let manageCommentsInputValue = manageCommentsInput.value;
+  Object.defineProperty(manageCommentsInput, "value", {
+      set(newValue) {
+          manageCommentsInputValue = newValue;
+          approveOrDelete(newValue);
+      },
+      get(){
+          return manageCommentsInputValue;
+      }
+  });
+
+  function approveOrDelete(action) {
+    console.log(`Approve or delete? ${action}`);
+    if (action === "delete") {
+      groupAction('deleteCommentsModal', document.location.href.indexOf('review') !== -1 ? '/dashboard/spam/deleteMany' : '/dashboard/comments/deleteMany');
+    } else if (action === "approve") {
+      groupAction('approveCommentsModal', '/dashboard/spam/unmarkMany');
     }
-    document.getElementById('manageComments').addEventListener('change', function(evt) {
+  }
 
-        let select = evt.target;
-        if (select.value === "delete") {
-            select.selectedIndex = 0;
-            groupAction('deleteCommentsModal', document.location.href.indexOf('review') !== -1 ? '/dashboard/spam/deleteMany' : '/dashboard/comments/deleteMany');
-        } else if (select.value === "approve") {
-            select.selectedIndex = 0;
-            groupAction('approveCommentsModal', '/dashboard/spam/unmarkMany');
-        }
-    });
+  let sortCommentsInput = document.getElementById("sortComments");
+  let sortCommentsInputValue = manageCommentsInput.value;
+  Object.defineProperty(sortCommentsInput, "value", {
+      set(newValue) {
+          sortCommentsInputValue = newValue;
+          sortComments(newValue);
+      },
+      get(){
+          return sortCommentsInputValue;
+      }
+  });
 
-    document.getElementById('sortComments').addEventListener('change', function(ev) {
-        let el = ev.target;
-        let sortOrder = el.options[el.selectedIndex].value;
-        if (sortOrder !== '') {
-            let location = document.location.href;
-            let redirectTo = `${location.includes('/review') ? '/dashboard/review/' : '/dashboard/'}?sort=${sortOrder}`;
-            document.location = redirectTo;
-        }
-    });
-
+  function sortComments(sortOrder) {
     let params = new URLSearchParams(document.location.search);
-    let sortOption = Array.from(document.getElementById('sortComments').options).find(opt => opt.value === params.get('sort'));
-    if (sortOption) {
-        sortOption.selected = true;
+    if (sortOrder === '' || sortOrder === params.get('sort')) {
+      return;
     }
+    let location = document.location.href;
+    let redirectTo = `${location.includes('/review') ? '/dashboard/review/' : '/dashboard/'}?sort=${sortOrder}`;
+    document.location = redirectTo;      
+  }
+
+  let params = new URLSearchParams(document.location.search);
+  let sortOption = Array.from(document.getElementById('sort-comments-container').children).find(opt => opt.getAttribute("data-value") === params.get('sort'));
+  if (sortOption) {
+      sortOption.click();
+  }
+})()
 </script>
