@@ -541,3 +541,69 @@ select {
         grid-column: 1 / span 12;
     }
 }
+
+/////////////////////////////////////////////////
+// custom select styling
+/////////////////////////////////////////////////
+
+// main wrapper to the custom .select class
+.select {
+  position: relative;
+  .selectWrapper {
+      position: relative;
+  }
+}
+// dropdown menu wrapper and options
+.selectCustom {
+  position: relative;
+  color: var(--light-purple);
+  font-size: 16px;
+  .selectCustom-trigger {
+      cursor: pointer;
+      position: relative;
+      width: auto;
+      min-width: 228px;
+      height: auto;
+      background-color: var(--whitespace);
+      padding: calc(#{var(--gap-xs)}/ 2) var(--gap-xs);
+      border-radius: var(--border-radius-sm);
+      &::after {
+          content: "▾";
+          position: absolute;
+          top: calc(#{var(--gap-xs)}/ 2);
+          right: var(--gap-xs);
+      }
+  }
+  .selectCustom-options {
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+      margin-top: 0;
+      width: 100%;
+      background-color: #fff;
+      box-shadow: $box-shadow;
+      z-index: 1;
+      color: var(--dark-purple);
+      display: none;
+      border-radius: var(--border-radius-sm);
+  }
+}
+// active state for dropdown menu wrapper and options
+.selectCustom.isActive {
+  .selectCustom-trigger {
+      box-shadow: $box-shadow;
+      border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+  }
+
+  .selectCustom-options {
+      display: block;
+      border-radius: 0 0 var(--border-radius-sm) var(--border-radius-sm);
+  }
+  .selectCustom-option {
+      position: relative;
+      padding: calc(#{var(--gap-xs)}/ 2) var(--gap-xs);
+      &:hover {
+          background-color: #f1f5f8;
+      }
+  }
+}
