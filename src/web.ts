@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser'
 import { config as dotenv } from 'dotenv'
 import csurf from 'csurf'
 import dateFormat from 'handlebars-dateformat'
-import exphbs from 'express-handlebars'
+import { engine } from 'express-handlebars'
 import flash = require('connect-flash')
 import handlebars from 'handlebars'
 import helpers from 'handlebars-helpers'
@@ -30,6 +30,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(WebModule)
   const logger = app.get(Logger)
   app.useLogger(logger)
+
   if (isInProduction) {
     app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal'])
   }
@@ -37,7 +38,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe())
   app.useStaticAssets(join(__dirname, '..', 'public'))
   app.setBaseViewsDir(join(__dirname, '..', 'src/web'))
-  app.engine('.hbs', exphbs({ extname: '.hbs', defaultLayout: 'public' }))
+  app.engine('.hbs', engine({ extname: '.hbs', defaultLayout: 'public' }))
+  logger.log(`Environment: ${process.env['NODE_ENVIRONMENT']}`)
   app.setViewEngine('hbs')
   helpers({ handlebars })
   handlebars.registerHelper('dateFormat', dateFormat)
@@ -117,7 +119,6 @@ async function bootstrap() {
     res.status(403)
     res.render('./home/views/csrf-error')
   })
-
   // initialize the job queue
   const queuedMailer = app.get(QueuedMailer)
   await queuedMailer.init()

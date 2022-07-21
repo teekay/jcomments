@@ -6,12 +6,12 @@ export interface User {
 
 /**
  * Describes a user of a multi-tenant instance of JamComments
- */
+ /** @see {isAccount} ts-auto-guard:type-guard
+*/
 export interface Account extends User {
   username: string
   email: string
-  password: string
-  createdAt: Date
+  createdAt: Date | string
 }
 
 export class AccountEmailDto {

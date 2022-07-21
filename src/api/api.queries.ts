@@ -22,20 +22,10 @@ export interface ILoginFromTokenQuery {
 }
 
 const loginFromTokenIR: any = {
-  name: 'LoginFromToken',
-  params: [
-    {
-      name: 'token',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 115, b: 119, line: 2, col: 88 }] },
-    },
-  ],
   usedParamSet: { token: true },
-  statement: {
-    body: 'SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL',
-    loc: { a: 27, b: 144, line: 2, col: 0 },
-  },
+  params: [{ name: 'token', required: false, transform: { type: 'scalar' }, locs: [{ a: 87, b: 92 }] }],
+  statement:
+    'SELECT DISTINCT a.* FROM accounts a JOIN tokens t ON (a.id=t.account_id) WHERE t.token=:token AND t.revoked_at IS NULL',
 }
 
 /**

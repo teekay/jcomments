@@ -1,4 +1,5 @@
 import { CommentDto } from '../comments/comment.interface'
+import { Email } from './email.interface'
 import handlebars from 'handlebars'
 import { Injectable } from '@nestjs/common'
 import { readFileSync } from 'fs'
@@ -24,10 +25,4 @@ export class EmailService {
       text: textTemplate({ comment, link }),
     }
   }
-}
-
-export class Email {
-  subject!: string
-  html?: string
-  text?: string
 }

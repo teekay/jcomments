@@ -23,57 +23,6 @@ export interface IPostCommentForUrlQuery {
 }
 
 const postCommentForUrlIR: any = {
-  name: 'PostCommentForUrl',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 161, b: 162, line: 2, col: 131 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 166, b: 174, line: 2, col: 136 }] },
-    },
-    {
-      name: 'url',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 178, b: 180, line: 2, col: 148 }] },
-    },
-    {
-      name: 'pageTitle',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 184, b: 192, line: 2, col: 154 }] },
-    },
-    {
-      name: 'text',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 196, b: 199, line: 2, col: 166 }] },
-    },
-    {
-      name: 'name',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 203, b: 206, line: 2, col: 173 }] },
-    },
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 210, b: 214, line: 2, col: 180 }] },
-    },
-    {
-      name: 'website',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 218, b: 224, line: 2, col: 188 }] },
-    },
-  ],
   usedParamSet: {
     id: true,
     accountId: true,
@@ -84,10 +33,18 @@ const postCommentForUrlIR: any = {
     email: true,
     website: true,
   },
-  statement: {
-    body: "INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, 'now'::timestamp)",
-    loc: { a: 30, b: 243, line: 2, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 130, b: 132 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 135, b: 144 }] },
+    { name: 'url', required: false, transform: { type: 'scalar' }, locs: [{ a: 147, b: 150 }] },
+    { name: 'pageTitle', required: false, transform: { type: 'scalar' }, locs: [{ a: 153, b: 162 }] },
+    { name: 'text', required: false, transform: { type: 'scalar' }, locs: [{ a: 165, b: 169 }] },
+    { name: 'name', required: false, transform: { type: 'scalar' }, locs: [{ a: 172, b: 176 }] },
+    { name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 179, b: 184 }] },
+    { name: 'website', required: false, transform: { type: 'scalar' }, locs: [{ a: 187, b: 194 }] },
+  ],
+  statement:
+    "INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, 'now'::timestamp)",
 }
 
 /**
@@ -123,63 +80,6 @@ export interface IPostCommentForUrlWithTimestampQuery {
 }
 
 const postCommentForUrlWithTimestampIR: any = {
-  name: 'PostCommentForUrlWithTimestamp',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 421, b: 422, line: 5, col: 131 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 426, b: 434, line: 5, col: 136 }] },
-    },
-    {
-      name: 'url',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 438, b: 440, line: 5, col: 148 }] },
-    },
-    {
-      name: 'pageTitle',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 444, b: 452, line: 5, col: 154 }] },
-    },
-    {
-      name: 'text',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 456, b: 459, line: 5, col: 166 }] },
-    },
-    {
-      name: 'name',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 463, b: 466, line: 5, col: 173 }] },
-    },
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 470, b: 474, line: 5, col: 180 }] },
-    },
-    {
-      name: 'website',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 478, b: 484, line: 5, col: 188 }] },
-    },
-    {
-      name: 'createdAt',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 488, b: 496, line: 5, col: 198 }] },
-    },
-  ],
   usedParamSet: {
     id: true,
     accountId: true,
@@ -191,10 +91,19 @@ const postCommentForUrlWithTimestampIR: any = {
     website: true,
     createdAt: true,
   },
-  statement: {
-    body: 'INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, :createdAt)',
-    loc: { a: 290, b: 497, line: 5, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 130, b: 132 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 135, b: 144 }] },
+    { name: 'url', required: false, transform: { type: 'scalar' }, locs: [{ a: 147, b: 150 }] },
+    { name: 'pageTitle', required: false, transform: { type: 'scalar' }, locs: [{ a: 153, b: 162 }] },
+    { name: 'text', required: false, transform: { type: 'scalar' }, locs: [{ a: 165, b: 169 }] },
+    { name: 'name', required: false, transform: { type: 'scalar' }, locs: [{ a: 172, b: 176 }] },
+    { name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 179, b: 184 }] },
+    { name: 'website', required: false, transform: { type: 'scalar' }, locs: [{ a: 187, b: 194 }] },
+    { name: 'createdAt', required: false, transform: { type: 'scalar' }, locs: [{ a: 197, b: 206 }] },
+  ],
+  statement:
+    'INSERT INTO comments(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url, :pageTitle, :text, :name, :email, :website, :createdAt)',
 }
 
 /**
@@ -230,57 +139,6 @@ export interface IFlagCommentForUrlQuery {
 }
 
 const flagCommentForUrlIR: any = {
-  name: 'FlagCommentForUrl',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 661, b: 662, line: 8, col: 130 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 666, b: 674, line: 8, col: 135 }] },
-    },
-    {
-      name: 'url',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 678, b: 680, line: 8, col: 147 }] },
-    },
-    {
-      name: 'pageTitle',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 683, b: 691, line: 8, col: 152 }] },
-    },
-    {
-      name: 'text',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 695, b: 698, line: 8, col: 164 }] },
-    },
-    {
-      name: 'name',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 702, b: 705, line: 8, col: 171 }] },
-    },
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 709, b: 713, line: 8, col: 178 }] },
-    },
-    {
-      name: 'website',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 717, b: 723, line: 8, col: 186 }] },
-    },
-  ],
   usedParamSet: {
     id: true,
     accountId: true,
@@ -291,10 +149,18 @@ const flagCommentForUrlIR: any = {
     email: true,
     website: true,
   },
-  statement: {
-    body: "INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, 'now'::timestamp)",
-    loc: { a: 531, b: 742, line: 8, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 129, b: 131 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 134, b: 143 }] },
+    { name: 'url', required: false, transform: { type: 'scalar' }, locs: [{ a: 146, b: 149 }] },
+    { name: 'pageTitle', required: false, transform: { type: 'scalar' }, locs: [{ a: 151, b: 160 }] },
+    { name: 'text', required: false, transform: { type: 'scalar' }, locs: [{ a: 163, b: 167 }] },
+    { name: 'name', required: false, transform: { type: 'scalar' }, locs: [{ a: 170, b: 174 }] },
+    { name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 177, b: 182 }] },
+    { name: 'website', required: false, transform: { type: 'scalar' }, locs: [{ a: 185, b: 192 }] },
+  ],
+  statement:
+    "INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, 'now'::timestamp)",
 }
 
 /**
@@ -330,63 +196,6 @@ export interface IFlagCommentForUrlWithTimestampQuery {
 }
 
 const flagCommentForUrlWithTimestampIR: any = {
-  name: 'FlagCommentForUrlWithTimestamp',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 919, b: 920, line: 11, col: 130 }] },
-    },
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 924, b: 932, line: 11, col: 135 }] },
-    },
-    {
-      name: 'url',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 936, b: 938, line: 11, col: 147 }] },
-    },
-    {
-      name: 'pageTitle',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 941, b: 949, line: 11, col: 152 }] },
-    },
-    {
-      name: 'text',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 953, b: 956, line: 11, col: 164 }] },
-    },
-    {
-      name: 'name',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 960, b: 963, line: 11, col: 171 }] },
-    },
-    {
-      name: 'email',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 967, b: 971, line: 11, col: 178 }] },
-    },
-    {
-      name: 'website',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 975, b: 981, line: 11, col: 186 }] },
-    },
-    {
-      name: 'createdAt',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 985, b: 993, line: 11, col: 196 }] },
-    },
-  ],
   usedParamSet: {
     id: true,
     accountId: true,
@@ -398,10 +207,19 @@ const flagCommentForUrlWithTimestampIR: any = {
     website: true,
     createdAt: true,
   },
-  statement: {
-    body: 'INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, :createdAt)',
-    loc: { a: 789, b: 994, line: 11, col: 0 },
-  },
+  params: [
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 129, b: 131 }] },
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 134, b: 143 }] },
+    { name: 'url', required: false, transform: { type: 'scalar' }, locs: [{ a: 146, b: 149 }] },
+    { name: 'pageTitle', required: false, transform: { type: 'scalar' }, locs: [{ a: 151, b: 160 }] },
+    { name: 'text', required: false, transform: { type: 'scalar' }, locs: [{ a: 163, b: 167 }] },
+    { name: 'name', required: false, transform: { type: 'scalar' }, locs: [{ a: 170, b: 174 }] },
+    { name: 'email', required: false, transform: { type: 'scalar' }, locs: [{ a: 177, b: 182 }] },
+    { name: 'website', required: false, transform: { type: 'scalar' }, locs: [{ a: 185, b: 192 }] },
+    { name: 'createdAt', required: false, transform: { type: 'scalar' }, locs: [{ a: 195, b: 204 }] },
+  ],
+  statement:
+    'INSERT INTO reviews(id, account_id, page_url, page_title, comment, reader_name, reader_email, reader_website, created_at) VALUES(:id, :accountId, :url,:pageTitle, :text, :name, :email, :website, :createdAt)',
 }
 
 /**
@@ -432,20 +250,9 @@ export interface ICommentCountForAccountQuery {
 }
 
 const commentCountForAccountIR: any = {
-  name: 'CommentCountForAccount',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1092, b: 1100, line: 14, col: 59 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'SELECT COUNT(*) as "Total" FROM comments WHERE account_id=:accountId',
-    loc: { a: 1033, b: 1100, line: 14, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 58, b: 67 }] }],
+  statement: 'SELECT COUNT(*) as "Total" FROM comments WHERE account_id=:accountId',
 }
 
 /**
@@ -475,20 +282,9 @@ export interface IReviewCountForAccountQuery {
 }
 
 const reviewCountForAccountIR: any = {
-  name: 'ReviewCountForAccount',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1196, b: 1204, line: 17, col: 58 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'SELECT COUNT(*) as "Total" FROM reviews WHERE account_id=:accountId',
-    loc: { a: 1138, b: 1204, line: 17, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 57, b: 66 }] }],
+  statement: 'SELECT COUNT(*) as "Total" FROM reviews WHERE account_id=:accountId',
 }
 
 /**
@@ -527,26 +323,12 @@ export interface IFindByIdForAccountQuery {
 }
 
 const findByIdForAccountIR: any = {
-  name: 'FindByIdForAccount',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1280, b: 1288, line: 20, col: 41 }] },
-    },
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1298, b: 1299, line: 20, col: 59 }] },
-    },
-  ],
   usedParamSet: { accountId: true, id: true },
-  statement: {
-    body: 'SELECT * FROM comments WHERE account_id=:accountId AND id=:id',
-    loc: { a: 1239, b: 1299, line: 20, col: 0 },
-  },
+  params: [
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 40, b: 49 }] },
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 58, b: 60 }] },
+  ],
+  statement: 'SELECT * FROM comments WHERE account_id=:accountId AND id=:id',
 }
 
 /**
@@ -584,20 +366,9 @@ export interface ICommentsForAccountQuery {
 }
 
 const commentsForAccountIR: any = {
-  name: 'CommentsForAccount',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1375, b: 1383, line: 23, col: 41 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC',
-    loc: { a: 1334, b: 1408, line: 23, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 40, b: 49 }] }],
+  statement: 'SELECT * FROM comments WHERE account_id=:accountId ORDER BY created_at DESC',
 }
 
 /**
@@ -638,38 +409,15 @@ export interface ICommentsForAccountPagedQuery {
 }
 
 const commentsForAccountPagedIR: any = {
-  name: 'CommentsForAccountPaged',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1489, b: 1497, line: 26, col: 41 }] },
-    },
-    {
-      name: 'asc',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1520, b: 1522, line: 26, col: 72 }] },
-    },
-    {
-      name: 'limit',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1580, b: 1584, line: 26, col: 132 }] },
-    },
-    {
-      name: 'offset',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1594, b: 1599, line: 26, col: 146 }] },
-    },
-  ],
   usedParamSet: { accountId: true, asc: true, limit: true, offset: true },
-  statement: {
-    body: 'SELECT * FROM comments WHERE account_id=:accountId ORDER BY (CASE WHEN :asc = true THEN created_at END) ASC, created_at DESC LIMIT :limit OFFSET :offset',
-    loc: { a: 1448, b: 1599, line: 26, col: 0 },
-  },
+  params: [
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 40, b: 49 }] },
+    { name: 'asc', required: false, transform: { type: 'scalar' }, locs: [{ a: 71, b: 74 }] },
+    { name: 'limit', required: false, transform: { type: 'scalar' }, locs: [{ a: 131, b: 136 }] },
+    { name: 'offset', required: false, transform: { type: 'scalar' }, locs: [{ a: 145, b: 151 }] },
+  ],
+  statement:
+    'SELECT * FROM comments WHERE account_id=:accountId ORDER BY (CASE WHEN :asc = true THEN created_at END) ASC, created_at DESC LIMIT :limit OFFSET :offset',
 }
 
 /**
@@ -709,26 +457,12 @@ export interface IFindSpamByIdForAccountQuery {
 }
 
 const findSpamByIdForAccountIR: any = {
-  name: 'FindSpamByIdForAccount',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1678, b: 1686, line: 29, col: 40 }] },
-    },
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1696, b: 1697, line: 29, col: 58 }] },
-    },
-  ],
   usedParamSet: { accountId: true, id: true },
-  statement: {
-    body: 'SELECT * FROM reviews WHERE account_id=:accountId AND id=:id',
-    loc: { a: 1638, b: 1697, line: 29, col: 0 },
-  },
+  params: [
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 39, b: 48 }] },
+    { name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 57, b: 59 }] },
+  ],
+  statement: 'SELECT * FROM reviews WHERE account_id=:accountId AND id=:id',
 }
 
 /**
@@ -766,20 +500,9 @@ export interface IReviewsForAccountQuery {
 }
 
 const reviewsForAccountIR: any = {
-  name: 'ReviewsForAccount',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1771, b: 1779, line: 32, col: 40 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: {
-    body: 'SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC',
-    loc: { a: 1731, b: 1804, line: 32, col: 0 },
-  },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 39, b: 48 }] }],
+  statement: 'SELECT * FROM reviews WHERE account_id=:accountId ORDER BY created_at DESC',
 }
 
 /**
@@ -820,38 +543,15 @@ export interface IReviewsForAccountPagedQuery {
 }
 
 const reviewsForAccountPagedIR: any = {
-  name: 'ReviewsForAccountPaged',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1883, b: 1891, line: 35, col: 40 }] },
-    },
-    {
-      name: 'asc',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1914, b: 1916, line: 35, col: 71 }] },
-    },
-    {
-      name: 'limit',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1974, b: 1978, line: 35, col: 131 }] },
-    },
-    {
-      name: 'offset',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 1988, b: 1993, line: 35, col: 145 }] },
-    },
-  ],
   usedParamSet: { accountId: true, asc: true, limit: true, offset: true },
-  statement: {
-    body: 'SELECT * FROM reviews WHERE account_id=:accountId ORDER BY (CASE WHEN :asc = true THEN created_at END) ASC, created_at DESC LIMIT :limit OFFSET :offset',
-    loc: { a: 1843, b: 1993, line: 35, col: 0 },
-  },
+  params: [
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 39, b: 48 }] },
+    { name: 'asc', required: false, transform: { type: 'scalar' }, locs: [{ a: 70, b: 73 }] },
+    { name: 'limit', required: false, transform: { type: 'scalar' }, locs: [{ a: 130, b: 135 }] },
+    { name: 'offset', required: false, transform: { type: 'scalar' }, locs: [{ a: 144, b: 150 }] },
+  ],
+  statement:
+    'SELECT * FROM reviews WHERE account_id=:accountId ORDER BY (CASE WHEN :asc = true THEN created_at END) ASC, created_at DESC LIMIT :limit OFFSET :offset',
 }
 
 /**
@@ -890,26 +590,12 @@ export interface ICommentsForUrlQuery {
 }
 
 const commentsForUrlIR: any = {
-  name: 'CommentsForUrl',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2065, b: 2073, line: 38, col: 41 }] },
-    },
-    {
-      name: 'url',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2089, b: 2091, line: 38, col: 65 }] },
-    },
-  ],
   usedParamSet: { accountId: true, url: true },
-  statement: {
-    body: 'SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at ASC',
-    loc: { a: 2024, b: 2115, line: 38, col: 0 },
-  },
+  params: [
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 40, b: 49 }] },
+    { name: 'url', required: false, transform: { type: 'scalar' }, locs: [{ a: 64, b: 67 }] },
+  ],
+  statement: 'SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url ORDER BY created_at ASC',
 }
 
 /**
@@ -947,32 +633,14 @@ export interface ICommentsForUrlSinceDateQuery {
 }
 
 const commentsForUrlSinceDateIR: any = {
-  name: 'CommentsForUrlSinceDate',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2196, b: 2204, line: 41, col: 41 }] },
-    },
-    {
-      name: 'url',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2220, b: 2222, line: 41, col: 65 }] },
-    },
-    {
-      name: 'date',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2242, b: 2245, line: 41, col: 87 }] },
-    },
-  ],
   usedParamSet: { accountId: true, url: true, date: true },
-  statement: {
-    body: 'SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at ASC',
-    loc: { a: 2155, b: 2269, line: 41, col: 0 },
-  },
+  params: [
+    { name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 40, b: 49 }] },
+    { name: 'url', required: false, transform: { type: 'scalar' }, locs: [{ a: 64, b: 67 }] },
+    { name: 'date', required: false, transform: { type: 'scalar' }, locs: [{ a: 86, b: 90 }] },
+  ],
+  statement:
+    'SELECT * FROM comments WHERE account_id=:accountId AND page_url=:url AND created_at > :date ORDER BY created_at ASC',
 }
 
 /**
@@ -1001,17 +669,9 @@ export interface IDeleteSingleCommentQuery {
 }
 
 const deleteSingleCommentIR: any = {
-  name: 'DeleteSingleComment',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2336, b: 2337, line: 44, col: 31 }] },
-    },
-  ],
   usedParamSet: { id: true },
-  statement: { body: 'DELETE FROM comments WHERE id=:id', loc: { a: 2305, b: 2337, line: 44, col: 0 } },
+  params: [{ name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 30, b: 32 }] }],
+  statement: 'DELETE FROM comments WHERE id=:id',
 }
 
 /**
@@ -1039,17 +699,9 @@ export interface IDeleteSingleSpamQuery {
 }
 
 const deleteSingleSpamIR: any = {
-  name: 'DeleteSingleSpam',
-  params: [
-    {
-      name: 'id',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2400, b: 2401, line: 47, col: 30 }] },
-    },
-  ],
   usedParamSet: { id: true },
-  statement: { body: 'DELETE FROM reviews WHERE id=:id', loc: { a: 2370, b: 2401, line: 47, col: 0 } },
+  params: [{ name: 'id', required: false, transform: { type: 'scalar' }, locs: [{ a: 29, b: 31 }] }],
+  statement: 'DELETE FROM reviews WHERE id=:id',
 }
 
 /**
@@ -1075,17 +727,9 @@ export interface IDeleteAllCommentsQuery {
 }
 
 const deleteAllCommentsIR: any = {
-  name: 'DeleteAllComments',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2474, b: 2482, line: 50, col: 39 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: { body: 'DELETE FROM comments WHERE account_id=:accountId', loc: { a: 2435, b: 2482, line: 50, col: 0 } },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 38, b: 47 }] }],
+  statement: 'DELETE FROM comments WHERE account_id=:accountId',
 }
 
 /**
@@ -1113,17 +757,9 @@ export interface IDeleteAllSpamQuery {
 }
 
 const deleteAllSpamIR: any = {
-  name: 'DeleteAllSpam',
-  params: [
-    {
-      name: 'accountId',
-      required: false,
-      transform: { type: 'scalar' },
-      codeRefs: { used: [{ a: 2550, b: 2558, line: 53, col: 38 }] },
-    },
-  ],
   usedParamSet: { accountId: true },
-  statement: { body: 'DELETE FROM reviews WHERE account_id=:accountId', loc: { a: 2512, b: 2558, line: 53, col: 0 } },
+  params: [{ name: 'accountId', required: false, transform: { type: 'scalar' }, locs: [{ a: 37, b: 46 }] }],
+  statement: 'DELETE FROM reviews WHERE account_id=:accountId',
 }
 
 /**

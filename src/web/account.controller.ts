@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { Account, AccountEmailDto } from '../shared/accounts/account.interface'
+import { AccountCloserPayload } from './accounts/account-closer-payload.interface'
 import { AccountParam } from '../shared/accounts/account.param'
 import { AccountService } from '../shared/accounts/account.service'
 import { AkismetService } from '../shared/comments/akismet.service'
@@ -26,6 +27,7 @@ import PgBoss from 'pg-boss'
 import { Request, Response } from 'express'
 import { SessionExpiredFilter } from '../shared/auth/auth.exception'
 import { TokenService } from '../shared/accounts/token.service'
+import { PgBossQueues } from '../shared/queue/pgboss/queues'
 
 @Controller('account')
 @UseFilters(new SessionExpiredFilter())
@@ -196,9 +198,9 @@ export class AccountController {
   @Post('close')
   @UseGuards(AuthenticatedGuard)
   async close(@Req() req, @Res() res: Response): Promise<void> {
-    // TODO delete in a queue
     const account = _.get(req, 'user') as Account
-    this.jobQueue.publish('notify-on-account-closing', { accountId: account.id })
+    const payload: AccountCloserPayload = { accountId: account.id }
+    this.jobQueue.send(PgBossQueues.AccountClosing, payload)
     res.redirect('/auth/logout')
   }
 }

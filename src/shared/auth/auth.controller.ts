@@ -3,7 +3,7 @@ import { AuthService } from './auth.service'
 import { Body, Controller, Get, Param, Post, Req, Request, Res, UseFilters, UseGuards } from '@nestjs/common'
 import { LocalAuthGuard } from './auth.local.guard'
 import { Logger } from 'nestjs-pino'
-import { Response } from 'express'
+import { Request as ExpressRequest, Response } from 'express'
 
 @Controller('auth')
 export class AuthController {
@@ -31,9 +31,13 @@ export class AuthController {
   }
 
   @Get('logout')
-  logout(@Request() req, @Res() res: Response): void {
-    req.logout()
-    res.redirect('/auth/login')
+  logout(@Request() req: ExpressRequest, @Res() res: Response): void {
+    req.logout((err) => {
+      if (err) {
+        this.logger.warn('Logout failed, WTF?')
+      }
+      return res.redirect('/auth/login')
+    })
   }
 
   @Get('forgot-password')

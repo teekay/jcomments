@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { Account } from '../shared/accounts/account.interface'
 import { AccountService } from '../shared/accounts/account.service'
-import { Body, Controller, Get, HttpStatus, Inject, Param, Post, Req, Res } from '@nestjs/common'
+import { Body, Controller, Get, HttpStatus, Inject, Post, Req, Res } from '@nestjs/common'
 import { CommentDto, CommentWithId } from '../shared/comments/comment.interface'
 import { CommentCreatedResult, CommentService, SortOrder } from '../shared/comments/comment.service'
 import { ContentFilteringService } from '../shared/comments/content-filtering-service'
@@ -23,17 +23,26 @@ export class CommentsController {
 
   @Get()
   async comments(@Req() req: Request): Promise<CommentWithId[]> {
+    const url = req.query['url']
+    if (!url || !_.isString(url)) {
+      return this.commentsForAccount(req)
+    }
+
+    return await this.commentsForUrl(req, url)
+  }
+
+  private async commentsForAccount(req: Request) {
     const allComments = await this.commentsService.commentsForAccount(_.get(req, 'account') as Account, SortOrder.Asc)
     return this.formattedForContentType(allComments, this.formatFromRequest(req))
   }
 
-  @Get(':url')
-  async commentsForUrl(@Req() req: Request, @Param() params: { url: string }): Promise<CommentWithId[]> {
+  private async commentsForUrl(req: Request, url: string): Promise<CommentWithId[]> {
     const since = req.query['since'] as string
     const fromDate = req.query['fromDate'] as string
     const maybeDate = moment(fromDate)
+    this.logger.log(`Comments for ${url}`)
     return this.formattedForContentType(
-      await this.commentsService.commentsForUrl(_.get(req, 'account') as Account, params.url, {
+      await this.commentsService.commentsForUrl(_.get(req, 'account') as Account, url, {
         afterId: since,
         fromDate: fromDate && maybeDate.isValid() ? maybeDate.toDate() : undefined,
       }),
@@ -77,7 +86,7 @@ export class CommentsController {
       const emailSettings = await this.accountService.emailSettingsFor(account)
       if (emailSettings?.notifyOnComments) {
         // notify
-        this.logger.debug('Scheduling an email notification about a new comment')
+        this.logger.log('Scheduling an email notification about a new comment')
         this.jobQueue.publish({ account, comment })
       }
     } catch (oops) {

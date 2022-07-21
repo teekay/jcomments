@@ -5,8 +5,7 @@ import { AzureServiceBusQueue } from '../shared/queue/azure/azure-service-bus-qu
 import { Client } from 'pg'
 import { ConfigModule } from '../shared/config/config.module'
 import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
-import { Logger } from 'nestjs-pino'
-import { LoggerModule } from 'nestjs-pino'
+import { Logger, LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
 
 @Module({
@@ -16,13 +15,7 @@ import { PersistenceModule } from '../shared/persistence/persistence.module'
     AzureCommentsModule,
     PersistenceModule,
     AzureQueueModule,
-    LoggerModule.forRoot({
-      pinoHttp: {
-        prettyPrint: true,
-        level: process.env.NODE_ENV !== 'production' ? 'debug' : 'info',
-        prettifier: require('pino-colada'),
-      },
-    }),
+    LoggerModule.forRoot(),
   ],
 })
 export class AzureApiModule implements OnApplicationShutdown {
