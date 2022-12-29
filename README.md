@@ -32,8 +32,6 @@ You can self-host the app anywhere. You need Node.js (v14 and up) and PostgreSQL
 
 You can also host this in Azure. Have a look at the [docs](./AZURE.md).
 
-Interested in a trial run? You can use our [staging environment](https://jcomm-staging-eus-webapp.azurewebsites.net) for testing (please be nice.) There might be a paid hosted version in the future.
-
 ## Tech stack
 
 The prototype is built with Typescript using the NestJS framework and PostgreSQL for data storage. Spam detection is delegated to Akismet (optional but recommended).
