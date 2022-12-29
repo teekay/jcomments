@@ -16,6 +16,13 @@
                         </div>
                     </div>
                 </div>
+                {{#if review}}
+                <button title="purge spam" class="btn delete purge" id="btnPurgeSpam">
+                    <img class="icon icon-small" src="/assets/images/icons/trash.svg" alt="">
+                    Empty all
+                </button>
+                {{/if}}
+
                 <div class="select sort-comments">
                     <div class="selectWrapper">
                         <div class="selectCustom sortBy selectAction">
@@ -125,12 +132,45 @@
   });
 
   function approveOrDelete(action) {
-    console.log(`Approve or delete? ${action}`);
     if (action === "delete") {
       groupAction('deleteCommentsModal', document.location.href.indexOf('review') !== -1 ? '/dashboard/spam/deleteMany' : '/dashboard/comments/deleteMany');
     } else if (action === "approve") {
       groupAction('approveCommentsModal', '/dashboard/spam/unmarkMany');
     }
+  }
+
+  function purgeSpam() {
+      let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      let confirmModal = document.getElementById('deleteCommentsModal');
+      let btnConfirm = confirmModal.querySelector('.confirm');
+      let cancelControls = Array.from(confirmModal.querySelectorAll('.close'));
+      let confirm = () => {
+      fetch('/dashboard/spam/purge', {
+          method: 'POST',
+          headers: {
+          'CSRF-Token': token,
+          'content-type': 'application/json'
+          }
+      }).then(response => {
+          if (response.status === 201) {
+          document.location = document.location;
+          return;
+          }
+          // TODO show error
+          console.error(response.status);
+          confirmModal.style.display = 'none';
+      });
+      };
+      let cancel = () => {
+          btnConfirm.removeEventListener('click', confirm);
+          cancelControls.forEach(el => el.removeEventListener('click', cancel));
+          confirmModal.style.display = 'none';
+      }
+
+      btnConfirm.addEventListener('click', confirm);
+      cancelControls.forEach(el => el.addEventListener('click', cancel));
+      confirmModal.style.display = 'block';
   }
 
   let sortCommentsInput = document.getElementById("sortComments");
@@ -144,6 +184,8 @@
           return sortCommentsInputValue;
       }
   });
+  document.getElementById('btnPurgeSpam').addEventListener('click', purgeSpam);
+
 
   function sortComments(sortOrder) {
     let params = new URLSearchParams(document.location.search);

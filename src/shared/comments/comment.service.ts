@@ -183,6 +183,10 @@ export class CommentService {
     )
   }
 
+  async purgeSpam(account: Account) {
+    await deleteAllSpam.run({ accountId: account.id }, this.client)
+  }
+
   async deleteContentsForAccount(account: Account): Promise<void> {
     await deleteAllComments.run({ accountId: account.id }, this.client)
     await deleteAllSpam.run({ accountId: account.id }, this.client)

@@ -93,6 +93,12 @@
         border-radius: 100%;
     }
 
+    &.purge {
+        width: auto;
+        border-radius: 5%;
+        color: #000000;
+    }
+
     &.approve {
         background: var(--approved-background);
         grid-column: 1;

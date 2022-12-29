@@ -169,4 +169,13 @@ export class DashboardController {
     }
     return res.status(201).end()
   }
+
+  @Post('spam/purge')
+  @UseGuards(AuthenticatedGuard)
+  async purgeSpam(@Req() req: Request, @Res() res: Response): Promise<void> {
+    const account = _.get(req, 'user') as Account
+    await this.commentService.purgeSpam(account)
+
+    return res.status(201).end()
+  }
 }

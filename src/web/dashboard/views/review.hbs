@@ -6,7 +6,7 @@
             <h1 class="heading-font">Awaiting Review ({{ reviewCount }})</h1>
             {{!!> commentsSearch }}
         </header>
-        {{> commentsActions }}
+        {{> commentsActions review=true }}
         <section class="settings-column comments">
             {{#each comments}}
             <div class="card awaiting-review">
