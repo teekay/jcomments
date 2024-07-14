@@ -38,7 +38,7 @@ on:
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-  NODE_VERSION: '16.x'                # set this to the node version to use
+  NODE_VERSION: '20.x'                # set this to the node version to use
   fullDeployment: ${{ github.event.inputs.fullDeployment || 'false' }}
 
 jobs:
@@ -48,7 +48,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v4
         with:
           persist-credentials: false
       - name: setup environment variables
@@ -77,9 +77,9 @@ jobs:
       environment: ${{ needs.setupEnv.outputs.environment }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'yarn'
@@ -106,7 +106,7 @@ jobs:
       uses: actions/checkout@master
 
     - name: Setup Node ${{ env.NODE_VERSION }} Environment
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'yarn'
