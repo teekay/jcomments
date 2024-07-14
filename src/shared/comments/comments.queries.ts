@@ -1,5 +1,5 @@
 /** Types generated for queries found in "src/shared/comments/comments.sql" */
-import { PreparedQuery } from '@pgtyped/query'
+import { PreparedQuery } from '@pgtyped/runtime'
 
 /** 'PostCommentForUrl' parameters type */
 export interface IPostCommentForUrlParams {

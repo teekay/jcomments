@@ -1,5 +1,5 @@
 /** Types generated for queries found in "src/shared/accounts/accounts.sql" */
-import { PreparedQuery } from '@pgtyped/query'
+import { PreparedQuery } from '@pgtyped/runtime'
 
 /** 'Signup' parameters type */
 export interface ISignupParams {

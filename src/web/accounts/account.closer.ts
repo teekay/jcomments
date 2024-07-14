@@ -20,9 +20,10 @@ export class AccountCloser {
       const payload = job.data  
       if (!isAccountCloserPayload(payload)) {
         this.logger.error(`Unsupported payload ${JSON.stringify(payload)}`)
-        return
+        return Promise.resolve()
       }  
       this.closeAccount(payload)
+      return Promise.resolve()
     })
   }
 

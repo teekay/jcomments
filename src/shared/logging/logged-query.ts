@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { PreparedQuery } from '@pgtyped/query'
+import { PreparedQuery } from '@pgtyped/runtime'
 
 export function interpretedQuery(query: PreparedQuery<any, any>, params: Record<string, unknown>): string {
   const templatedSql = (_.get(query, 'query.statement.body') as string) ?? ''

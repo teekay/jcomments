@@ -9,6 +9,8 @@ import moment from 'moment'
 import { Request, Response } from 'express'
 import { SessionExpiredFilter } from '../../shared/auth/auth.exception'
 
+type GenericResponse = Response<any, Record<string, any>>;
+
 @Controller('dashboard')
 @UseFilters(new SessionExpiredFilter())
 export class DashboardController {
@@ -83,7 +85,7 @@ export class DashboardController {
 
   @Post('comment/delete')
   @UseGuards(AuthenticatedGuard)
-  async deleteSingleComment(@Req() req: Request, @Res() res: Response, @Body() id: Identifiable): Promise<void> {
+  async deleteSingleComment(@Req() req: Request, @Res() res: Response, @Body() id: Identifiable): Promise<GenericResponse> {
     const account = _.get(req, 'user') as Account
     const comment = await this.commentService.findById(account, id.id)
     if (!comment) {
@@ -96,7 +98,7 @@ export class DashboardController {
 
   @Post('comments/deleteMany')
   @UseGuards(AuthenticatedGuard)
-  async deleteComments(@Req() req: Request, @Res() res: Response, @Body() body: { ids: string[] }): Promise<void> {
+  async deleteComments(@Req() req: Request, @Res() res: Response, @Body() body: { ids: string[] }): Promise<GenericResponse> {
     const account = _.get(req, 'user') as Account
     for (const id of body.ids) {
       const comment = await this.commentService.findById(account, id)
@@ -112,7 +114,7 @@ export class DashboardController {
 
   @Post('spam/delete')
   @UseGuards(AuthenticatedGuard)
-  async deleteSpamComment(@Req() req: Request, @Res() res: Response, @Body() id: Identifiable): Promise<void> {
+  async deleteSpamComment(@Req() req: Request, @Res() res: Response, @Body() id: Identifiable): Promise<GenericResponse> {
     const account = _.get(req, 'user') as Account
     const comment = await this.commentService.findSpamById(account, id.id)
     if (!comment) {
@@ -127,7 +129,7 @@ export class DashboardController {
 
   @Post('spam/deleteMany')
   @UseGuards(AuthenticatedGuard)
-  async deleteSpamComments(@Req() req: Request, @Res() res: Response, @Body() body: { ids: string[] }): Promise<void> {
+  async deleteSpamComments(@Req() req: Request, @Res() res: Response, @Body() body: { ids: string[] }): Promise<GenericResponse> {
     const account = _.get(req, 'user') as Account
     for (const id of body.ids) {
       const comment = await this.commentService.findSpamById(account, id)
@@ -143,7 +145,7 @@ export class DashboardController {
 
   @Post('spam/unmark')
   @UseGuards(AuthenticatedGuard)
-  async unmarkSingle(@Req() req: Request, @Res() res: Response, @Body() id: Identifiable): Promise<void> {
+  async unmarkSingle(@Req() req: Request, @Res() res: Response, @Body() id: Identifiable): Promise<GenericResponse> {
     const account = _.get(req, 'user') as Account
     const comment = await this.commentService.findSpamById(account, id.id)
     if (!comment) {
@@ -156,7 +158,7 @@ export class DashboardController {
 
   @Post('spam/unmarkMany')
   @UseGuards(AuthenticatedGuard)
-  async unmarkMany(@Req() req: Request, @Res() res: Response, @Body() body: { ids: string[] }): Promise<void> {
+  async unmarkMany(@Req() req: Request, @Res() res: Response, @Body() body: { ids: string[] }): Promise<GenericResponse> {
     const account = _.get(req, 'user') as Account
     for (const id of body.ids) {
       const comment = await this.commentService.findSpamById(account, id)
@@ -172,7 +174,7 @@ export class DashboardController {
 
   @Post('spam/purge')
   @UseGuards(AuthenticatedGuard)
-  async purgeSpam(@Req() req: Request, @Res() res: Response): Promise<void> {
+  async purgeSpam(@Req() req: Request, @Res() res: Response): Promise<GenericResponse> {
     const account = _.get(req, 'user') as Account
     await this.commentService.purgeSpam(account)
 
