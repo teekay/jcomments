@@ -2,4 +2,4 @@ FROM jcomments as app
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start-app"]
+CMD ["yarn", "start"]
