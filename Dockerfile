@@ -9,14 +9,10 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+RUN yarn
 
 # Copy the rest of your app's source code
 COPY . .
 
 # Build your TypeScript app
-RUN npm run build
-
-# At this point, you can add steps to copy the output from /usr/src/app/dist 
-# to another stage if you want to create a smaller, production-ready image.
-# Since you're only interested in the build, this Dockerfile stops here.
+RUN yarn build
