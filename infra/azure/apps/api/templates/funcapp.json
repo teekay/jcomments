@@ -72,7 +72,7 @@
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]",
                 "siteConfig": {
                     "numberOfWorkers": 1,
-                    "linuxFxVersion": "Node|20-lts",
+                    "linuxFxVersion": "Node|20",
                     "alwaysOn": false,
                     "functionAppScaleLimit": 200,
                     "minimumElasticInstanceCount": 0
