@@ -1,5 +1,5 @@
 /** Types generated for queries found in "src/shared/auth/auth.sql" */
-import { PreparedQuery } from '@pgtyped/query'
+import { PreparedQuery } from '@pgtyped/runtime'
 
 /** 'ExpirePendingTokens' parameters type */
 export interface IExpirePendingTokensParams {

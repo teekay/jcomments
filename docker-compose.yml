@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-app
+    ports:
+      - "3030:3030"
+    networks:
+      - my_network
+    environment:
+      NODE_ENVIRONMENT: production
+    depends_on:
+      - db
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    ports:
+      - "3000:3000"
+    networks:
+      - my_network
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: master
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    networks:
+      - my_network
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  
+networks:
+  my_network:
+    driver: bridge
+
+volumes:
+  pgdata:

@@ -67,7 +67,7 @@ export class CommentsController {
         ...comment,
         postedAt: moment().utc().toDate(),
       },
-      req.ip
+      req.ip ?? ''
     )
 
     if (req.headers['content-type'] !== 'application/json') {
