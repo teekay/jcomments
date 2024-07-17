@@ -1,6 +1,14 @@
 {
   "version": "2.0",
   "logging": {
+    "logLevel": {
+      "default": "Warning",
+      "Function": "Warning",
+      "Host.Aggregator": "Error",
+      "Host.Results": "Information", 
+      "Function.AzureCommentsApiPost": "Information",
+      "Function.AzureCommentsNotify": "Information"
+    },
     "applicationInsights": {
       "samplingSettings": {
         "isEnabled": true,
