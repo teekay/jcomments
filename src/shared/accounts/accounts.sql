@@ -29,7 +29,10 @@ UPDATE tokens SET revoked_at=:revokedAt WHERE token=:token;
 SELECT * FROM tokens WHERE token=:token;
 
 /* @name findCurrentToken */
-SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL;
+SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL ORDER BY created_at DESC;
+
+/* @name findAllValidTokens */
+SELECT * FROM tokens WHERE account_id=:accountId AND revoked_at IS NULL ORDER BY created_at DESC;
 
 /* @name accountSettings */
 SELECT * FROM account_settings WHERE account_id=:accountId;

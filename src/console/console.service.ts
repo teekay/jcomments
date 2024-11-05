@@ -120,7 +120,7 @@ export class CliService {
     const account = await this.accountService.findById(args.account)
     if (!account) throw new Error(`No account found for id ${args.account}`)
     await this.tokenService.create(account)
-    const token = await this.accountService.token(account)
+    const token = await this.accountService.lastToken(account)
     if (!token) {
       throw new Error('Token not created')
     }

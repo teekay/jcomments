@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { Account } from '../shared/accounts/account.interface'
 import { AccountService } from '../shared/accounts/account.service'
-import { Body, Controller, Get, HttpStatus, Inject, Post, Req, Res } from '@nestjs/common'
+import { Body, Delete, Controller, Get, HttpStatus, Inject, Post, Req, Res, Param } from '@nestjs/common'
 import { CommentDto, CommentWithId } from '../shared/comments/comment.interface'
 import { CommentCreatedResult, CommentService, SortOrder } from '../shared/comments/comment.service'
 import { ContentFilteringService } from '../shared/comments/content-filtering-service'
@@ -92,5 +92,13 @@ export class CommentsController {
     } catch (oops) {
       this.logger.warn(`Trouble scheduling email notification: ${(oops as Error)?.message}`)
     }
+  }
+
+  @Delete(':commentId')
+  async deleteComment(@Param('commentId') commentId: string, @Res() res: Response): Promise<void> {
+    // TODO add HMAC auth as we'll call this from the CLI
+    this.logger.log(`Deleting comment ${commentId}`)
+    await this.commentsService.deleteSingleById(commentId)
+    res.status(HttpStatus.OK).send()
   }
 }

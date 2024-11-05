@@ -27,12 +27,13 @@ services:
 
   db:
     image: postgres:14-alpine
+    hostname: db
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: master
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     networks:
       - my_network
     volumes:

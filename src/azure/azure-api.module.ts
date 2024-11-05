@@ -7,9 +7,11 @@ import { ConfigModule } from '../shared/config/config.module'
 import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
 import { Logger, LoggerModule } from 'nestjs-pino'
 import { PersistenceModule } from '../shared/persistence/persistence.module'
+import { AzureAuthModule } from './auth.module'
 
 @Module({
   imports: [
+    AzureAuthModule,
     AzureAccountsModule,
     ConfigModule,
     AzureCommentsModule,

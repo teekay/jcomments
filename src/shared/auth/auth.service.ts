@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import {
   accountFromToken,
   changePassword,
@@ -13,8 +14,11 @@ import { EmailService } from '../emails/email.service'
 import { Inject, Injectable } from '@nestjs/common'
 import { loginFromToken } from '../../api/api.queries'
 import moment from 'moment'
+import { Request } from 'express'
 import { SendMailService } from '../infra/sendmail.service'
 import { v4 as uuidv4 } from 'uuid'
+import { findAllValidTokens } from '../accounts/accounts.queries'
+import { HttpRequest } from '@azure/functions'
 
 @Injectable()
 export class AuthService {
@@ -95,4 +99,49 @@ export class AuthService {
     const t = await isTokenUsable.run({ token, date: forDate }, this.client)
     return t.length === 1
   }
+
+  async tokensForAccount(accountId: string): Promise<string[]> {
+    const tokens = await findAllValidTokens.run({ accountId }, this.client)
+
+    return tokens.map(t => t.token)
+  }
+
+  async isHmacSignatureValid(
+      req: Request | HttpRequest,
+      expiryInSeconds: number,
+      accountId: string,
+      timestamp: string,
+      signature: string,
+      forDate: Date): Promise<HmacValidationResult> {
+    const allTokens = await this.tokensForAccount(accountId)
+
+    // Verify the request is not too old (e.g., 5 minutes)
+    const now = Math.floor(forDate.getTime() / 1000)
+    if (Math.abs(now - parseInt(timestamp)) > expiryInSeconds) {
+      return HmacValidationResult.REQUEST_TOO_OLD
+    }
+
+    const tryValidate = (token: string): boolean => {
+      // Reconstruct the string to verify
+      const stringToSign = `${req.method}\n${req.url}\n${timestamp}`
+      
+      // Create HMAC signature
+      const hmac = crypto.createHmac('sha256', token)
+      hmac.update(stringToSign)
+      const expectedSignature = hmac.digest('hex')
+
+      return expectedSignature === signature
+    }
+
+    // see if at least one token matches the signature
+    return allTokens.reduce((acc, e) => acc || tryValidate(e), false)
+      ? HmacValidationResult.OK
+      : HmacValidationResult.INVALID_SIGNATURE
+  }
+}
+
+export enum HmacValidationResult {
+  OK,
+  INVALID_SIGNATURE,
+  REQUEST_TOO_OLD,
 }

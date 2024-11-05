@@ -165,6 +165,10 @@ export class CommentService {
     )
   }
 
+  async deleteSingleById(commentId: string): Promise<void> {
+    await deleteSingleComment.run({ id: commentId }, this.client)
+  }
+
   async deleteSingle(comment: Comment): Promise<void> {
     await deleteSingleComment.run({ id: comment.id }, this.client)
   }
