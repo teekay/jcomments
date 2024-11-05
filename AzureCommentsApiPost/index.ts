@@ -78,6 +78,12 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
     // no email notification for spam
     return
   }
+  const commentEntity = await commentService.findById(account, result as string)
+  if (!commentEntity) {
+    context.log.warn(`Comment ${result} not found - cannot send email notification`)
+
+    return
+  }
 
   // send email notification as another Azure function triggered by ServiceBus
   try {
@@ -85,7 +91,7 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
     if (emailSettings?.notifyOnComments) {
       // notify
       context.log('Scheduling an email notification about a new comment')
-      jobQueue.publish({ account, comment })
+      jobQueue.publish({ account, comment: commentEntity })
     }
   } catch (oops) {
     context.log.warn(`Trouble scheduling email notification: ${(oops as Error)?.message}`)

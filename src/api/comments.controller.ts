@@ -82,12 +82,19 @@ export class CommentsController {
       return
     }
 
+    const commentEntity = await this.commentsService.findById(account, result as string)
+    if (!commentEntity) {
+      this.logger.warn(`Comment ${result} not found - cannot send email notification`)
+  
+      return
+    }
+
     try {
       const emailSettings = await this.accountService.emailSettingsFor(account)
       if (emailSettings?.notifyOnComments) {
         // notify
         this.logger.log('Scheduling an email notification about a new comment')
-        this.jobQueue.publish({ account, comment })
+        this.jobQueue.publish({ account, comment: commentEntity })
       }
     } catch (oops) {
       this.logger.warn(`Trouble scheduling email notification: ${(oops as Error)?.message}`)

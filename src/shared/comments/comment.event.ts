@@ -1,9 +1,9 @@
 import { Account } from '../accounts/account.interface'
-import { CommentDto } from './comment.interface'
+import { Comment } from './comment.interface'
 
 export interface CommentEventBody {
   account: Account
-  comment: CommentDto // TODO this should not be the DTO
+  comment: Comment
 }
 
 export class CommentEvent {

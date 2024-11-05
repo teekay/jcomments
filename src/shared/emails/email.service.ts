@@ -1,4 +1,4 @@
-import { CommentDto } from '../comments/comment.interface'
+import { CommentWithId } from '../comments/comment.interface'
 import { Email } from './email.interface'
 import handlebars from 'handlebars'
 import { Injectable } from '@nestjs/common'
@@ -16,11 +16,11 @@ export class EmailService {
     }
   }
 
-  notifyOnSingleComment(comment: CommentDto, link: string): Email {
+  notifyOnSingleComment(comment: CommentWithId, link: string): Email {
     const htmlTemplate = handlebars.compile(readFileSync(`${__dirname}/views/comments/single/html.hbs`).toString())
     const textTemplate = handlebars.compile(readFileSync(`${__dirname}/views/comments/single/text.hbs`).toString())
     return {
-      subject: 'A new comment came in to your JamComments',
+      subject: 'A new comment came in to your JComments',
       html: htmlTemplate({ comment, link }),
       text: textTemplate({ comment, link }),
     }

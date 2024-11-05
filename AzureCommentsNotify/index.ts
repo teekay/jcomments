@@ -15,7 +15,11 @@ const commentEventHandler: AzureFunction = async function (context: Context, eve
   const configService = app.get(ConfigService)
   const emailService = app.get(EmailService)
   const { account, comment } = eventBody
-  const email = emailService.notifyOnSingleComment(comment, `${configService.adminUrl()}/dashboard`)
+  const commentEntity = {
+    ...comment,
+    postedAt: new Date(comment.postedAt),
+  }
+  const email = emailService.notifyOnSingleComment(commentEntity, `${configService.adminUrl()}/dashboard`)
   context.log(`Notifying ${account.email} on comment posted`)
 
   await sendMailService.send(configService.mailgunSender(), account.email, email.subject, email.html, email.text)
