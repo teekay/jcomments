@@ -14,11 +14,9 @@ import { EmailService } from '../emails/email.service'
 import { Inject, Injectable } from '@nestjs/common'
 import { loginFromToken } from '../../api/api.queries'
 import moment from 'moment'
-import { Request } from 'express'
 import { SendMailService } from '../infra/sendmail.service'
 import { v4 as uuidv4 } from 'uuid'
 import { findAllValidTokens } from '../accounts/accounts.queries'
-import { HttpRequest } from '@azure/functions'
 
 @Injectable()
 export class AuthService {
@@ -107,7 +105,8 @@ export class AuthService {
   }
 
   async isHmacSignatureValid(
-      req: Request | HttpRequest,
+      httpMethod: string,
+      urlPath: string,
       expiryInSeconds: number,
       accountId: string,
       timestamp: string,
@@ -123,7 +122,7 @@ export class AuthService {
 
     const tryValidate = (token: string): boolean => {
       // Reconstruct the string to verify
-      const stringToSign = `${req.method}\n${req.url}\n${timestamp}`
+      const stringToSign = `${httpMethod}\n${urlPath}\n${timestamp}`
       
       // Create HMAC signature
       const hmac = crypto.createHmac('sha256', token)
@@ -141,7 +140,7 @@ export class AuthService {
 }
 
 export enum HmacValidationResult {
-  OK,
-  INVALID_SIGNATURE,
-  REQUEST_TOO_OLD,
+  OK = 'OK',
+  INVALID_SIGNATURE = 'KO',
+  REQUEST_TOO_OLD = 'OLD',
 }

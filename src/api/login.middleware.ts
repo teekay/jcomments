@@ -58,8 +58,10 @@ export class HmacLoginMiddleware implements NestMiddleware {
       }
 
       const forDate = new Date()
+      console.log(`Date: ${forDate}`)
       const signatureVerificationResult = await this.authService.isHmacSignatureValid(
-        req,
+        'DELETE',
+        req.url, // gonna be relative - /comments/123
         300,
         accountId,
         timestamp,
@@ -77,7 +79,7 @@ export class HmacLoginMiddleware implements NestMiddleware {
       }
       
       // see if at least one token matches the signature
-      if (signatureVerificationResult === HmacValidationResult.INVALID_SIGNATURE) {
+      if (signatureVerificationResult !== HmacValidationResult.OK) {
         this.logger.warn(`Invalid signature`)
         res.status(403).end()
 

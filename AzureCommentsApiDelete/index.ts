@@ -25,8 +25,11 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
   }
 
   const forDate = new Date()
+  console.log(`Date: ${forDate}`)
+
   const signatureVerificationResult = await authService.isHmacSignatureValid(
-    req,
+    'DELETE',
+    `/comments/${commentId}`,
     300,
     accountId,
     timestamp,
@@ -40,6 +43,15 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
     context.log.warn(`Request too old: ${Math.abs(now - parseInt(timestamp))}s`)
     context.res = {
       status: 429,
+    }
+
+    return
+  }
+
+  if (signatureVerificationResult !== HmacValidationResult.OK) {
+    context.log.warn(`Invalid signature: ${signatureVerificationResult}`)
+    context.res = {
+      status: 403,
     }
 
     return
