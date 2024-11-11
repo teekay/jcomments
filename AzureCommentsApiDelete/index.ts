@@ -25,7 +25,6 @@ const commentsApi: AzureFunction = async function (context: Context, req: HttpRe
   }
 
   const forDate = new Date()
-  console.log(`Date: ${forDate}`)
 
   const signatureVerificationResult = await authService.isHmacSignatureValid(
     'DELETE',
