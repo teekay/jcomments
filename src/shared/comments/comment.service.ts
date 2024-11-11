@@ -43,19 +43,21 @@ export class CommentService {
     private readonly logger: Logger
   ) {}
 
-  async create(account: Account, comment: CommentBase, ip: string): Promise<CommentCreatedResult> {
+  async create(account: Account, comment: CommentBase, ip: string): Promise<CommentCreatedResult|string> {
     const settings = await this.accountService.settingsFor(account)
     const toModeration = settings?.requireModeration ?? false
+    const payload = this.commentToDbParam(account, comment)
     if (toModeration || (settings?.akismetKey && settings.useAkismet)) {
       const flagIt = toModeration || (settings && (await this.akismetService.isCommentSpam(settings, comment, ip)))
       if (flagIt) {
         this.logger.warn(`${toModeration ? 'Moderation enforced' : 'SPAM detected'}: ${JSON.stringify(comment)}`)
-        await flagCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
+        await flagCommentForUrl.run(payload, this.client)
         return CommentCreatedResult.Flagged
       }
     }
-    await postCommentForUrl.run(this.commentToDbParam(account, comment), this.client)
-    return CommentCreatedResult.Created
+    await postCommentForUrl.run(payload, this.client)
+
+    return payload.id
   }
 
   async createWithOption(account: Account, comment: CommentBase, toModeration: boolean): Promise<CommentCreatedResult> {
@@ -163,6 +165,10 @@ export class CommentService {
       },
       this.recordToClass(c[0] as ICommentsForAccountResult)
     )
+  }
+
+  async deleteSingleById(commentId: string): Promise<void> {
+    await deleteSingleComment.run({ id: commentId }, this.client)
   }
 
   async deleteSingle(comment: Comment): Promise<void> {

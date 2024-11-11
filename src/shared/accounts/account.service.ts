@@ -79,7 +79,7 @@ export class AccountService {
     return this.recordToAccount(accounts[0])
   }
 
-  async token(account: Account): Promise<Token | undefined> {
+  async lastToken(account: Account): Promise<Token | undefined> {
     const t = await findCurrentToken.run({ accountId: account.id }, this.client)
     if (t.length === 0) return
 

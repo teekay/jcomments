@@ -7,6 +7,8 @@
   },
   "scripts": {
     "generate": "json2ts -i schemas/**/* -o generated/ && ts-auto-guard --paths ./generated/*.ts --export-all && ts-auto-guard --paths ./src/**/*.interface.ts --export-all",
+    "build": "tsc -p tsconfig.json",
+    "watch": "tsc -p tsconfig.json -w",
     "api": "ts-node src/api.ts",
     "web": "ts-node src/web.ts",
     "cli": "ts-node src/cli.ts",
@@ -14,7 +16,6 @@
     "test": "jest",
     "build:sass": "node-sass assets/scss -o public/css  --output-style compressed",
     "prebuild": "yarn generate",
-    "build": "tsc -p tsconfig.json",
     "postbuild": "copyfiles \"./src/**/*.hbs\" \"./public/**/*\" \"./public/assets/**/*\" build",
     "clean": "rm -rf build && rm -rf generated",
     "ts-node": "ts-node",
@@ -25,7 +26,6 @@
     "prestart": "node ./build/src/cli.js db:migrate",
     "start": "node ./build/src/web.js",
     "start-api": "node ./build/src/api.js",
-    "watch": "tsc -p tsconfig.json -w",
     "func": "func start --verbose",
     "zip:app": "zip -q -r webapp.zip . -x@.appserviceignore -x .appserviceignore",
     "zip:api": "zip -q -r funcapp.zip . -x@.funcignore -x .funcignore"

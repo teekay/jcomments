@@ -83,7 +83,7 @@ export class AccountController {
       layout: 'dashboard',
       section: 'Settings',
       csrfToken: req.csrfToken(),
-      token: await this.accountService.token(account),
+      token: await this.accountService.lastToken(account),
       account,
       changeEmailError: req.flash('change-email-error'),
       ...settings,
@@ -134,7 +134,7 @@ export class AccountController {
   @UseGuards(AuthenticatedGuard)
   async refreshToken(@Req() req: Request, @Res() res: Response): Promise<Response> {
     const account = _.get(req, 'user') as Account
-    const token = await this.accountService.token(account)
+    const token = await this.accountService.lastToken(account)
     if (!token) {
       this.logger.error('No token found, none revoked')
       return res.status(400).json({ error: 'Could not reissue API token' })
@@ -143,7 +143,7 @@ export class AccountController {
     await this.tokenService.revoke(token)
     await this.tokenService.create(account)
     return res.status(201).json({
-      token: (await this.accountService.token(account))?.token,
+      token: (await this.accountService.lastToken(account))?.token,
     })
   }
 

@@ -54,13 +54,21 @@ components:
         comment:
           type: object
           required:
+            - id
             - postUrl
+            - postedAt
             - text
             - author
           additionalProperties: false
           properties:
+            id: 
+              type: string
+              format: guid
             postUrl:
               type: string
+            postedAt:
+              type: string
+              format: datetime
             postTitle:
               type: string
             text:
