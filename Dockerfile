@@ -1,6 +1,6 @@
 # Stage 1: Build the application
 # Use a Node.js image
-FROM node:20-alpine as builder
+FROM node:22 as builder
 
 # Create app directory
 WORKDIR /usr/src/app
