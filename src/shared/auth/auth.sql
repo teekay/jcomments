@@ -11,4 +11,4 @@ SELECT * FROM password_resets WHERE token=:token AND used_at IS NULL AND expires
 SELECT a.* FROM accounts a JOIN password_resets p ON (a.id=p.account_id) WHERE p.token=:token;
 
 /* @name changePassword */
-UPDATE accounts SET password=digest(:password::text, 'sha256') WHERE id=:accountId;
+UPDATE accounts SET password=:passwordHash WHERE id=:accountId;

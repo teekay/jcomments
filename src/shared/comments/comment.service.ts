@@ -1,43 +1,23 @@
 import _ from 'lodash'
+import moment from 'moment'
 import { Account } from '../accounts/account.interface'
 import { AccountService } from '../accounts/account.service'
 import { AkismetService } from './akismet.service'
-import { Client } from 'pg'
 import { Comment, CommentBase, CommentWithId } from './comment.interface'
-import {
-  commentsForAccount,
-  commentCountForAccount,
-  commentsForUrl,
-  commentsForUrlSinceDate,
-  ICommentsForAccountResult,
-  postCommentForUrl,
-  commentsForAccountPaged,
-  findByIdForAccount,
-  flagCommentForUrl,
-  reviewCountForAccount,
-  reviewsForAccountPaged,
-  deleteSingleComment,
-  deleteSingleSpam,
-  postCommentForUrlWithTimestamp,
-  findSpamByIdForAccount,
-  ICommentsForUrlSinceDateResult,
-  ICommentsForUrlResult,
-  deleteAllComments,
-  deleteAllSpam,
-  flagCommentForUrlWithTimestamp,
-  ICommentsForAccountPagedParams,
-} from './comments.queries'
 import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
 import { v4 as uuidv4 } from 'uuid'
-import moment from 'moment'
-import { interpretedQuery } from '../logging/logged-query'
 import { AuthorDto } from './author.interface'
+import {
+  COMMENT_REPOSITORY,
+  ICommentRepository,
+  CommentRecord,
+} from '../repositories/comment.repository.interface'
 
 @Injectable()
 export class CommentService {
   constructor(
-    @Inject('PG_CLIENT') private client: Client,
+    @Inject(COMMENT_REPOSITORY) private commentRepo: ICommentRepository,
     private readonly accountService: AccountService,
     private readonly akismetService: AkismetService,
     private readonly logger: Logger
@@ -51,37 +31,32 @@ export class CommentService {
       const flagIt = toModeration || (settings && (await this.akismetService.isCommentSpam(settings, comment, ip)))
       if (flagIt) {
         this.logger.warn(`${toModeration ? 'Moderation enforced' : 'SPAM detected'}: ${JSON.stringify(comment)}`)
-        await flagCommentForUrl.run(payload, this.client)
+        await this.commentRepo.createFlaggedComment(payload)
         return CommentCreatedResult.Flagged
       }
     }
-    await postCommentForUrl.run(payload, this.client)
+    await this.commentRepo.createComment(payload)
 
     return payload.id
   }
 
   async createWithOption(account: Account, comment: CommentBase, toModeration: boolean): Promise<CommentCreatedResult> {
+    const payload = { ...this.commentToDbParam(account, comment), createdAt: comment.postedAt }
     if (toModeration) {
       this.logger.warn(`Moderation enforced: ${JSON.stringify(comment)}`)
-      await flagCommentForUrlWithTimestamp.run(
-        { ...this.commentToDbParam(account, comment), createdAt: comment.postedAt },
-        this.client
-      )
+      await this.commentRepo.createFlaggedComment(payload)
       return CommentCreatedResult.Flagged
     }
-    await postCommentForUrlWithTimestamp.run(
-      { ...this.commentToDbParam(account, comment), createdAt: comment.postedAt },
-      this.client
-    )
+    await this.commentRepo.createComment(payload)
     return CommentCreatedResult.Created
   }
 
   async commentsForUrl(account: Account, url: string, query?: CommentsQuery): Promise<CommentWithId[]> {
-    let records: ICommentsForUrlSinceDateResult[] | ICommentsForUrlResult[]
+    let records: CommentRecord[]
     if (query?.fromDate) {
-      records = await commentsForUrlSinceDate.run({ url, accountId: account.id, date: query.fromDate }, this.client)
+      records = await this.commentRepo.findForUrlSinceDate(account.id, url, query.fromDate)
     } else {
-      records = await commentsForUrl.run({ url, accountId: account.id }, this.client)
+      records = await this.commentRepo.findForUrl(account.id, url)
       if (query?.afterId) {
         // records are sorted with the most recent coming up first
         // hopefully no two records have the exact same timestamp
@@ -94,17 +69,15 @@ export class CommentService {
   }
 
   async commentCountForAccount(account: Account): Promise<number> {
-    const c = await commentCountForAccount.run({ accountId: account.id }, this.client)
-    return +(c[0].Total ?? 0)
+    return this.commentRepo.countForAccount(account.id)
   }
 
   async reviewCountForAccount(account: Account): Promise<number> {
-    const c = await reviewCountForAccount.run({ accountId: account.id }, this.client)
-    return +(c[0].Total ?? 0)
+    return this.commentRepo.countFlaggedForAccount(account.id)
   }
 
   async commentsForAccount(account: Account, sort?: SortOrder): Promise<CommentWithId[]> {
-    const allComments = await commentsForAccount.run({ accountId: account.id }, this.client)
+    const allComments = await this.commentRepo.findAllForAccount(account.id)
     const sorted = sort === SortOrder.Asc ? allComments.reverse() : allComments
     return sorted.map(this.recordToClass)
   }
@@ -117,14 +90,8 @@ export class CommentService {
   ): Promise<CommentWithId[]> {
     const limit = batchSize ?? 10
     const offset = ((page ?? 1) - 1) * limit
-    const params: ICommentsForAccountPagedParams = {
-      accountId: account.id,
-      limit: `${limit}`,
-      offset: `${offset}`,
-      asc: sort === SortOrder.Asc,
-    }
-    const pagedComments = await commentsForAccountPaged.run(params, this.client)
-    this.logger.debug(interpretedQuery(commentsForAccountPaged, { ...params, asc: params.asc?.toString() }))
+    const sortOrder = sort === SortOrder.Asc ? 'asc' : 'desc'
+    const pagedComments = await this.commentRepo.findPagedForAccount(account.id, sortOrder, limit, offset)
     return pagedComments.map(this.recordToClass)
   }
 
@@ -136,73 +103,70 @@ export class CommentService {
   ): Promise<CommentWithId[]> {
     const limit = batchSize ?? 10
     const offset = ((page ?? 1) - 1) * limit
-    const pagedComments = await reviewsForAccountPaged.run(
-      { accountId: account.id, limit: `${limit}`, offset: `${offset}`, asc: sort === SortOrder.Asc },
-      this.client
-    )
+    const sortOrder = sort === SortOrder.Asc ? 'asc' : 'desc'
+    const pagedComments = await this.commentRepo.findPagedFlaggedForAccount(account.id, sortOrder, limit, offset)
     return pagedComments.map(this.recordToClass)
   }
 
   async findById(account: Account, id: string): Promise<Comment | undefined> {
-    const c = await findByIdForAccount.run({ accountId: account.id, id }, this.client)
-    if (c.length !== 1) return
+    const record = await this.commentRepo.findById(account.id, id)
+    if (!record) return undefined
     return _.merge(
       {
-        id: c[0].id,
+        id: record.id,
         account,
       },
-      this.recordToClass(c[0] as ICommentsForAccountResult)
+      this.recordToClass(record)
     )
   }
 
   async findSpamById(account: Account, id: string): Promise<Comment | undefined> {
-    const c = await findSpamByIdForAccount.run({ accountId: account.id, id }, this.client)
-    if (c.length !== 1) return
+    const record = await this.commentRepo.findFlaggedById(account.id, id)
+    if (!record) return undefined
     return _.merge(
       {
-        id: c[0].id,
+        id: record.id,
         account,
       },
-      this.recordToClass(c[0] as ICommentsForAccountResult)
+      this.recordToClass(record)
     )
   }
 
   async deleteSingleById(commentId: string): Promise<void> {
-    await deleteSingleComment.run({ id: commentId }, this.client)
+    await this.commentRepo.deleteComment(commentId)
   }
 
   async deleteSingle(comment: Comment): Promise<void> {
-    await deleteSingleComment.run({ id: comment.id }, this.client)
+    await this.commentRepo.deleteComment(comment.id)
   }
 
   async deleteSingleSpam(comment: Comment): Promise<void> {
-    await deleteSingleSpam.run({ id: comment.id }, this.client)
+    await this.commentRepo.deleteFlaggedComment(comment.id)
   }
 
   async markCommentNotSpam(comment: Comment): Promise<void> {
     const account = await this.accountService.findById(comment.account.id)
     if (!account) throw new Error('Data integrity error')
-    await deleteSingleSpam.run({ id: comment.id }, this.client)
-    await postCommentForUrlWithTimestamp.run(
-      _.merge({ createdAt: comment.postedAt }, this.commentToDbParam(account, comment)),
-      this.client
+    await this.commentRepo.deleteFlaggedComment(comment.id)
+    await this.commentRepo.createComment(
+      _.merge({ createdAt: comment.postedAt }, this.commentToDbParam(account, comment))
     )
   }
 
   async purgeSpam(account: Account) {
-    await deleteAllSpam.run({ accountId: account.id }, this.client)
+    await this.commentRepo.deleteAllFlaggedForAccount(account.id)
   }
 
   async deleteContentsForAccount(account: Account): Promise<void> {
-    await deleteAllComments.run({ accountId: account.id }, this.client)
-    await deleteAllSpam.run({ accountId: account.id }, this.client)
+    await this.commentRepo.deleteAllForAccount(account.id)
+    await this.commentRepo.deleteAllFlaggedForAccount(account.id)
   }
 
   async import(account: Account, dump: JsonDump[]): Promise<void> {
-    await this.client.query('BEGIN;')
-    for (const comment of dump) {
-      await postCommentForUrlWithTimestamp.run(
-        {
+    await this.commentRepo.beginTransaction()
+    try {
+      for (const comment of dump) {
+        await this.commentRepo.createComment({
           id: uuidv4(),
           accountId: account.id,
           createdAt: moment(comment.postedAt).utc(true).toDate(),
@@ -212,11 +176,13 @@ export class CommentService {
           name: comment.author.name,
           email: comment.author.email,
           website: comment.author.website,
-        },
-        this.client
-      )
+        })
+      }
+      await this.commentRepo.commitTransaction()
+    } catch (error) {
+      await this.commentRepo.rollbackTransaction()
+      throw error
     }
-    await this.client.query('COMMIT;')
   }
 
   private commentToDbParam(account: Account, comment: CommentBase) {
@@ -232,7 +198,7 @@ export class CommentService {
     }
   }
 
-  private recordToClass(r: ICommentsForAccountResult): CommentWithId {
+  private recordToClass(r: CommentRecord): CommentWithId {
     return {
       id: r.id,
       postUrl: r.page_url,

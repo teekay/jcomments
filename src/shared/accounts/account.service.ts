@@ -1,34 +1,26 @@
 import { Account } from './account.interface'
-import {
-  accountEmailSettings,
-  accountSettings,
-  changeAccountEmail,
-  closeAccount,
-  deleteEmailSettings,
-  deleteSettings,
-  deleteTokens,
-  findByEmail,
-  findById,
-  findByUsername,
-  findCurrentToken,
-  findUserByEmailOrUsername,
-  IFindByIdResult,
-  initialAccountEmailSettings,
-  initialAccountSettings,
-  login,
-  signup,
-  updateEmailSettings,
-  updateSettings,
-} from './accounts.queries'
-import { Client } from 'pg'
 import { Inject, Injectable } from '@nestjs/common'
 import { EmailSettingsParam, SettingsParam } from './settings.param'
 import { Token } from './token.interface'
 import { v4 as uuidv4 } from 'uuid'
+import {
+  ACCOUNT_REPOSITORY,
+  IAccountRepository,
+  AccountRecord,
+} from '../repositories/account.repository.interface'
+import {
+  TOKEN_REPOSITORY,
+  ITokenRepository,
+} from '../repositories/token.repository.interface'
+import { PasswordService } from '../crypto/password.service'
 
 @Injectable()
 export class AccountService {
-  constructor(@Inject('PG_CLIENT') private client: Client) {}
+  constructor(
+    @Inject(ACCOUNT_REPOSITORY) private accountRepo: IAccountRepository,
+    @Inject(TOKEN_REPOSITORY) private tokenRepo: ITokenRepository,
+    private passwordService: PasswordService
+  ) {}
 
   async create(username: string, email: string, password: string): Promise<void> {
     const existing = await this.findByUsernameOrEmail(username)
@@ -36,121 +28,110 @@ export class AccountService {
       throw new Error(`${username} or email already exist`)
     }
     const accountId = uuidv4()
-    await signup.run({ id: accountId, username, email, password, createdAt: new Date() }, this.client)
-    await initialAccountSettings.run({ id: uuidv4(), accountId }, this.client)
-    await initialAccountEmailSettings.run({ id: uuidv4(), accountId }, this.client)
+    const passwordHash = await this.passwordService.hash(password)
+    await this.accountRepo.create(accountId, username, email, passwordHash, new Date())
   }
 
   async login(username: string, password: string): Promise<Account | undefined> {
-    const a = await login.run({ username, password }, this.client)
-    return a.length === 1
-      ? {
-          id: a[0].id,
-          username: a[0].username,
-          email: a[0].email,
-          createdAt: a[0].created_at,
-        }
-      : undefined
+    const record = await this.accountRepo.findByUsername(username)
+    if (!record) return undefined
+
+    // Check if this is a bcrypt hash or legacy SHA256
+    const isBcrypt = this.passwordService.isBcryptHash(record.password)
+
+    let passwordValid: boolean
+    if (isBcrypt) {
+      const hashStr = Buffer.isBuffer(record.password)
+        ? record.password.toString('utf8')
+        : record.password
+      passwordValid = await this.passwordService.verify(password, hashStr)
+    } else {
+      // Legacy SHA256 hash (stored as bytea/Buffer in Postgres)
+      const hashBuffer = Buffer.isBuffer(record.password)
+        ? record.password
+        : Buffer.from(record.password, 'hex')
+      passwordValid = this.passwordService.verifyLegacySha256(password, hashBuffer)
+
+      // Auto-migrate to bcrypt on successful login
+      if (passwordValid) {
+        const newHash = await this.passwordService.hash(password)
+        await this.accountRepo.updatePassword(record.id, newHash)
+      }
+    }
+
+    if (!passwordValid) return undefined
+
+    return this.recordToAccount(record)
   }
 
   async findById(id: string): Promise<Account | undefined> {
-    const accounts = await findById.run({ id }, this.client)
-    if (accounts.length !== 1) {
-      return
-    }
-    return this.recordToAccount(accounts[0])
+    const record = await this.accountRepo.findById(id)
+    if (!record) return undefined
+    return this.recordToAccount(record)
   }
 
   async findByUsername(username: string): Promise<Account | undefined> {
-    const accounts = await findByUsername.run({ username }, this.client)
-    if (accounts.length === 0) return
-    return this.recordToAccount(accounts[0])
+    const record = await this.accountRepo.findByUsername(username)
+    if (!record) return undefined
+    return this.recordToAccount(record)
   }
 
   async findByUsernameOrEmail(usernameOrEmail: string): Promise<Account | undefined> {
-    const accounts = await findUserByEmailOrUsername.run(
-      {
-        username: usernameOrEmail.trim(),
-        email: usernameOrEmail.toLowerCase().trim(),
-      },
-      this.client
+    const record = await this.accountRepo.findByUsernameOrEmail(
+      usernameOrEmail.trim(),
+      usernameOrEmail.toLowerCase().trim()
     )
-    if (accounts.length !== 1) return
-    return this.recordToAccount(accounts[0])
+    if (!record) return undefined
+    return this.recordToAccount(record)
   }
 
   async lastToken(account: Account): Promise<Token | undefined> {
-    const t = await findCurrentToken.run({ accountId: account.id }, this.client)
-    if (t.length === 0) return
+    const record = await this.tokenRepo.findCurrentToken(account.id)
+    if (!record) return undefined
 
-    const { created_at, ...base } = t[0]
-    const token = {
+    return {
       account,
-      createdAt: created_at,
-      ...base,
+      token: record.token,
+      createdAt: record.created_at,
+      revokedAt: record.revoked_at,
     }
-    return token
   }
 
   async settingsFor(account: Account): Promise<SettingsParam | undefined> {
-    const s = await accountSettings.run({ accountId: account.id }, this.client)
-    if (s.length === 0) return
-    return {
-      requireModeration: s[0].require_moderation ?? false,
-      useAkismet: s[0].use_akismet ?? false,
-      akismetKey: s[0].akismet_key ?? '',
-      blogUrl: s[0].blog_url ?? '',
-    }
+    return this.accountRepo.getSettings(account.id)
   }
 
   async emailSettingsFor(account: Account): Promise<EmailSettingsParam | undefined> {
-    const s = await accountEmailSettings.run({ accountId: account.id }, this.client)
-    if (s.length === 0) return
-    return {
-      notifyOnComments: s[0].notify_on_comments ?? false,
-      sendCommentsDigest: s[0].send_comments_digest ?? false,
-    }
+    return this.accountRepo.getEmailSettings(account.id)
   }
 
   async updateSettings(account: Account, settings: SettingsParam): Promise<void> {
-    await updateSettings.run(
-      {
-        accountId: account.id,
-        requireModeration: settings.requireModeration ?? false,
-        useAkismet: settings.useAkismet ?? false,
-        akismetKey: settings.akismetKey,
-        blogUrl: settings.blogUrl,
-      },
-      this.client
-    )
+    await this.accountRepo.updateSettings(account.id, settings)
   }
 
   async updateEmailSettings(account: Account, settings: EmailSettingsParam): Promise<void> {
-    await updateEmailSettings.run({ accountId: account.id, ...settings }, this.client)
+    await this.accountRepo.updateEmailSettings(account.id, settings)
   }
 
   async changeEmail(account: Account, emailParam: string): Promise<void> {
     const email = emailParam.toLowerCase().trim()
-    const e = await findByEmail.run({ email }, this.client)
-    if (e.length > 0) {
+    const existing = await this.accountRepo.findByEmail(email)
+    if (existing) {
       throw new Error('Email already exists')
     }
-    await changeAccountEmail.run({ accountId: account.id, email }, this.client)
+    await this.accountRepo.changeEmail(account.id, email)
   }
 
   async closeAccount(account: Account): Promise<void> {
-    await deleteSettings.run({ accountId: account.id }, this.client)
-    await deleteEmailSettings.run({ accountId: account.id }, this.client)
-    await deleteTokens.run({ accountId: account.id }, this.client)
-    await closeAccount.run({ accountId: account.id }, this.client)
+    await this.accountRepo.closeAccount(account.id)
   }
 
-  private recordToAccount(a: IFindByIdResult): Account {
+  private recordToAccount(record: AccountRecord): Account {
     return {
-      id: a.id,
-      username: a.username,
-      email: a.email,
-      createdAt: a.created_at,
+      id: record.id,
+      username: record.username,
+      email: record.email,
+      createdAt: record.created_at,
     }
   }
 }

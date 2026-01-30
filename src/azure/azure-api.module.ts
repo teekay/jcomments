@@ -4,25 +4,27 @@ import { AzureQueueModule } from '../shared/queue/azure/azure-queue.module'
 import { AzureServiceBusQueue } from '../shared/queue/azure/azure-service-bus-queue'
 import { Client } from 'pg'
 import { ConfigModule } from '../shared/config/config.module'
-import { Inject, Module, OnApplicationShutdown } from '@nestjs/common'
+import { DatabaseModule, getDatabaseProvider } from '../shared/database/database.module'
+import { Inject, Module, OnApplicationShutdown, Optional } from '@nestjs/common'
 import { Logger, LoggerModule } from 'nestjs-pino'
-import { PersistenceModule } from '../shared/persistence/persistence.module'
 import { AzureAuthModule } from './auth.module'
+import Database from 'better-sqlite3'
 
 @Module({
   imports: [
+    DatabaseModule.forRoot(),
     AzureAuthModule,
     AzureAccountsModule,
     ConfigModule,
     AzureCommentsModule,
-    PersistenceModule,
     AzureQueueModule,
     LoggerModule.forRoot(),
   ],
 })
 export class AzureApiModule implements OnApplicationShutdown {
   constructor(
-    @Inject('PG_CLIENT') private client: Client,
+    @Optional() @Inject('PG_CLIENT') private pgClient: Client | undefined,
+    @Optional() @Inject('SQLITE_DB') private sqliteDb: Database.Database | undefined,
     private queue: AzureServiceBusQueue,
     private readonly logger: Logger
   ) {}
@@ -31,7 +33,14 @@ export class AzureApiModule implements OnApplicationShutdown {
   async onApplicationShutdown(signal?: string): Promise<void> {
     this.logger.log(`Application exiting with code ${signal}`)
     await this.queue.stop()
-    await this.client.end()
+
+    const dbProvider = getDatabaseProvider()
+    if (dbProvider === 'postgres' && this.pgClient) {
+      await this.pgClient.end()
+    } else if (dbProvider === 'sqlite' && this.sqliteDb) {
+      this.sqliteDb.close()
+    }
+
     this.logger.log('JamComments API stopped')
   }
 }

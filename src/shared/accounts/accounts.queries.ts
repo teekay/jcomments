@@ -8,7 +8,7 @@ export interface ISignupParams {
   createdAt?: DateOrString | null | void;
   email?: string | null | void;
   id?: string | null | void;
-  password?: string | null | void;
+  passwordHash?: string | null | void;
   username?: string | null | void;
 }
 
@@ -21,12 +21,12 @@ export interface ISignupQuery {
   result: ISignupResult;
 }
 
-const signupIR: any = {"usedParamSet":{"id":true,"username":true,"email":true,"password":true,"createdAt":true},"params":[{"name":"id","required":false,"transform":{"type":"scalar"},"locs":[{"a":72,"b":74}]},{"name":"username","required":false,"transform":{"type":"scalar"},"locs":[{"a":77,"b":85}]},{"name":"email","required":false,"transform":{"type":"scalar"},"locs":[{"a":88,"b":93}]},{"name":"password","required":false,"transform":{"type":"scalar"},"locs":[{"a":103,"b":111}]},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"locs":[{"a":131,"b":140}]}],"statement":"INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt)"};
+const signupIR: any = {"usedParamSet":{"id":true,"username":true,"email":true,"passwordHash":true,"createdAt":true},"params":[{"name":"id","required":false,"transform":{"type":"scalar"},"locs":[{"a":72,"b":74}]},{"name":"username","required":false,"transform":{"type":"scalar"},"locs":[{"a":77,"b":85}]},{"name":"email","required":false,"transform":{"type":"scalar"},"locs":[{"a":88,"b":93}]},{"name":"passwordHash","required":false,"transform":{"type":"scalar"},"locs":[{"a":96,"b":108}]},{"name":"createdAt","required":false,"transform":{"type":"scalar"},"locs":[{"a":111,"b":120}]}],"statement":"INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, :passwordHash, :createdAt)"};
 
 /**
  * Query generated from SQL:
  * ```
- * INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt)
+ * INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, :passwordHash, :createdAt)
  * ```
  */
 export const signup = new PreparedQuery<ISignupParams,ISignupResult>(signupIR);
@@ -84,14 +84,13 @@ const initialAccountEmailSettingsIR: any = {"usedParamSet":{"id":true,"accountId
 export const initialAccountEmailSettings = new PreparedQuery<IInitialAccountEmailSettingsParams,IInitialAccountEmailSettingsResult>(initialAccountEmailSettingsIR);
 
 
-/** 'Login' parameters type */
-export interface ILoginParams {
-  password?: string | null | void;
+/** 'FindByUsernameForLogin' parameters type */
+export interface IFindByUsernameForLoginParams {
   username?: string | null | void;
 }
 
-/** 'Login' return type */
-export interface ILoginResult {
+/** 'FindByUsernameForLogin' return type */
+export interface IFindByUsernameForLoginResult {
   created_at: Date;
   email: string;
   id: string;
@@ -99,21 +98,21 @@ export interface ILoginResult {
   username: string;
 }
 
-/** 'Login' query type */
-export interface ILoginQuery {
-  params: ILoginParams;
-  result: ILoginResult;
+/** 'FindByUsernameForLogin' query type */
+export interface IFindByUsernameForLoginQuery {
+  params: IFindByUsernameForLoginParams;
+  result: IFindByUsernameForLoginResult;
 }
 
-const loginIR: any = {"usedParamSet":{"username":true,"password":true},"params":[{"name":"username","required":false,"transform":{"type":"scalar"},"locs":[{"a":38,"b":46}]},{"name":"password","required":false,"transform":{"type":"scalar"},"locs":[{"a":68,"b":76}]}],"statement":"SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')"};
+const findByUsernameForLoginIR: any = {"usedParamSet":{"username":true},"params":[{"name":"username","required":false,"transform":{"type":"scalar"},"locs":[{"a":38,"b":46}]}],"statement":"SELECT * FROM accounts WHERE username=:username"};
 
 /**
  * Query generated from SQL:
  * ```
- * SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256')
+ * SELECT * FROM accounts WHERE username=:username
  * ```
  */
-export const login = new PreparedQuery<ILoginParams,ILoginResult>(loginIR);
+export const findByUsernameForLogin = new PreparedQuery<IFindByUsernameForLoginParams,IFindByUsernameForLoginResult>(findByUsernameForLoginIR);
 
 
 /** 'FindById' parameters type */
