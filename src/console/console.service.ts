@@ -82,6 +82,29 @@ export class CliService {
 
     this.consoleService.createCommand(
       {
+        command: 'bootstrap',
+        description: 'Creates a new account with an access token',
+        options: [
+          {
+            flags: '-u --username <username>',
+            required: true,
+          },
+          {
+            flags: '-e --email <email>',
+            required: true,
+          },
+          {
+            flags: '-p --password <password>',
+            required: true,
+          },
+        ],
+      },
+      this.bootstrap,
+      cli
+    )
+
+    this.consoleService.createCommand(
+      {
         command: 'db:migrate',
         description: 'Migrates the database',
       },
@@ -137,6 +160,21 @@ export class CliService {
     const token = await this.tokenService.findById(args.token)
     if (!token) throw new Error(`Token ${args.token} not found`)
     await this.tokenService.revoke(token)
+  }
+
+  bootstrap = async (args: { username: string; email: string; password: string }): Promise<void> => {
+    await this.accountService.create(args.username, args.email, args.password)
+    const account = await this.accountService.findByUsername(args.username)
+    if (!account) {
+      throw new Error('Account not created')
+    }
+    await this.tokenService.create(account)
+    const token = await this.accountService.lastToken(account)
+    if (!token) {
+      throw new Error('Token not created')
+    }
+    console.log(`Account created. ID: ${account.id}`)
+    console.log(`Token created: ${token.token}`)
   }
 
   migrate = async (): Promise<void> => {

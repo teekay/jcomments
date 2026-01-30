@@ -9,10 +9,10 @@ import { Inject, Module, OnApplicationShutdown, Optional } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
 import { loggerConfig } from '../shared/logging/logging-setup'
 import { LoggerModule } from 'nestjs-pino'
-import { QueueModule } from '../shared/queue/queue.module'
-import { Queue } from '../shared/queue/queue.interface'
+import { QueueModule, getQueueProvider } from '../shared/queue/queue.module'
 import { AuthModule } from '../shared/auth/auth.module'
 import Database from 'better-sqlite3'
+import PgBoss from 'pg-boss'
 
 @Module({
   imports: [
@@ -31,13 +31,17 @@ export class ApiModule implements OnApplicationShutdown {
   constructor(
     @Optional() @Inject('PG_CLIENT') private pgClient: Client | undefined,
     @Optional() @Inject('SQLITE_DB') private sqliteDb: Database.Database | undefined,
-    private queue: Queue,
+    @Optional() @Inject('PG_BOSS') private boss: PgBoss | undefined,
     private readonly logger: Logger
   ) {}
 
   async onApplicationShutdown(signal?: string): Promise<void> {
     this.logger.log(`Application exiting with code ${signal}`)
-    await this.queue.stop()
+
+    const queueProvider = getQueueProvider()
+    if (queueProvider === 'pgboss' && this.boss) {
+      await this.boss.stop()
+    }
 
     const dbProvider = getDatabaseProvider()
     if (dbProvider === 'postgres' && this.pgClient) {

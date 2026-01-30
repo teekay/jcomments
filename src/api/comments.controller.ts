@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { Account } from '../shared/accounts/account.interface'
 import { AccountService } from '../shared/accounts/account.service'
-import { Body, Delete, Controller, Get, HttpStatus, Inject, Post, Req, Res, Param } from '@nestjs/common'
+import { Body, Delete, Controller, Get, HttpStatus, Post, Req, Res, Param } from '@nestjs/common'
 import { CommentDto, CommentWithId } from '../shared/comments/comment.interface'
 import { CommentCreatedResult, CommentService, SortOrder } from '../shared/comments/comment.service'
 import { ContentFilteringService } from '../shared/comments/content-filtering-service'
@@ -9,12 +9,12 @@ import { Logger } from 'nestjs-pino'
 import moment from 'moment'
 import { Request, Response } from 'express'
 import { CommentInFormat } from '../shared/comments/formatted-comment'
-import { PgBossQueue } from '../shared/queue/pgboss/pg-boss-queue'
+import { Queue } from '../shared/queue/queue.interface'
 
 @Controller('comments')
 export class CommentsController {
   constructor(
-    @Inject(PgBossQueue) private readonly jobQueue: PgBossQueue,
+    private readonly jobQueue: Queue,
     private readonly accountService: AccountService,
     private readonly commentsService: CommentService,
     private readonly contentFilteringService: ContentFilteringService,
