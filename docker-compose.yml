@@ -11,6 +11,11 @@ services:
       - my_network
     environment:
       NODE_ENVIRONMENT: production
+      PGHOST: db
+      PGPORT: ${PGPORT}
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE}
     depends_on:
       - db
 
@@ -22,6 +27,12 @@ services:
       - "3000:3000"
     networks:
       - my_network
+    environment:
+      PGHOST: db
+      PGPORT: ${PGPORT}
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGDATABASE: ${PGDATABASE}
     depends_on:
       - db
 
@@ -31,9 +42,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${PGDATABASE}
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
     networks:
       - my_network
     volumes:
