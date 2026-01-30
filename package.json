@@ -20,6 +20,7 @@
     "clean": "rm -rf build && rm -rf generated",
     "ts-node": "ts-node",
     "repl": "ts-node src/repl.ts",
+    "migrate:pg-to-sqlite": "ts-node scripts/migrate-pg-to-sqlite.ts",
     "prettier-format": "prettier --config .prettierrc \"{,!(node_modules|build)/**/}*.ts\" --write",
     "lint": "eslint src/ --ext .js,.jsx,.ts,.tsx",
     "lint-fix": "eslint \"./src/**/*.ts\" --fix",
