@@ -122,10 +122,13 @@ export class SqliteAccountRepository implements IAccountRepository {
   }
 
   async closeAccount(accountId: string): Promise<void> {
-    this.db.prepare('DELETE FROM account_settings WHERE account_id = ?').run(accountId)
-    this.db.prepare('DELETE FROM account_email_settings WHERE account_id = ?').run(accountId)
-    this.db.prepare('DELETE FROM tokens WHERE account_id = ?').run(accountId)
-    this.db.prepare('DELETE FROM accounts WHERE id = ?').run(accountId)
+    const deleteAccount = this.db.transaction((id: string) => {
+      this.db.prepare('DELETE FROM account_settings WHERE account_id = ?').run(id)
+      this.db.prepare('DELETE FROM account_email_settings WHERE account_id = ?').run(id)
+      this.db.prepare('DELETE FROM tokens WHERE account_id = ?').run(id)
+      this.db.prepare('DELETE FROM accounts WHERE id = ?').run(id)
+    })
+    deleteAccount(accountId)
   }
 
   private toRecord(row: SqliteAccountRow): AccountRecord {

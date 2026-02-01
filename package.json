@@ -50,7 +50,7 @@
     "@pgtyped/cli": "2.*",
     "@pgtyped/query": "2.*",
     "akismet-api": "5.1.0",
-    "bcrypt": "^6.0.0",
+    "bcrypt": "~6.0.0",
     "better-sqlite3": "^12.6.2",
     "better-sqlite3-session-store": "^0.1.0",
     "class-transformer": "0.5.*",

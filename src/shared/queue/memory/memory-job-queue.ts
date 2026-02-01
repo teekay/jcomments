@@ -24,8 +24,11 @@ export class MemoryJobQueue {
   async send(queueName: string, data: unknown): Promise<string | null> {
     const handler = this.handlers.get(queueName)
     if (handler) {
-      // Process immediately
-      await handler({ data })
+      try {
+        await handler({ data })
+      } catch (err) {
+        console.error(`[MemoryJobQueue] Handler error for queue "${queueName}":`, err)
+      }
     }
     return 'memory-job-' + Date.now()
   }

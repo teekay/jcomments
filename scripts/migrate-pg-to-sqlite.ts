@@ -133,6 +133,10 @@ async function main() {
   sqliteDb.exec(schema)
   console.log('  ✓ Schema created\n')
 
+  // Start transaction for all data inserts
+  sqliteDb.exec('BEGIN TRANSACTION')
+
+  try {
   // Migration helpers
   const toISOString = (date: Date | null): string | null =>
     date ? date.toISOString() : null
@@ -294,6 +298,16 @@ async function main() {
     console.log(`  ✓ Migrated ${resets.rows.length} password_resets\n`)
   } catch {
     console.log('  ⚠ password_resets table not found, skipping\n')
+  }
+
+  // Commit the transaction
+  sqliteDb.exec('COMMIT')
+  console.log('✓ All data committed successfully\n')
+
+  } catch (err) {
+    // Rollback on any error
+    sqliteDb.exec('ROLLBACK')
+    throw err
   }
 
   // Re-enable foreign keys and close
