@@ -22,7 +22,7 @@ function createPostgresSessionStore(sessionModule: typeof session): session.Stor
 }
 
 function createSqliteSessionStore(sessionModule: typeof session): session.Store {
-  const dbPath = process.env.SQLITE_PATH ?? './data/jcomments.db'
+  const dbPath = process.env.SQLITE_SESSION_PATH ?? './data/sessions.db'
   const dbDir = path.dirname(dbPath)
 
   if (!fs.existsSync(dbDir)) {
