@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { AccountCloser } from './web/accounts/account.closer'
 import { ConfigService } from './shared/config/config.service'
-import connectPgSimple from 'connect-pg-simple'
 import cookieParser from 'cookie-parser'
 import { config as dotenv } from 'dotenv'
 import csurf from 'csurf'
@@ -16,11 +15,14 @@ import { Logger } from 'nestjs-pino'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { NestFactory } from '@nestjs/core'
 import passport from 'passport'
-import { QueuedMailer } from './shared/queue/pgboss/queued-mailer'
 import { readFileSync } from 'fs'
 import session from 'express-session'
 import { ValidationPipe } from '@nestjs/common'
 import { WebModule } from './web/web.module'
+import { createSessionStore } from './shared/database/session-store.factory'
+import { getQueueProvider } from './shared/queue/queue.module'
+import { QueuedMailer } from './shared/queue/pgboss/queued-mailer'
+import { MemoryQueuedMailer } from './shared/queue/memory/memory-queued-mailer'
 
 dotenv()
 
@@ -78,7 +80,7 @@ async function bootstrap() {
   app.use(
     session({
       name: 'JamComments',
-      store: new (connectPgSimple(session))({ tableName: 'sessions' }), // connection string created implicitly from env vars, see https://node-postgres.com/features/connecting
+      store: createSessionStore(session),
       cookie: {
         maxAge: sessionLifetime,
         sameSite: true,
@@ -120,8 +122,14 @@ async function bootstrap() {
     res.render('./home/views/csrf-error')
   })
   // initialize the job queue
-  const queuedMailer = app.get(QueuedMailer)
-  await queuedMailer.init()
+  const queueProvider = getQueueProvider()
+  if (queueProvider === 'pgboss') {
+    const queuedMailer = app.get(QueuedMailer)
+    await queuedMailer.init()
+  } else {
+    const memoryMailer = app.get(MemoryQueuedMailer)
+    await memoryMailer.init()
+  }
   const accountCloser = app.get(AccountCloser)
   await accountCloser.init()
 

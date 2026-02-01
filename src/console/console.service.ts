@@ -1,17 +1,23 @@
 import _ from 'lodash'
+import * as fs from 'fs'
+import * as path from 'path'
 import { AccountService } from '../shared/accounts/account.service'
 import { Client } from 'pg'
 import { CommentBase } from '../shared/comments/comment.interface'
 import { CommentService, JsonDump } from '../shared/comments/comment.service'
 import { ConsoleService } from 'nestjs-console'
-import { Inject, Injectable } from '@nestjs/common'
+import { getDatabaseProvider } from '../shared/database/database.module'
+import { Inject, Injectable, Optional } from '@nestjs/common'
 import { migrate } from 'postgres-migrations'
 import { randCatchPhrase, randQuote, randSlug, randUrl, randUser } from '@ngneat/falso'
 import { TokenService } from '../shared/accounts/token.service'
+import Database from 'better-sqlite3'
+
 @Injectable()
 export class CliService {
   constructor(
-    @Inject('PG_CLIENT') private client: Client,
+    @Optional() @Inject('PG_CLIENT') private pgClient: Client | undefined,
+    @Optional() @Inject('SQLITE_DB') private sqliteDb: Database.Database | undefined,
     private readonly consoleService: ConsoleService,
     private readonly accountService: AccountService,
     private readonly commentService: CommentService,
@@ -76,6 +82,29 @@ export class CliService {
 
     this.consoleService.createCommand(
       {
+        command: 'bootstrap',
+        description: 'Creates a new account with an access token',
+        options: [
+          {
+            flags: '-u --username <username>',
+            required: true,
+          },
+          {
+            flags: '-e --email <email>',
+            required: true,
+          },
+          {
+            flags: '-p --password <password>',
+            required: true,
+          },
+        ],
+      },
+      this.bootstrap,
+      cli
+    )
+
+    this.consoleService.createCommand(
+      {
         command: 'db:migrate',
         description: 'Migrates the database',
       },
@@ -133,10 +162,58 @@ export class CliService {
     await this.tokenService.revoke(token)
   }
 
+  bootstrap = async (args: { username: string; email: string; password: string }): Promise<void> => {
+    await this.accountService.create(args.username, args.email, args.password)
+    const account = await this.accountService.findByUsername(args.username)
+    if (!account) {
+      throw new Error('Account not created')
+    }
+    await this.tokenService.create(account)
+    const token = await this.accountService.lastToken(account)
+    if (!token) {
+      throw new Error('Token not created')
+    }
+    console.log(`Account created. ID: ${account.id}`)
+    console.log(`Token created: ${token.token}`)
+  }
+
   migrate = async (): Promise<void> => {
+    const dbProvider = getDatabaseProvider()
+
+    if (dbProvider === 'sqlite') {
+      await this.migrateSqlite()
+    } else {
+      await this.migratePostgres()
+    }
+  }
+
+  private migratePostgres = async (): Promise<void> => {
+    if (!this.pgClient) {
+      throw new Error('PostgreSQL client not available')
+    }
     try {
-      await migrate({ client: this.client }, `${process.cwd()}/sql/migrations`)
-      console.log('Migrated')
+      await migrate({ client: this.pgClient }, `${process.cwd()}/sql/migrations`)
+      console.log('Migrated (PostgreSQL)')
+    } catch (oops) {
+      console.warn('Migration failed')
+      throw oops
+    }
+  }
+
+  private migrateSqlite = async (): Promise<void> => {
+    if (!this.sqliteDb) {
+      throw new Error('SQLite database not available')
+    }
+
+    const schemaPath = path.join(process.cwd(), 'sql/sqlite/schema.sql')
+    if (!fs.existsSync(schemaPath)) {
+      throw new Error(`SQLite schema not found at ${schemaPath}`)
+    }
+
+    try {
+      const schema = fs.readFileSync(schemaPath, 'utf8')
+      this.sqliteDb.exec(schema)
+      console.log('Migrated (SQLite)')
     } catch (oops) {
       console.warn('Migration failed')
       throw oops

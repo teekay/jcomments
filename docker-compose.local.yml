@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - "127.0.0.1:${WEB_PORT}:${WEB_PORT}"
+    environment:
+      NODE_ENVIRONMENT: development
+      DB_PROVIDER: sqlite
+      SQLITE_PATH: /app/data/jcomments-migrated.db
+    volumes:
+      - .:/app
+    command: yarn start
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    ports:
+      - "127.0.0.1:${API_PORT}:${API_PORT}"
+    environment:
+      DB_PROVIDER: sqlite
+      SQLITE_PATH: /app/data/jcomments-migrated.db
+    volumes:
+      - .:/app
+    command: yarn start-api

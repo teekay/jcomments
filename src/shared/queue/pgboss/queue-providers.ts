@@ -3,6 +3,7 @@ import { EmailService } from '../../emails/email.service'
 import { Logger } from 'nestjs-pino'
 import PgBoss from 'pg-boss'
 import { PgBossQueue } from './pg-boss-queue'
+import { Queue } from '../queue.interface'
 
 export const jobQueueProviders = [
   {
@@ -10,7 +11,7 @@ export const jobQueueProviders = [
     useFactory: boss,
   },
   {
-    provide: PgBossQueue,
+    provide: Queue,
     useFactory: async (pgBoss: PgBoss, configService: ConfigService, emailService: EmailService, logger: Logger): Promise<PgBossQueue> => {
       return new PgBossQueue(pgBoss, configService, emailService, logger)
     },

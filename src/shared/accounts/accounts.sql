@@ -1,5 +1,5 @@
 /* @name Signup */
-INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, digest(:password::text, 'sha256'), :createdAt);
+INSERT INTO accounts (id, username, email, password, created_at) VALUES(:id, :username, :email, :passwordHash, :createdAt);
 
 /* @name initialAccountSettings */
 INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId);
@@ -7,8 +7,8 @@ INSERT INTO account_settings(id, account_id) VALUES(:id, :accountId);
 /* @name initialAccountEmailSettings */
 INSERT INTO account_email_settings(id, account_id) VALUES(:id, :accountId);
 
-/* @name Login */
-SELECT * FROM accounts WHERE username=:username AND password=digest(:password::text, 'sha256');
+/* @name findByUsernameForLogin */
+SELECT * FROM accounts WHERE username=:username;
 
 /* @name findById */
 SELECT * FROM accounts WHERE id=:id;

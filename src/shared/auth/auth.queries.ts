@@ -125,7 +125,7 @@ export const accountFromToken = new PreparedQuery<IAccountFromTokenParams,IAccou
 /** 'ChangePassword' parameters type */
 export interface IChangePasswordParams {
   accountId?: string | null | void;
-  password?: string | null | void;
+  passwordHash?: string | null | void;
 }
 
 /** 'ChangePassword' return type */
@@ -137,12 +137,12 @@ export interface IChangePasswordQuery {
   result: IChangePasswordResult;
 }
 
-const changePasswordIR: any = {"usedParamSet":{"password":true,"accountId":true},"params":[{"name":"password","required":false,"transform":{"type":"scalar"},"locs":[{"a":36,"b":44}]},{"name":"accountId","required":false,"transform":{"type":"scalar"},"locs":[{"a":72,"b":81}]}],"statement":"UPDATE accounts SET password=digest(:password::text, 'sha256') WHERE id=:accountId"};
+const changePasswordIR: any = {"usedParamSet":{"passwordHash":true,"accountId":true},"params":[{"name":"passwordHash","required":false,"transform":{"type":"scalar"},"locs":[{"a":29,"b":41}]},{"name":"accountId","required":false,"transform":{"type":"scalar"},"locs":[{"a":52,"b":61}]}],"statement":"UPDATE accounts SET password=:passwordHash WHERE id=:accountId"};
 
 /**
  * Query generated from SQL:
  * ```
- * UPDATE accounts SET password=digest(:password::text, 'sha256') WHERE id=:accountId
+ * UPDATE accounts SET password=:passwordHash WHERE id=:accountId
  * ```
  */
 export const changePassword = new PreparedQuery<IChangePasswordParams,IChangePasswordResult>(changePasswordIR);

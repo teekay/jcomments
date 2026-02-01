@@ -1,0 +1,18 @@
+{
+  "bindings": [
+    {
+      "authLevel": "admin",
+      "type": "httpTrigger",
+      "direction": "in",
+      "name": "req",
+      "methods": ["get"],
+      "route": "admin/verify-migration"
+    },
+    {
+      "type": "http",
+      "direction": "out",
+      "name": "res"
+    }
+  ],
+  "scriptFile": "../build/AzureMigrationVerify/index.js"
+}

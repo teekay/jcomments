@@ -1,30 +1,36 @@
 import crypto from 'crypto'
-import {
-  accountFromToken,
-  changePassword,
-  createPasswordResetToken,
-  expirePendingTokens,
-  isTokenUsable,
-} from './auth.queries'
 import { Account } from '../accounts/account.interface'
 import { AccountService } from '../accounts/account.service'
-import { Client } from 'pg'
 import { ConfigService } from '../config/config.service'
 import { EmailService } from '../emails/email.service'
 import { Inject, Injectable } from '@nestjs/common'
-import { loginFromToken } from '../../api/api.queries'
 import moment from 'moment'
 import { SendMailService } from '../infra/sendmail.service'
 import { v4 as uuidv4 } from 'uuid'
-import { findAllValidTokens } from '../accounts/accounts.queries'
+import {
+  AUTH_REPOSITORY,
+  IAuthRepository,
+} from '../repositories/auth.repository.interface'
+import {
+  TOKEN_REPOSITORY,
+  ITokenRepository,
+} from '../repositories/token.repository.interface'
+import {
+  ACCOUNT_REPOSITORY,
+  IAccountRepository,
+} from '../repositories/account.repository.interface'
+import { PasswordService } from '../crypto/password.service'
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject('PG_CLIENT') private client: Client,
+    @Inject(AUTH_REPOSITORY) private authRepo: IAuthRepository,
+    @Inject(TOKEN_REPOSITORY) private tokenRepo: ITokenRepository,
+    @Inject(ACCOUNT_REPOSITORY) private accountRepo: IAccountRepository,
     private readonly configService: ConfigService,
     private readonly emailService: EmailService,
     private readonly sendMailService: SendMailService,
+    private readonly passwordService: PasswordService,
     private usersService: AccountService,
   ) {}
 
@@ -38,24 +44,15 @@ export class AuthService {
   }
 
   async accountFromToken(token: string): Promise<Account | null> {
-    const accounts = await loginFromToken.run(
-      {
-        token: token,
-      },
-      this.client
-    )
-    if (accounts.length !== 1) {
-      return null
-    }
+    const record = await this.authRepo.accountFromLoginToken(token)
+    if (!record) return null
 
-    const result = accounts[0]
     return {
-      id: result.id,
-      email: result.email,
-      username: result.username,
-      createdAt: new Date(result.created_at)
+      id: record.id,
+      email: record.email,
+      username: record.username,
+      createdAt: record.created_at,
     }
-
   }
 
   async initiatePasswordReset(usernameOrEmail: string): Promise<void> {
@@ -65,19 +62,16 @@ export class AuthService {
     }
 
     // expire all pending reset tokens, if any
-    await expirePendingTokens.run({ accountId: account.id, now: new Date() }, this.client)
+    await this.authRepo.expirePendingTokens(account.id, new Date())
 
     // create a new token
     const token = uuidv4()
-    await createPasswordResetToken.run(
-      {
-        id: uuidv4(),
-        token,
-        accountId: account.id,
-        createdAt: new Date(),
-        expiresAt: moment().add(1, 'day').toDate(),
-      },
-      this.client
+    await this.authRepo.createPasswordResetToken(
+      uuidv4(),
+      account.id,
+      token,
+      new Date(),
+      moment().add(1, 'day').toDate()
     )
 
     // email it to the account holder
@@ -86,21 +80,19 @@ export class AuthService {
   }
 
   async completePasswordReset(token: string, password: string): Promise<void> {
-    const a = await accountFromToken.run({ token }, this.client)
-    if (a.length !== 1) throw new Error('Data integrity violation or wrong token')
-    const account = a[0]
-    await changePassword.run({ accountId: account.id, password }, this.client)
-    await expirePendingTokens.run({ accountId: account.id, now: new Date() }, this.client)
+    const record = await this.authRepo.accountFromToken(token)
+    if (!record) throw new Error('Data integrity violation or wrong token')
+    const passwordHash = await this.passwordService.hash(password)
+    await this.accountRepo.updatePassword(record.id, passwordHash)
+    await this.authRepo.expirePendingTokens(record.id, new Date())
   }
 
   async isTokenValid(token: string, forDate: Date): Promise<boolean> {
-    const t = await isTokenUsable.run({ token, date: forDate }, this.client)
-    return t.length === 1
+    return this.authRepo.isTokenUsable(token, forDate)
   }
 
   async tokensForAccount(accountId: string): Promise<string[]> {
-    const tokens = await findAllValidTokens.run({ accountId }, this.client)
-
+    const tokens = await this.tokenRepo.findAllValidTokens(accountId)
     return tokens.map(t => t.token)
   }
 
@@ -123,7 +115,7 @@ export class AuthService {
     const tryValidate = (token: string): boolean => {
       // Reconstruct the string to verify
       const stringToSign = `${httpMethod}\n${urlPath}\n${timestamp}`
-      
+
       // Create HMAC signature
       const hmac = crypto.createHmac('sha256', token)
       hmac.update(stringToSign)

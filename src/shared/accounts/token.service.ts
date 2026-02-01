@@ -1,39 +1,48 @@
 import { Account } from './account.interface'
-import { Client } from 'pg'
 import { Inject, Injectable } from '@nestjs/common'
 import { v4 as uuidv4 } from 'uuid'
-import { createToken, findById, findToken, revokeToken } from './accounts.queries'
 import { Token } from './token.interface'
+import {
+  TOKEN_REPOSITORY,
+  ITokenRepository,
+} from '../repositories/token.repository.interface'
+import {
+  ACCOUNT_REPOSITORY,
+  IAccountRepository,
+} from '../repositories/account.repository.interface'
 
 @Injectable()
 export class TokenService {
-  constructor(@Inject('PG_CLIENT') private client: Client) {}
+  constructor(
+    @Inject(TOKEN_REPOSITORY) private tokenRepo: ITokenRepository,
+    @Inject(ACCOUNT_REPOSITORY) private accountRepo: IAccountRepository
+  ) {}
 
   async findById(token: string): Promise<Token | undefined> {
-    const tokens = await findToken.run({ token }, this.client)
-    if (tokens.length !== 1) return
-    const t = tokens[0]
-    const accounts = await findById.run({ id: t.account_id }, this.client)
-    if (accounts.length !== 1) throw new Error('Reference integrity error')
-    const a = accounts[0]
+    const tokenRecord = await this.tokenRepo.findByToken(token)
+    if (!tokenRecord) return undefined
+
+    const accountRecord = await this.accountRepo.findById(tokenRecord.account_id)
+    if (!accountRecord) throw new Error('Reference integrity error')
+
     return {
       account: {
-        id: a.id,
-        username: a.username,
-        email: a.email,
-        createdAt: a.created_at,
+        id: accountRecord.id,
+        username: accountRecord.username,
+        email: accountRecord.email,
+        createdAt: accountRecord.created_at,
       },
-      token: t.token,
-      createdAt: t.created_at,
-      revokedAt: t.revoked_at,
+      token: tokenRecord.token,
+      createdAt: tokenRecord.created_at,
+      revokedAt: tokenRecord.revoked_at,
     }
   }
 
   async create(account: Account): Promise<void> {
-    await createToken.run({ id: uuidv4(), accountId: account.id, token: uuidv4(), createdAt: new Date() }, this.client)
+    await this.tokenRepo.create(uuidv4(), account.id, uuidv4(), new Date())
   }
 
   async revoke(token: Token): Promise<void> {
-    await revokeToken.run({ token: token.token, revokedAt: new Date() }, this.client)
+    await this.tokenRepo.revoke(token.token, new Date())
   }
 }
