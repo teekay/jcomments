@@ -39,7 +39,7 @@ const TABLES_TO_VERIFY = [
 
 const migrationVerify: AzureFunction = async function (
   context: Context,
-  req: HttpRequest
+  _req: HttpRequest
 ): Promise<void> {
   context.log('JamComments - Verifying PostgreSQL to SQLite migration')
 
