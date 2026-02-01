@@ -4,14 +4,13 @@ services:
       context: .
       dockerfile: Dockerfile.local
     ports:
-      - "${WEB_PORT}:3060"
+      - "127.0.0.1:${WEB_PORT}:${WEB_PORT}"
     environment:
       NODE_ENVIRONMENT: development
       DB_PROVIDER: sqlite
-      SQLITE_PATH: /usr/src/app/data/jcomments-migrated.db
+      SQLITE_PATH: /app/data/jcomments-migrated.db
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - .:/app
     command: yarn start
 
   api:
@@ -19,11 +18,10 @@ services:
       context: .
       dockerfile: Dockerfile.local
     ports:
-      - "${API_PORT}:3000"
+      - "127.0.0.1:${API_PORT}:${API_PORT}"
     environment:
       DB_PROVIDER: sqlite
-      SQLITE_PATH: /usr/src/app/data/jcomments-migrated.db
+      SQLITE_PATH: /app/data/jcomments-migrated.db
     volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+      - .:/app
     command: yarn start-api
