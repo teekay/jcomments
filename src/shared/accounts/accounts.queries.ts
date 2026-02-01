@@ -368,6 +368,9 @@ export interface IAccountSettingsResult {
   id: string;
   require_moderation: boolean;
   use_akismet: boolean | null;
+  use_llm_check: boolean | null;
+  llm_api_key: string | null;
+  llm_confidence_threshold: string | null;
 }
 
 /** 'AccountSettings' query type */
@@ -424,6 +427,9 @@ export interface IUpdateSettingsParams {
   blogUrl?: string | null | void;
   requireModeration?: boolean | null | void;
   useAkismet?: boolean | null | void;
+  useLlmCheck?: boolean | null | void;
+  llmApiKey?: string | null | void;
+  llmConfidenceThreshold?: number | null | void;
 }
 
 /** 'UpdateSettings' return type */
@@ -435,12 +441,12 @@ export interface IUpdateSettingsQuery {
   result: IUpdateSettingsResult;
 }
 
-const updateSettingsIR: any = {"usedParamSet":{"requireModeration":true,"blogUrl":true,"useAkismet":true,"akismetKey":true,"accountId":true},"params":[{"name":"requireModeration","required":false,"transform":{"type":"scalar"},"locs":[{"a":47,"b":64}]},{"name":"blogUrl","required":false,"transform":{"type":"scalar"},"locs":[{"a":76,"b":83}]},{"name":"useAkismet","required":false,"transform":{"type":"scalar"},"locs":[{"a":98,"b":108}]},{"name":"akismetKey","required":false,"transform":{"type":"scalar"},"locs":[{"a":123,"b":133}]},{"name":"accountId","required":false,"transform":{"type":"scalar"},"locs":[{"a":152,"b":161}]}],"statement":"UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId"};
+const updateSettingsIR: any = {"usedParamSet":{"requireModeration":true,"blogUrl":true,"useAkismet":true,"akismetKey":true,"useLlmCheck":true,"llmApiKey":true,"llmConfidenceThreshold":true,"accountId":true},"params":[{"name":"requireModeration","required":false,"transform":{"type":"scalar"},"locs":[{"a":47,"b":64}]},{"name":"blogUrl","required":false,"transform":{"type":"scalar"},"locs":[{"a":76,"b":83}]},{"name":"useAkismet","required":false,"transform":{"type":"scalar"},"locs":[{"a":98,"b":108}]},{"name":"akismetKey","required":false,"transform":{"type":"scalar"},"locs":[{"a":123,"b":133}]},{"name":"useLlmCheck","required":false,"transform":{"type":"scalar"},"locs":[{"a":150,"b":161}]},{"name":"llmApiKey","required":false,"transform":{"type":"scalar"},"locs":[{"a":177,"b":186}]},{"name":"llmConfidenceThreshold","required":false,"transform":{"type":"scalar"},"locs":[{"a":214,"b":236}]},{"name":"accountId","required":false,"transform":{"type":"scalar"},"locs":[{"a":255,"b":264}]}],"statement":"UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey, use_llm_check=:useLlmCheck, llm_api_key=:llmApiKey, llm_confidence_threshold=:llmConfidenceThreshold WHERE account_id=:accountId"};
 
 /**
  * Query generated from SQL:
  * ```
- * UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey WHERE account_id=:accountId
+ * UPDATE account_settings SET require_moderation=:requireModeration, blog_url=:blogUrl, use_akismet=:useAkismet, akismet_key=:akismetKey, use_llm_check=:useLlmCheck, llm_api_key=:llmApiKey, llm_confidence_threshold=:llmConfidenceThreshold WHERE account_id=:accountId
  * ```
  */
 export const updateSettings = new PreparedQuery<IUpdateSettingsParams,IUpdateSettingsResult>(updateSettingsIR);

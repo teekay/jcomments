@@ -17,7 +17,10 @@ CREATE TABLE IF NOT EXISTS account_settings (
   blog_url TEXT,
   akismet_key TEXT,
   use_akismet INTEGER DEFAULT 0,
-  require_moderation INTEGER NOT NULL DEFAULT 0
+  require_moderation INTEGER NOT NULL DEFAULT 0,
+  use_llm_check INTEGER DEFAULT 0,
+  llm_api_key TEXT,
+  llm_confidence_threshold REAL DEFAULT 0.8
 );
 
 -- Account email settings

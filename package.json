@@ -40,6 +40,7 @@
   },
   "homepage": "https://github.com/teekay/JamComments#readme",
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.72.1",
     "@azure/functions": "3.2.0",
     "@azure/service-bus": "7.6.0",
     "@nestjs/common": "10.*",

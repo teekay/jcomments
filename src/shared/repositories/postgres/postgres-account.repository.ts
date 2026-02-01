@@ -82,6 +82,9 @@ export class PostgresAccountRepository implements IAccountRepository {
       useAkismet: s[0].use_akismet ?? false,
       akismetKey: s[0].akismet_key ?? '',
       blogUrl: s[0].blog_url ?? '',
+      useLlmCheck: s[0].use_llm_check ?? false,
+      llmApiKey: s[0].llm_api_key ?? '',
+      llmConfidenceThreshold: parseFloat(s[0].llm_confidence_threshold ?? '0.8'),
     }
   }
 
@@ -102,6 +105,9 @@ export class PostgresAccountRepository implements IAccountRepository {
         useAkismet: settings.useAkismet ?? false,
         akismetKey: settings.akismetKey,
         blogUrl: settings.blogUrl,
+        useLlmCheck: settings.useLlmCheck ?? false,
+        llmApiKey: settings.llmApiKey,
+        llmConfidenceThreshold: settings.llmConfidenceThreshold ?? 0.8,
       },
       this.client
     )

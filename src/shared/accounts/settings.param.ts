@@ -3,6 +3,9 @@ export class SettingsParam {
   useAkismet = false
   akismetKey = ''
   blogUrl = ''
+  useLlmCheck = false
+  llmApiKey = ''
+  llmConfidenceThreshold = 0.8
 }
 
 export class EmailSettingsParam {
