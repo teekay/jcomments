@@ -22,7 +22,7 @@ interface MigrationResult {
 
 const migrationRun: AzureFunction = async function (
   context: Context,
-  req: HttpRequest
+  _req: HttpRequest
 ): Promise<void> {
   context.log('JamComments - Running PostgreSQL to SQLite migration')
 
