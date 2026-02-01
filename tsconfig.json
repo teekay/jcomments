@@ -35,7 +35,9 @@
     "AzureCommentsApiGet/**/*.ts",
     "AzureCommentsApiPost/**/*.ts",
     "AzureCommentsNotify/**/*.ts",
-    "AzureHealthCheck/**/*.ts"
+    "AzureCommentsNotify/**/*.ts",
+    "AzureMigrationRun/**/*.ts",
+    "AzureMigrationVerify/**/*.ts",
   ],
   "exclude": [
     "node_modules",
