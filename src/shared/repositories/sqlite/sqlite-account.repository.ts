@@ -80,6 +80,9 @@ export class SqliteAccountRepository implements IAccountRepository {
       useAkismet: Boolean(row.use_akismet),
       akismetKey: row.akismet_key ?? '',
       blogUrl: row.blog_url ?? '',
+      useLlmCheck: Boolean(row.use_llm_check),
+      llmApiKey: row.llm_api_key ?? '',
+      llmConfidenceThreshold: row.llm_confidence_threshold ?? 0.8,
     }
   }
 
@@ -96,7 +99,8 @@ export class SqliteAccountRepository implements IAccountRepository {
   async updateSettings(accountId: string, settings: SettingsParam): Promise<void> {
     const stmt = this.db.prepare(`
       UPDATE account_settings
-      SET require_moderation = ?, blog_url = ?, use_akismet = ?, akismet_key = ?
+      SET require_moderation = ?, blog_url = ?, use_akismet = ?, akismet_key = ?,
+          use_llm_check = ?, llm_api_key = ?, llm_confidence_threshold = ?
       WHERE account_id = ?
     `)
     stmt.run(
@@ -104,6 +108,9 @@ export class SqliteAccountRepository implements IAccountRepository {
       settings.blogUrl,
       settings.useAkismet ? 1 : 0,
       settings.akismetKey,
+      settings.useLlmCheck ? 1 : 0,
+      settings.llmApiKey,
+      settings.llmConfidenceThreshold ?? 0.8,
       accountId
     )
   }
@@ -157,6 +164,9 @@ interface SqliteSettingsRow {
   akismet_key: string | null
   use_akismet: number | null
   require_moderation: number
+  use_llm_check: number | null
+  llm_api_key: string | null
+  llm_confidence_threshold: number | null
 }
 
 interface SqliteEmailSettingsRow {

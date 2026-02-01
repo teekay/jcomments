@@ -155,7 +155,7 @@
                     </div>
                     <div id="anti-spam" class="card settings-tab">
                         <div>
-                            <h2 class="admin-setting-heading heading-font">Anti-Spam <div class="tooltip icon"><span
+                            <h2 class="admin-setting-heading heading-font">Anti-Spam (Akismet) <div class="tooltip icon"><span
                                         class="tooltiptext">If you enable Akismet integration, we will check each comment to
                                         determine if it's SPAM or not relying on the Akismet SPAM detection feature.</span>
                                 </div>
@@ -163,14 +163,33 @@
                             <span class="admin-setting-description">Use anti-SPAM protection (Akismet) <img
                                     class="icon icon-small toggle" src="/assets/images/icons/setting-toggle-{{#if useAkismet}}on{{else}}off{{/if}}.svg"
                                     alt=""/>
-                                    <input type="checkbox" 
+                                    <input type="checkbox"
                                            value="1"
-                                           class="d-none"                                     
-                                           name="useAkismet" 
+                                           class="d-none"
+                                           name="useAkismet"
                                            id="useAkismet"{{#if useAkismet}} checked{{/if}}>
                             </span>
                             <input type="text" id="akismetKey" name="akismetKey" placeholder="Akismet API Key" value="{{ akismetKey }}">
                             <input type="text" id="blogUrl" name="blogUrl" placeholder="Blog URL (required by Akismet)" value="{{ blogUrl }}">
+                        </div>
+                    </div>
+                    <div id="llm-spam" class="card settings-tab">
+                        <div>
+                            <h2 class="admin-setting-heading heading-font">Anti-Spam (LLM) <div class="tooltip icon"><span
+                                        class="tooltiptext">Use an LLM (Claude Haiku) as a second pass to detect spam. Comments flagged by the LLM with confidence above threshold will be sent to moderation.</span>
+                                </div>
+                            </h2>
+                            <span class="admin-setting-description">Use LLM spam detection <img
+                                    class="icon icon-small toggle" src="/assets/images/icons/setting-toggle-{{#if useLlmCheck}}on{{else}}off{{/if}}.svg"
+                                    alt=""/>
+                                    <input type="checkbox"
+                                           value="1"
+                                           class="d-none"
+                                           name="useLlmCheck"
+                                           id="useLlmCheck"{{#if useLlmCheck}} checked{{/if}}>
+                            </span>
+                            <input type="text" id="llmApiKey" name="llmApiKey" placeholder="Anthropic API Key" value="{{ llmApiKey }}">
+                            <input type="number" id="llmConfidenceThreshold" name="llmConfidenceThreshold" placeholder="Confidence threshold (0-1)" value="{{ llmConfidenceThreshold }}" min="0" max="1" step="0.1">
                             <button class="btn" type="submit">SAVE</button>
                         </div>
                     </div>
@@ -327,6 +346,15 @@
         } else {
             inputApiKey.removeAttribute('required');
             inputBlogUrl.removeAttribute('required');
+        }
+    });
+    document.getElementById('useLlmCheck').addEventListener('change', function(evt) {
+        let isOn = evt.target.checked;
+        let inputApiKey = document.getElementById('llmApiKey');
+        if (isOn) {
+            inputApiKey.setAttribute('required', 'required');
+        } else {
+            inputApiKey.removeAttribute('required');
         }
     });
 

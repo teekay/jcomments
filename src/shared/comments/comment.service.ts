@@ -3,6 +3,7 @@ import moment from 'moment'
 import { Account } from '../accounts/account.interface'
 import { AccountService } from '../accounts/account.service'
 import { AkismetService } from './akismet.service'
+import { LlmSpamService } from './llm-spam.service'
 import { Comment, CommentBase, CommentWithId } from './comment.interface'
 import { Inject, Injectable } from '@nestjs/common'
 import { Logger } from 'nestjs-pino'
@@ -20,6 +21,7 @@ export class CommentService {
     @Inject(COMMENT_REPOSITORY) private commentRepo: ICommentRepository,
     private readonly accountService: AccountService,
     private readonly akismetService: AkismetService,
+    private readonly llmSpamService: LlmSpamService,
     private readonly logger: Logger
   ) {}
 
@@ -27,16 +29,40 @@ export class CommentService {
     const settings = await this.accountService.settingsFor(account)
     const toModeration = settings?.requireModeration ?? false
     const payload = this.commentToDbParam(account, comment)
-    if (toModeration || (settings?.akismetKey && settings.useAkismet)) {
-      const flagIt = toModeration || (settings && (await this.akismetService.isCommentSpam(settings, comment, ip)))
-      if (flagIt) {
-        this.logger.warn(`${toModeration ? 'Moderation enforced' : 'SPAM detected'}: ${JSON.stringify(comment)}`)
+
+    // Manual moderation takes precedence
+    if (toModeration) {
+      this.logger.warn(`Moderation enforced: ${JSON.stringify(comment)}`)
+      await this.commentRepo.createFlaggedComment(payload)
+      return CommentCreatedResult.Flagged
+    }
+
+    // First pass: Akismet (if configured)
+    if (settings?.akismetKey && settings.useAkismet) {
+      const isAkismetSpam = await this.akismetService.isCommentSpam(settings, comment, ip)
+      if (isAkismetSpam) {
+        this.logger.warn(`SPAM detected (Akismet): ${JSON.stringify(comment)}`)
         await this.commentRepo.createFlaggedComment(payload)
         return CommentCreatedResult.Flagged
       }
     }
-    await this.commentRepo.createComment(payload)
 
+    // Second pass: LLM check (if configured)
+    if (settings?.llmApiKey && settings.useLlmCheck) {
+      const llmResult = await this.llmSpamService.checkComment(settings, comment)
+      if (llmResult) {
+        const threshold = settings.llmConfidenceThreshold ?? 0.8
+        if (llmResult.is_spam && llmResult.confidence >= threshold) {
+          this.logger.warn(
+            `SPAM detected (LLM, confidence: ${llmResult.confidence}): ${JSON.stringify(comment)}`
+          )
+          await this.commentRepo.createFlaggedComment(payload)
+          return CommentCreatedResult.Flagged
+        }
+      }
+    }
+
+    await this.commentRepo.createComment(payload)
     return payload.id
   }
 
