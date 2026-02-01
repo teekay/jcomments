@@ -6,7 +6,7 @@
       "direction": "in",
       "name": "req",
       "methods": ["post"],
-      "route": "admin/migrate"
+      "route": "migrate"
     },
     {
       "type": "http",
